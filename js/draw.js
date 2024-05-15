@@ -14,8 +14,8 @@ function draw() {
   textSize(20);
   // top left HUD
   textAlign(LEFT, TOP);
-  text(`PLACEHOLDER`, 10, 10);
-  text(`PLACEHOLDER`, 10, 40);
+  text(`realtime: ${world.realTime}`, 10, 10);
+  text(`${Math.round(mouse.x)}, ${Math.round(mouse.y)}`, 10, 40);
   // right HUD
   textAlign(RIGHT, TOP);
   text(`PLACEHOLDER`, width-10, 10);
@@ -28,9 +28,17 @@ function draw() {
 
   stroke(255);
   strokeWeight(2);
+
+  // just move the camera to center, why not?
+  camera.pos = {x: 0, y: 0};
+
+  // debug stuff for showing mouse pos
   // line(mouse.canvasPos.x, 0, mouse.canvasPos.x, height);
   // line(0, mouse.canvasPos.y, width, mouse.canvasPos.y);
   // ellipse(mouse.canvasPos.x, mouse.canvasPos.y, 10)
 }
 // after this the draw functions of sprites are called
 // by default sprites are drawn in the order they were created in
+// each sprite's update function is called after it is drawn
+// will have to figure out how to make gui elements appear on top of objects
+// (maybe i have to make them sprites too? that'll be annoying)

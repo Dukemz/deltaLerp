@@ -1,3 +1,4 @@
+// main script
 "use strict";
 console.log("[HELLO WORLD]");
 
@@ -9,7 +10,7 @@ let scriptList = [
   'windowResized'
 ];
 
-let player;
+let player, testspr;
 
 async function loadScripts(scriptUrls) {
   // Create an array to store Promise objects
@@ -33,7 +34,8 @@ async function loadScripts(scriptUrls) {
   await Promise.all(promises);
 }
 
-function preload() { // preload assets (if any)
+function preload() { // preload assets (none at the moment though)
+  document.getElementById("loadtext").innerHTML = "loading assets...";
   console.log("[PRELOAD]");
 }
 
@@ -54,16 +56,20 @@ async function setup() {
     if (fpsList.length > 30) fpsList.shift();
   }, 100);
 
-  // original height and width
-  // world origin will be ow/2, oh/2
-  originalW = canvas.w;
-  originalH = canvas.h;
-
   // setup player
-  player = new Player(10, 10, 50, 50);
+  // player = new Player(10, 10, 50, 50);
 
   // test sprite
-
+  testspr = new Sprite([ // vertex mode
+    [-50, 50], // bottom left
+    [0, -70], // top
+    [50, 50], // bottom right
+    [0, 0], // bottom notch
+    [-50, 50] // repeat 1st to connect
+  ]);
+  testspr.debug = true;
+  testspr.strokeWeight = 1;
+  testspr.rotation = 90
 }
 
 function deltaLerp(a, b, f) { // lerp with deltatime
