@@ -1,0 +1,16 @@
+body {
+  background-color: #2e3447;
+  margin: auto;
+}
+
+#canvasContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+
+p {
+  color: white;
+}
