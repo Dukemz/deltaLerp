@@ -63,7 +63,7 @@ async function setup() {
   randomObjs = new Group();
   randomObjs.height = 50;
   randomObjs.width = 50;
-  randomObjs.image = "🗿";
+  randomObjs.image = () => random(["🗿", "✨", "💀", "🎉"]);
   randomObjs.drag = 1;
   randomObjs.rotationDrag = 1;
   // assume center is 0, 0
@@ -72,6 +72,7 @@ async function setup() {
 
   randomObjs.amount = 10;
 
+  background("#242838");
   startTimestamp = Date.now();
 }
 // test variables below

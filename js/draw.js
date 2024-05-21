@@ -31,7 +31,8 @@ function draw() {
 
   stroke(255);
   strokeWeight(2);
-  // ellipse drawn using new canvasPos feature
+
+  // temp: forcefield indication
   noFill()
   arc(player.canvasPos.x, player.canvasPos.y, 85, 85, 0, 180);
 
