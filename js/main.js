@@ -7,7 +7,8 @@ let fpsList = [], fpsPush, avgFPS, avgDeltaTime;
 let scriptList = [
   'draw',
   'player',
-  'windowResized'
+  'windowResized',
+  'machinegun'
 ];
 
 let player;

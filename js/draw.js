@@ -5,6 +5,7 @@ function draw() {
     window.lastHidden = Date.now();
   }
   background(color("#24283880"));
+  // background(color("#242838"))
 
   // average deltatime, fps calcs
   avgFPS = fpsList.reduce((a, b) => a + b, 0)/fpsList.length || 0;

@@ -21,7 +21,12 @@ class Player extends Sprite {
     // in future figure out how to make this into classes
     // for easier addition of new weapons, use of extends, etc
     this.weapons = new Group();
-    this.bullets = new this.weapons.Group();
+    // technically the better way:
+    // this.bullets = new this.weapons.Group();
+    // but this way is classable:
+    this.bullets = new Group();
+    this.weapons.subgroups.push(this.bullets);
+    this.bullets.parent = this.weapons.idNum;
     this.bullets.diameter = 10;
     this.bullets.x = () => this.x + 45;
     this.bullets.y = () => this.y;
@@ -88,7 +93,7 @@ class Player extends Sprite {
         this.bullets[0].remove();
       }
     }
-    // culling - remove bullets if they go offscreen
-    this.bullets.cull(10, 10, 10, 10)
+    // culling - remove bullets if they go more than 10 units offscreen
+    this.bullets.cull(10, 10, 10, 10);
   }
 }
