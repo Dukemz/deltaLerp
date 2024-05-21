@@ -1,6 +1,9 @@
 "use strict";
 
 function draw() {
+  if(document.hidden) {
+    window.lastHidden = Date.now();
+  }
   background(color("#24283880"));
 
   // average deltatime, fps calcs
@@ -14,12 +17,12 @@ function draw() {
   textSize(20);
   // top left HUD
   textAlign(LEFT, TOP);
-  text(`realtime: ${world.realTime}`, 10, 10);
-  text(`${Math.round(mouse.x)}, ${Math.round(mouse.y)}`, 10, 40);
+  text(`frames: ${frameCount}`, 10, 10);
+  text(`realtime: ${world.realTime}`, 10, 40);
   // right HUD
   textAlign(RIGHT, TOP);
-  text(`PLACEHOLDER`, width-10, 10);
-  text(`PLACEHOLDER`, width-10, 40);
+  text(`${Math.round(mouse.x)}, ${Math.round(mouse.y)}`, width-10, 10);
+  text(`placeholder`, width-10, 40);
   // bottom left HUD
   noStroke()
   textAlign(LEFT, BOTTOM);
@@ -28,6 +31,9 @@ function draw() {
 
   stroke(255);
   strokeWeight(2);
+  // ellipse drawn using new canvasPos feature
+  noFill()
+  arc(player.canvasPos.x, player.canvasPos.y, 85, 85, 0, 180);
 
   // just move the camera to center, why not?
   camera.pos = {x: 0, y: 0};

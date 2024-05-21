@@ -2,7 +2,7 @@
 "use strict";
 console.log("[HELLO WORLD]");
 
-let originalW, originalH;
+let originalW, originalH, startTimestamp;
 let fpsList = [], fpsPush, avgFPS, avgDeltaTime;
 let scriptList = [
   'draw',
@@ -10,7 +10,7 @@ let scriptList = [
   'windowResized'
 ];
 
-let player, testspr;
+let player;
 
 async function loadScripts(scriptUrls) {
   // Create an array to store Promise objects
@@ -57,20 +57,25 @@ async function setup() {
   }, 100);
 
   // setup player
-  // player = new Player(10, 10, 50, 50);
+  player = new Player(10, 10, 50, 50);
 
-  // test sprite
-  testspr = new Sprite([ // vertex mode
-    [-50, 50], // bottom left
-    [0, -70], // top
-    [50, 50], // bottom right
-    [0, 0], // bottom notch
-    [-50, 50] // repeat 1st to connect
-  ]);
-  testspr.debug = true;
-  testspr.strokeWeight = 1;
-  testspr.rotation = 90
+  // various objects
+  randomObjs = new Group();
+  randomObjs.height = 50;
+  randomObjs.width = 50;
+  randomObjs.image = "🗿";
+  randomObjs.drag = 1;
+  randomObjs.rotationDrag = 1;
+  // assume center is 0, 0
+  randomObjs.x = () => random(-canvas.hw, canvas.hw);
+  randomObjs.y = () => random(-canvas.hh, canvas.hh)
+
+  randomObjs.amount = 10;
+
+  startTimestamp = Date.now();
 }
+// test variables below
+let randomObjs, testspr;
 
 function deltaLerp(a, b, f) { // lerp with deltatime
   // f is the factor between 0 and 1 deciding how quickly it catches up
