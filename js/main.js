@@ -15,24 +15,24 @@ let scriptList = [
 let player;
 
 async function loadScripts(scriptUrls) {
-  // Create an array to store Promise objects
+  // create an array to store Promise objects
   const promises = [];
 
-  // Dynamically load each script
+  // dynamically load each script
   scriptUrls.forEach(scriptUrl => {
     promises.push(
       new Promise((resolve, reject) => {
         const script = document.createElement('script');
         script.src = `js/${scriptUrl}.js`;
-        script.async = false; // Ensure synchronous loading
-        script.onload = resolve; // Resolve the Promise when the script is loaded
-        script.onerror = reject; // Reject the Promise if the script fails to load
+        script.async = false; // ensure synchronous loading
+        script.onload = resolve; // resolve the promise when the script is loaded
+        script.onerror = reject; // reject the promise if the script fails to load
         document.body.appendChild(script);
       })
     );
   });
 
-  // Wait for all Promises to resolve
+  // wait for all Promises to resolve
   await Promise.all(promises);
 }
 
@@ -59,7 +59,9 @@ async function setup() {
   }, 100);
 
   // setup player
-  player = new Player(10, 10, 50, 50);
+  player = new Player({
+    stroke: color(122, 122, 255),
+  });
 
   // various objects
   randomObjs = new Group();
@@ -72,7 +74,7 @@ async function setup() {
   randomObjs.x = () => random(-canvas.hw, canvas.hw);
   randomObjs.y = () => random(-canvas.hh, canvas.hh)
 
-  // randomObjs.amount = 10;
+  randomObjs.amount = 10;
 
   // just move the camera to center, why not?
   camera.pos = {x: 0, y: 0};
