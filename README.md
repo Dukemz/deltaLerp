@@ -1,4 +1,4 @@
-# Interpolate (Scroller Game Test)
+# deltaLerp (Scroller Game Test)
 
 WORK IN PROGRESS!
 
