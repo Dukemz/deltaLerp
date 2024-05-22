@@ -33,13 +33,6 @@ function draw() {
   stroke(255);
   strokeWeight(2);
 
-  // temp: forcefield indication
-  noFill()
-  arc(player.canvasPos.x, player.canvasPos.y, 85, 85, 0, 180);
-
-  // just move the camera to center, why not?
-  camera.pos = {x: 0, y: 0};
-
   // debug stuff for showing mouse pos
   // line(mouse.canvasPos.x, 0, mouse.canvasPos.x, height);
   // line(0, mouse.canvasPos.y, width, mouse.canvasPos.y);

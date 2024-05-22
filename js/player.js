@@ -3,12 +3,19 @@
 class Player extends Sprite {
   constructor(...data) {
     console.log(data);
-    super([ // vertex mode
+    // super([ // vertex mode
+    //   [-50, 50], // bottom left
+    //   [0, -70], // top
+    //   [50, 50], // bottom right
+    //   [0, 0], // bottom notch
+    //   [-50, 50] // repeat 1st to connect
+    // ]);
+    super([
+      [0, 0], // bottom notch
       [-50, 50], // bottom left
       [0, -70], // top
       [50, 50], // bottom right
-      [0, 0], // bottom notch
-      [-50, 50] // repeat 1st to connect
+      [0, 0] // repeat 1st to connect
     ]);
     // this.y = -200
     this.autoFire = false;
@@ -34,11 +41,14 @@ class Player extends Sprite {
     this.bullets.collider = "kinematic";
     // stores timestamp of last time a bullet was fired
     this.bullets.lastFired = 0;
-    // remove bullet when it overlaps with something
-    this.bullets.overlaps(allSprites, b => b.remove());
+    // remove bullet when it overlaps with random object (temporary)
+    // this.bullets.overlaps(randomObjs, b => b.remove());
+
+    // shield thing
+    this.shield = new ArcIndicator(this);
 
     // set attributes
-    this.offset.y = 5;
+    this.offset.y = 10;
     this.rotation = 90;
     this.scale = {x: 0.5, y: 0.5};
     this.strokeWeight = 1;

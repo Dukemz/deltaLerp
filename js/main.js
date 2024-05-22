@@ -8,7 +8,8 @@ let scriptList = [
   'draw',
   'player',
   'windowResized',
-  'machinegun'
+  'machinegun',
+  'arcindicator'
 ];
 
 let player;
@@ -71,9 +72,14 @@ async function setup() {
   randomObjs.x = () => random(-canvas.hw, canvas.hw);
   randomObjs.y = () => random(-canvas.hh, canvas.hh)
 
-  randomObjs.amount = 10;
+  // randomObjs.amount = 10;
 
+  // just move the camera to center, why not?
+  camera.pos = {x: 0, y: 0};
   background("#242838");
+
+  // save timestamp on when the thing starts
+  // at some point game will be a class, so setup opens the menu rather than jumping straight into the game
   startTimestamp = Date.now();
 }
 // test variables below
