@@ -14,22 +14,23 @@ let scriptList = [
 
 let player;
 
-async function loadScripts(scriptUrls) {
+async function loadScripts(scriptUrls) { // load scripts and add them to the page
+  // may be able to reuse this function for level loading and/or modding
+  // maybe modded scripts can be packaged and loaded on the main menu?
+
   // create an array to store Promise objects
   const promises = [];
-
   // dynamically load each script
   scriptUrls.forEach(scriptUrl => {
-    promises.push(
-      new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = `js/${scriptUrl}.js`;
-        script.async = false; // ensure synchronous loading
-        script.onload = resolve; // resolve the promise when the script is loaded
-        script.onerror = reject; // reject the promise if the script fails to load
-        document.body.appendChild(script);
-      })
-    );
+    promises.push(new Promise((resolve, reject) => {
+      // create script element and set its source
+      const script = document.createElement('script');
+      script.src = `js/${scriptUrl}.js`;
+      script.async = false; // ensure synchronous loading
+      script.onload = resolve; // resolve the Promise when the script is loaded
+      script.onerror = reject; // reject the Promise if the script fails to load
+      document.body.appendChild(script);
+    }));
   });
 
   // wait for all Promises to resolve

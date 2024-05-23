@@ -63,10 +63,10 @@ class Player extends Sprite {
   // ~~ UPDATE FUNCTION ~~ //
   update() { // this is called after the sprite's internal draw function
     // difference between camera position and player position
-    const camDevX = camera.x-this.x;
-    const camDevY = camera.y-this.y;
+    // const camDevX = camera.x-this.x;
+    // const camDevY = camera.y-this.y;
 
-    // counteract gravity
+    // counteract gravity if there is any
     if(world.gravity.y) this.applyForceScaled(world.gravity.y);
 
     // movement
