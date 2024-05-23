@@ -27,20 +27,25 @@ class Player extends Sprite {
     // group of all projectiles
     // allow for use with enemies as well?
 
+    // if this.weapons is not already an array, create it
+    this.weapons ||= [];
     // this.activeWeapon will be the currently active weapon
     // at the end of update, if pressing down fire key or autofire is on, call the fire function
     // the weapon class should handle everything from there
     this.projectiles = new Group();
-    this.weapons = [
-      new machineGun(this)
-    ];
     this.activeWeapon = 0;
+    this.weapons.forEach(weapon => { // initialise all weapons
+      weapon.initialise(this);
+    });
+
+    // delete any bullets that touch the player
+    this.collides(this.projectiles, (_p, b) => b.remove())
 
     // shield thing
     this.shield = new ArcIndicator(this);
 
     // set attributes
-    this.offset.y = 10;
+    this.offset.y = 8;
     this.rotation = 90;
     this.scale = {x: 0.5, y: 0.5};
     this.strokeWeight = 1;

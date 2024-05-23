@@ -60,21 +60,32 @@ async function setup() {
 
   // setup player
   player = new Player({
+    layer: 1,
     stroke: color(122, 122, 255),
+    weapons: [
+      new machineGun()
+    ]
   });
 
   // various objects
   randomObjs = new Group();
   randomObjs.height = 50;
   randomObjs.width = 50;
-  randomObjs.image = () => random(["🗿", "✨", "💀", "🎉"]);
   randomObjs.drag = 1;
   randomObjs.rotationDrag = 1;
   // assume center is 0, 0
   randomObjs.x = () => random(-canvas.hw, canvas.hw);
-  randomObjs.y = () => random(-canvas.hh, canvas.hh)
+  randomObjs.y = () => random(-canvas.hh, canvas.hh);
 
-  randomObjs.amount = 10;
+  rocks = new randomObjs.Group();
+  rocks.image = () => random(["🗿", "💀"]);
+  rocks.collides(player.projectiles, (_p, b) => b.remove())
+  rocks.amount = 5;
+
+  stars = new randomObjs.Group();
+  stars.image = "✨";
+  stars.overlaps(player.projectiles, (_p, b) => b.remove());
+  stars.amount = 5;
 
   // just move the camera to center, why not?
   camera.pos = {x: 0, y: 0};
@@ -85,7 +96,7 @@ async function setup() {
   startTimestamp = Date.now();
 }
 // test variables below
-let randomObjs, testspr;
+let randomObjs, rocks, stars;
 
 function deltaLerp(a, b, f) { // lerp with deltatime
   // f is the factor between 0 and 1 deciding how quickly it catches up

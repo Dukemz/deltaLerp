@@ -10,6 +10,7 @@ class ArcIndicator extends Sprite { // arc indicator thing
     // set properties
     this.collider = "none";
     this.layer = parent.layer - 1;
+    this.stroke = color(255);
   }
 
   draw() {
@@ -17,7 +18,6 @@ class ArcIndicator extends Sprite { // arc indicator thing
     this.pos = this.parent.pos;
 
     noFill();
-    stroke(255);
     arc(this.x, this.y, this.diameter, this.diameter, 0, 180);
   }
 }
