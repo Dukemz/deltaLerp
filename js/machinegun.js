@@ -1,9 +1,10 @@
 "use strict";
+
 class machineGun {
   // machine gun weapon - fires multiple small bullets in quick succession
   // this group represents all the bullets
   constructor() {
-    // ~~ TRACKING ~~ ///
+    // ~~ TRACKING ~~ //
     // stores timestamp of last time a bullet was fired
     this.lastFired = 0;
     // total bullets fired
