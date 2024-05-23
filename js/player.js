@@ -39,7 +39,7 @@ class Player extends Sprite {
     });
 
     // delete any bullets that touch the player
-    this.collides(this.projectiles, (_p, b) => b.remove())
+    this.collides(this.projectiles, (_p, b) => b.remove());
 
     // shield thing
     this.shield = new ArcIndicator(this);

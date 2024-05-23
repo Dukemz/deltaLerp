@@ -22,8 +22,8 @@ function draw() {
   text(`realtime: ${world.realTime}`, 10, 40);
   // right HUD
   textAlign(RIGHT, TOP);
-  text(`player: ${Math.round(player.x)}, ${Math.round(player.y)} || mouse: ${Math.round(mouse.x)}, ${Math.round(mouse.y)}`, width-10, 10);
-  text(`bullets fired: ${player.weapons[player.activeWeapon].bulletsFired}`, width-10, 40);
+  text(`player: ${Math.round(game.player.x)}, ${Math.round(game.player.y)} || mouse: ${Math.round(mouse.x)}, ${Math.round(mouse.y)}`, width-10, 10);
+  text(`bullets fired: ${game.player.weapons[game.player.activeWeapon].bulletsFired}`, width-10, 40);
   // bottom left HUD
   noStroke()
   textAlign(LEFT, BOTTOM);
@@ -33,14 +33,11 @@ function draw() {
   stroke(255);
   strokeWeight(2);
 
-  // test
-  randomObjs.cull(50, 50, 50, 50);
-  randomObjs.amount = 10;
-
   // debug stuff for showing mouse pos
   // line(mouse.canvasPos.x, 0, mouse.canvasPos.x, height);
   // line(0, mouse.canvasPos.y, width, mouse.canvasPos.y);
   // ellipse(mouse.canvasPos.x, mouse.canvasPos.y, 10)
+  game.draw();
 }
 // after this the draw functions of sprites are called
 // by default sprites are drawn in the order they were created in

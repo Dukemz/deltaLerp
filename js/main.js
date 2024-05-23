@@ -2,17 +2,18 @@
 "use strict";
 console.log("[HELLO WORLD]");
 
-let originalW, originalH, startTimestamp;
 let fpsList = [], fpsPush, avgFPS, avgDeltaTime;
 let scriptList = [
   'draw',
   'player',
   'windowResized',
   'machinegun',
-  'arcindicator'
+  'arcindicator',
+  'game'
 ];
 
-let player;
+// will hold game instance
+let game;
 
 async function loadScripts(scriptUrls) { // load scripts and add them to the page
   // may be able to reuse this function for level loading and/or modding
@@ -37,9 +38,11 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
   await Promise.all(promises);
 }
 
-function preload() { // preload assets (none at the moment though)
-  document.getElementById("loadtext").innerHTML = "loading assets...";
+function preload() { // preload assets
   console.log("[PRELOAD]");
+  document.getElementById("loadtext").innerHTML = "loading assets...";
+  // don't actually have any assets to load yet lol
+  // but music will be loaded here
 }
 
 async function setup() {
@@ -59,45 +62,9 @@ async function setup() {
     if (fpsList.length > 30) fpsList.shift();
   }, 100);
 
-  // setup player
-  player = new Player({
-    layer: 1,
-    stroke: color(122, 122, 255),
-    weapons: [
-      new machineGun()
-    ]
-  });
-
-  // various objects
-  randomObjs = new Group();
-  randomObjs.height = 50;
-  randomObjs.width = 50;
-  randomObjs.drag = 1;
-  randomObjs.rotationDrag = 1;
-  // assume center is 0, 0
-  randomObjs.x = () => random(-canvas.hw, canvas.hw);
-  randomObjs.y = () => random(-canvas.hh, canvas.hh);
-
-  rocks = new randomObjs.Group();
-  rocks.image = () => random(["🗿", "💀"]);
-  rocks.collides(player.projectiles, (_p, b) => b.remove())
-  rocks.amount = 5;
-
-  stars = new randomObjs.Group();
-  stars.image = "✨";
-  stars.overlaps(player.projectiles, (_p, b) => b.remove());
-  stars.amount = 5;
-
-  // just move the camera to center, why not?
-  camera.pos = {x: 0, y: 0};
-  background("#242838");
-
-  // save timestamp on when the thing starts
-  // at some point game will be a class, so setup opens the menu rather than jumping straight into the game
-  startTimestamp = Date.now();
+  // initial setup complete - create game
+  game = new Game();
 }
-// test variables below
-let randomObjs, rocks, stars;
 
 function deltaLerp(a, b, f) { // lerp with deltatime
   // f is the factor between 0 and 1 deciding how quickly it catches up
