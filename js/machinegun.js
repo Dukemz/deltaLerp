@@ -24,13 +24,14 @@ class machineGun {
     // and travel in the right direction accordingly
     this.group.x = () => player.x + 45;
     this.group.y = () => player.y;
-    this.group.vel.x = 30; // bullet velocity
+    this.group.vel.x = 20; // bullet velocity
     // kinematic collider - will not be affected by other objects
-    // maybe set back to dynamic if adding enemies that reflect bullets?
     // this.group.collider = "kinematic";
+    // bouncy
+    this.bounciness = 1;
 
     this.group.update = (a) => {
-      // a is index of sprite in group
+      // a is amount of sprites in group
     }
   } 
 
@@ -41,7 +42,11 @@ class machineGun {
     // elapsed time since last bullet fired
     const elapseFired = Date.now() - this.lastFired;
     if(elapseFired > this.fireRate) {
-      new this.group.Sprite();
+      const bullet = new this.group.Sprite();
+      // set bullet's update function since for some reason you can't define it before
+      bullet.update = () => {
+        if(bullet.speed < 3) bullet.remove();
+      }
       this.bulletsFired++;
       this.lastFired = Date.now();
       if(this.group.amount > 10) {
@@ -50,7 +55,7 @@ class machineGun {
     }
     // culling - remove bullets if they go more than 10 units offscreen
     // note - if screen size is changed then cull boundary changes too
-    this.group.cull(10, 10, 10, 10);
+    this.group.cull(50, 50, 50, 50);
   }
 }
 
