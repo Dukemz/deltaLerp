@@ -13,6 +13,7 @@ class GameHUD extends Sprite {
     noStroke();
     fill(255);
     textSize(20);
+    
     // top left HUD
     textAlign(LEFT, TOP);
     text(`frames: ${frameCount}`, 10, 10);
