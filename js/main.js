@@ -9,7 +9,8 @@ let scriptList = [
   'windowResized',
   'machinegun',
   'arcindicator',
-  'game'
+  'game',
+  'gamehud'
 ];
 
 // will hold game instance
@@ -62,12 +63,19 @@ async function setup() {
     if (fpsList.length > 30) fpsList.shift();
   }, 100);
 
+  // background colour
+  window.bgcol = color("#24283880");
+  
+  const opaquebgcol = color(red(bgcol), green(bgcol), blue(bgcol));
+  background(opaquebgcol);
+  console.log(opaquebgcol)
+
   // initial setup complete - create game
   game = new Game();
 }
 
 function deltaLerp(a, b, f) { // lerp with deltatime
   // f is the factor between 0 and 1 deciding how quickly it catches up
-  // e.g. if f = 0.25, it will cover 75% the remaining distance every second
-  return lerp(a, b, 1 - pow(f, avgDeltaTime));
+  // e.g. if f = 0.25, it will cover 25% the remaining distance every second
+  return lerp(a, b, 1 - pow(1-f, avgDeltaTime));
 }

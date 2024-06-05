@@ -29,6 +29,9 @@ class machineGun {
     // this.group.collider = "kinematic";
     // bouncy
     this.bounciness = 1;
+    // visual properties
+    this.group.stroke = 255;
+    this.group.strokeWeight = 2;
 
     this.group.update = (a) => {
       // a is amount of sprites in group

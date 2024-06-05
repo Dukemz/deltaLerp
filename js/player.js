@@ -12,7 +12,7 @@ class Player extends Sprite {
 
     Object.assign(this, data);
 
-    // this.y = -200
+    this.autoDraw = false;
     this.autoFire = false;
     this.originX = 0;
     this.originY = 0;
@@ -32,7 +32,7 @@ class Player extends Sprite {
     // this.activeWeapon will be the currently active weapon
     // at the end of update, if pressing down fire key or autofire is on, call the fire function
     // the weapon class should handle everything from there
-    this.projectiles = new Group();
+    this.projectiles ||= new Group();
     this.activeWeapon = 0;
     this.weapons.forEach(weapon => { // initialise all weapons
       weapon.initialise(this);
@@ -41,8 +41,11 @@ class Player extends Sprite {
     // delete any bullets that touch the player
     this.collides(this.projectiles, (_p, b) => b.remove());
 
-    // shield thing
-    this.shield = new ArcIndicator(this);
+    // subdetails should already be created in the constructor
+    this.subdetails ||= new Group();
+    // indicators like health and such - rings around the player
+    this.arcindics = new this.subdetails.Group();
+    this.arcindics.push(new ArcIndicator(this));
 
     // set attributes
     this.offset.y = 8;
@@ -75,14 +78,14 @@ class Player extends Sprite {
     } else if(kb.pressing("down")) {
       this.vel.y = 5;
     } else {
-      this.vel.y = deltaLerp(this.vel.y, 0, 0.001);
+      this.vel.y = deltaLerp(this.vel.y, 0, 0.999);
     }
     if(kb.pressing("left")) {
       this.vel.x = -5;
     } else if(kb.pressing("right")) {
       this.vel.x = 5;
     } else {
-      this.vel.x = deltaLerp(this.vel.x, 0, 0.001);
+      this.vel.x = deltaLerp(this.vel.x, 0, 0.999);
     }
 
     // toggle auto fire

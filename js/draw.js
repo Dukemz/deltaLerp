@@ -8,7 +8,7 @@ function draw() {
   // background(color("#242838"))
 
   // average deltatime, fps calcs
-  avgFPS = fpsList.reduce((a, b) => a + b, 0)/fpsList.length || 0;
+  avgFPS = fpsList.reduce((a, b) => a + b, 0)/fpsList.length || frameRate();
   avgDeltaTime = 1/avgFPS;
 
   game.draw();
