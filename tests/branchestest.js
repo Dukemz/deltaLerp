@@ -29,6 +29,7 @@ function setup() {
   things.drag = 5;
   things.rotationLock = true;
   things.textSize = 15;
+  things.autoDraw = false;
 
   // automatic branch creation system
   // group as 1st argument, structure data as 2nd (optional base sprite as 3rd)
@@ -39,21 +40,48 @@ function setup() {
 }
 
 function draw() {
-  background(color("#24283890"));
-
-  // temp
-  things[0].text = things[3].distanceTo(things[1]).toFixed(3)
-
   // average deltatime, fps calcs
   avgFPS = fpsList.reduce((a, b) => a + b, 0)/fpsList.length || 0;
   avgDeltaTime = 1/avgFPS;
 
+  // draw stuff
+  background(color("#24283890"));
+  camera.on();
+  things.draw();
+  camera.off();
+  // temp hud
+  push();
+  noStroke();
+  fill(255);
+  textSize(20);
+  textAlign(LEFT, BOTTOM);
+  text(`${frameRate().toFixed(0)}fps, avg ${avgFPS.toFixed(0)}`, 10, height-40);
+  text(`deltaTime = ${deltaTime}, avg ${Math.round(avgDeltaTime*1000)}`, 10, height-10);
+  pop();
+
+  // smooth zoom
   camera.zoom = lerp(camera.zoom, targetZoom, zoomSpeed);
 
-  things.forEach(thing => {
-    if(thing.mouse.hovering()) window.activeSpr = thing;
-    // list not including this
-    const thingsExceptThisThing = things.filter(x => x.idNum !== thing.idNum)
+  // list of all squares connected to active (middle) square
+  window.connectedToActive = getConnectedSprites(activeSpr);
+  // code to move each square in a circular motion
+  connectedToActive.forEach(sub => {
+    
+    // set angle
+    sub.bearing = sub.angleTo(activeSpr) + 90;
+    sub.applyForceScaled(10);
+    sub.text = `${sub.idNum}/${sub.speed.toFixed(2)}`;
+  });
+
+  // loop runs for every square
+  things.forEach(thing => { // thing is the current square
+    if(thing.mouse.hovers() && window.activeSpr !== thing) { // set hovered sprite to active
+      window.activeSpr = thing;
+      console.log("PONG")
+    }
+    // list not including this thing
+    const thingsExceptThisThing = things.filter(x => x.idNum !== thing.idNum);
+    // repel every other square from thing
     thingsExceptThisThing.forEach(t => {
       // why am i doing this lol
       const gravconst = 300;
@@ -73,7 +101,7 @@ function draw() {
           thing.overlaps(t);
         }
       } else { // we are stuck with this sprite
-        if(thing.distanceTo(t) > 75) { // if far away enough...
+        if(thing.distanceTo(t) > 72) { // if far away enough...
           // then re-enable collision
           thing.collides(t);
           // remove 1 item from list at index
@@ -86,7 +114,6 @@ function draw() {
       } else {
         thing.strokeColor = "white";
       }
-      // thing.text = (force).toFixed(3);
       thing.repelFrom(t, force);
     });
   });
@@ -98,6 +125,40 @@ function draw() {
 
   // activeSpr.scale.x = 2
   // activeSpr.scale.y = 2
+}
+
+// i don't completely know this but it works so
+function getBranchedSprites(spr, ignore = null, visited = new Set()) {
+  // spr is the sprite you want to get the branched sprites of
+  // ignore is the sprite to ignore along the branch line
+  let branchedSprites = [];
+
+  // Check if the sprite has already been visited
+  if (visited.has(spr.idNum)) return [];
+
+  // add the current sprite to visited
+  visited.add(spr.idNum);
+  // add the current sprite to the list of branched sprites
+  branchedSprites.push(spr);
+  // get connected sprites, ignoring the specified sprite
+  const subspr = getConnectedSprites(spr).filter(s => !ignore || s.idNum !== ignore.idNum);
+
+  // recursive call for each connected sprite
+  subspr.forEach(s => {
+    const subbr = getBranchedSpritesC(s, spr, visited);
+    branchedSprites.push(...subbr);
+  });
+  return branchedSprites;
+}
+
+
+function getConnectedSprites(spr) { // gets all sprites connected
+  const connected = [];
+  spr.joints.forEach(joint => {
+    if(spr.idNum !== joint.spriteA.idNum) connected.push(joint.spriteA);
+    if(spr.idNum !== joint.spriteB.idNum) connected.push(joint.spriteB);
+  });
+  return connected;
 }
 
 function branchMake(maingroup, data, basespr) {
@@ -116,7 +177,7 @@ function branchMake(maingroup, data, basespr) {
   const { subc, ...copied } = data;
   Object.assign(spr, copied);
 
-  // for each of the subsprite data 
+  // for each of the subsprite data
   // call the function again
   if(subc) subc.forEach(sub => branchMake(maingroup, sub, spr));
 }
@@ -129,7 +190,12 @@ branchStructure = {
       text: "PLAY",
       subc: [
         {
-          text: "yo"
+          text: "yo",
+          subc: [
+            {
+              text: "sq"
+            }
+          ]
         }
       ]
     },
@@ -167,7 +233,15 @@ branchStructure = {
       text: "ACHIEV",
       subc: [
         {
-          text: "how"
+          text: "how",
+          subc: [
+            {
+              text: "idk lol"
+            },
+            {
+              text: "or do i..."
+            }
+          ]
         }
       ]
     },
