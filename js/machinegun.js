@@ -24,7 +24,7 @@ class machineGun {
     // and travel in the right direction accordingly
     this.group.x = () => player.x + 45;
     this.group.y = () => player.y;
-    this.group.vel.x = 30; // bullet velocity
+    this.group.vel.x = 20; // bullet velocity
     // kinematic collider - will not be affected by other objects
     // this.group.collider = "kinematic";
     // bouncy

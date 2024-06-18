@@ -1,3 +1,6 @@
+// prototype for menu branch system
+// when item is selected as active, increase the springiness of all its joints and increase its size
+
 "use strict";
 console.log("what the branch");
 
@@ -34,7 +37,7 @@ function setup() {
   // automatic branch creation system
   // group as 1st argument, structure data as 2nd (optional base sprite as 3rd)
   branchMake(things, branchStructure);
-  window.activeSpr = things[0];
+  setActiveSprite(things[0]);
 
   background(color("#242838"));
 }
@@ -54,30 +57,30 @@ function draw() {
   noStroke();
   fill(255);
   textSize(20);
+  textAlign(LEFT, TOP);
+  text(`${connectedToActive.length} connected`, 10, 10);
+  text(`sploink`, 10, 40);
   textAlign(LEFT, BOTTOM);
   text(`${frameRate().toFixed(0)}fps, avg ${avgFPS.toFixed(0)}`, 10, height-40);
-  text(`deltaTime = ${deltaTime}, avg ${Math.round(avgDeltaTime*1000)}`, 10, height-10);
+  text(`deltaTime = ${Math.round(deltaTime)}, avg ${Math.round(avgDeltaTime*1000)}`, 10, height-10);
   pop();
 
   // smooth zoom
   camera.zoom = lerp(camera.zoom, targetZoom, zoomSpeed);
 
-  // list of all squares connected to active (middle) square
-  window.connectedToActive = getConnectedSprites(activeSpr);
   // code to move each square in a circular motion
-  connectedToActive.forEach(sub => {
-    
+  connectedToActive.forEach(sub => {    
     // set angle
     sub.bearing = sub.angleTo(activeSpr) + 90;
-    sub.applyForceScaled(10);
-    sub.text = `${sub.idNum}/${sub.speed.toFixed(2)}`;
+    // apply force based on total branch mass
+    sub.applyForce(sub.totalBranchMass*2);
+    sub.text = `${sub.totalBranchMass.toFixed(1)}/${sub.speed.toFixed(2)}`;
   });
 
   // loop runs for every square
   things.forEach(thing => { // thing is the current square
-    if(thing.mouse.hovers() && window.activeSpr !== thing) { // set hovered sprite to active
-      window.activeSpr = thing;
-      console.log("PONG")
+    if(thing.mouse.hovers() && window.activeSpr !== thing) {
+      setActiveSprite(thing);
     }
     // list not including this thing
     const thingsExceptThisThing = things.filter(x => x.idNum !== thing.idNum);
@@ -114,17 +117,36 @@ function draw() {
       } else {
         thing.strokeColor = "white";
       }
-      thing.repelFrom(t, force);
+      t.repelFrom(thing, force);
     });
   });
 
-  // activeSpr.moveTowards(mouse, 1);
-  activeSpr.moveTowards(0, 0);
+  if(false) {
+    activeSpr.moveTowards(mouse, 1);
+  } else {
+    activeSpr.moveTowards(0, 0);
+  }
 
   // if(frameCount % 60 === 0) activeSpr = random(things);
 
   // activeSpr.scale.x = 2
   // activeSpr.scale.y = 2
+}
+
+function setActiveSprite(thing) {
+  // set hovered sprite to active
+  window.activeSpr = thing;
+  // list of all squares connected to active (middle) square
+  window.connectedToActive = getConnectedSprites(thing);
+  
+  connectedToActive.forEach(con => {
+    // mass calculation for each branch
+    const branched = getBranchedSprites(con, activeSpr);
+    con.totalBranchMass = branched.reduce((accumulator, currentValue) => {
+      // this adds up the mass of all the objects
+      return accumulator + currentValue.mass;
+    }, 0);
+  });
 }
 
 // i don't completely know this but it works so
@@ -145,7 +167,7 @@ function getBranchedSprites(spr, ignore = null, visited = new Set()) {
 
   // recursive call for each connected sprite
   subspr.forEach(s => {
-    const subbr = getBranchedSpritesC(s, spr, visited);
+    const subbr = getBranchedSprites(s, spr, visited);
     branchedSprites.push(...subbr);
   });
   return branchedSprites;

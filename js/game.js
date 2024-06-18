@@ -40,6 +40,9 @@ class Game { // game class
     // at the moment the game is only single-player though
     this.players.push(this.player);
 
+    // wall test - vertex mode
+    this.wall = new Sprite([[100, 100], [200, -100]], 's');
+
     // various objects
     this.randomObjs = new this.objects.Group();
     this.randomObjs.height = 50;
@@ -62,7 +65,7 @@ class Game { // game class
 
     this.rocks = new this.randomObjs.Group();
     this.rocks.image = () => random(["🗿", "💀"]);
-    this.rocks.collides(this.player.projectiles, (_p, b) => b.remove())
+    this.rocks.collides(this.player.projectiles, (_p, b) => b.remove());
     this.rocks.amount = 5;
 
     this.stars = new this.randomObjs.Group();

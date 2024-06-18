@@ -4,7 +4,7 @@ function draw() {
   if(document.hidden) {
     window.lastHidden = Date.now();
   }
-  background(bgcol);
+  background(window.bgcol);
   // background(color("#242838"))
 
   // average deltatime, fps calcs
