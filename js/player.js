@@ -6,18 +6,19 @@ class Player extends Sprite {
       [0, 0], // bottom notch
       [-50, 50], // bottom left
       [0, -70], // top
-      [50, 50], // bottom right
       [0, 0] // repeat 1st to connect
     ]);
 
-    Object.assign(this, data);
+    /*
+      [0, 0], // bottom notch
+      [50, 50], // bottom right
+      [0, -70], // top
+      [0, 0] // repeat 1st to connect
 
-    this.autoDraw = false;
-    this.autoFire = false;
-    this.originX = 0;
-    this.originY = 0;
-    // for gravity counter-action
-    this.bearing = -90;
+      [0, 0], [50, 50], [0, -70], [0, 0]
+    */
+
+    Object.assign(this, data);
 
     // weapons, bullets, etc
     // in future figure out how to make this into classes
@@ -38,8 +39,6 @@ class Player extends Sprite {
       weapon.initialise(this);
     });
 
-    // delete any bullets that touch the player
-    this.collides(this.projectiles, (_p, b) => b.remove());
 
     // subdetails should already be created in the constructor
     this.subdetails ||= new Group();
@@ -47,11 +46,27 @@ class Player extends Sprite {
     this.arcindics = new this.subdetails.Group();
     this.arcindics.push(new ArcIndicator(this));
 
+    // offset for first half (this took FOREVER to get right)
+    this.offset = {x:-16.666, y:0}
+    // second half of the thing
+    this.addCollider(-16.666, 0, [[0, 0], [50, 50], [0, -70], [0, 0]]);
+    this.resetCenterOfMass();
+
+    // delete any bullets that touch the player
+    this.overlaps(this.projectiles, (_p, b) => b.remove());
+
     // set attributes
-    this.offset.y = 8;
-    this.rotation = 90;
-    this.scale = {x: 0.5, y: 0.5};
+    this.rotationLock = true;
     this.strokeWeight = 1;
+
+    this.autoDraw = false;
+    this.autoFire = false;
+    this.scale = {x: 0.5, y: 0.5};
+
+    this.pos = {x:0, y:0}
+    // not sure why this needs to be here???
+    this.offset.y = -1.666;
+    this.rotation = 90;
   }
 
   directionalVelocity(angle) { // calculate velocity respective of an angle
@@ -70,7 +85,14 @@ class Player extends Sprite {
     // const camDevY = camera.y-this.y;
 
     // counteract gravity if there is any
-    if(world.gravity.y) this.applyForceScaled(world.gravity.y);
+    if(world.gravity.y) {
+      this.bearing = -90;
+      this.applyForceScaled(world.gravity.y);
+    }
+    if(world.gravity.x) {
+      this.bearing = 180;
+      this.applyForceScaled(world.gravity.x);
+    }
 
     // movement
     if(kb.pressing("up")) {

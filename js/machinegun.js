@@ -22,7 +22,7 @@ class machineGun {
     this.group.diameter = 10;
     // todo: figure out how to make bullets always shoot from the tip of the player
     // and travel in the right direction accordingly
-    this.group.x = () => player.x + 45;
+    this.group.x = () => player.x + 41;
     this.group.y = () => player.y;
     this.group.vel.x = 20; // bullet velocity
     // kinematic collider - will not be affected by other objects
@@ -35,6 +35,7 @@ class machineGun {
 
     this.group.update = (a) => {
       // a is amount of sprites in group
+      // note: this doesn't seem to be useful
     }
   } 
 

@@ -30,7 +30,8 @@ class Game { // game class
       projectiles: new this.projectiles.Group(),
       subdetails: new this.playerDetails.Group(),
       layer: 1,
-      stroke: color(122, 122, 255),
+      stroke: color(0,0,0,0),
+      fill: color(122, 122, 255),
       weapons: [
         new machineGun()
       ]
@@ -41,7 +42,7 @@ class Game { // game class
     this.players.push(this.player);
 
     // wall test - vertex mode
-    this.wall = new Sprite([[100, 100], [200, -100]], 's');
+    this.wall = new this.objects.Sprite([[100, 100], [200, -100]], 's');
 
     // various objects
     this.randomObjs = new this.objects.Group();
@@ -58,9 +59,8 @@ class Game { // game class
     this.randomObjs.strokeWeight = 2;
     // set layer
     this.randomObjs.layer = () => {
-      const thing = this.objects._getTopLayer() + 1 || 5;
-      console.log(thing)
-      return thing
+      const layer = this.objects._getTopLayer() + 1 || 5;
+      return layer;
     }
 
     this.rocks = new this.randomObjs.Group();
@@ -71,7 +71,7 @@ class Game { // game class
     this.stars = new this.randomObjs.Group();
     this.stars.image = "✨";
     this.stars.overlaps(this.player.projectiles, (_p, b) => b.remove());
-    this.stars.amount = 3;
+    this.stars.amount = 2;
 
     // just move the camera to center, why not?
     camera.pos = { x: 0, y: 0 };
@@ -100,7 +100,7 @@ class Game { // game class
     this.randomObjs.amount = 10;
 
     // the attractive
-    this.stars.attractTo(this.player, 1);
+    // this.stars.attractTo(this.player, 1);
     this.stars.overlaps(this.player);
   }
 
