@@ -8,6 +8,11 @@ class Game { // game class
     Object.assign(this, data);
     this.active = true;
 
+    // camera config
+    this.cameraSpeed = 0;
+    this.targetCameraSpeed = 0;
+    this.cameraLerpAmount = 0.05;
+
     // heads-up display, info like framerate and things
     this.hud = new GameHUD();
 
@@ -44,6 +49,7 @@ class Game { // game class
     this.walls = new this.objects.Group();
     this.walls.stroke = "white";
     this.walls.strokeWeight = 2
+    this.walls.collides(this.projectiles, (_w, p) => p.remove());
 
     this.wall = new this.walls.Sprite([[100, 100], [200, -100]], 's');
 
@@ -71,6 +77,11 @@ class Game { // game class
     // hud is drawn last and with the camera disabled
     camera.off();
     this.hud.draw();
+
+    // calculation for camera movement
+    // this is about as accurate as i can make it lol
+    camera.x += this.cameraSpeed * deltaTime;
+    this.cameraSpeed = lerp(this.cameraSpeed, this.targetCameraSpeed, this.cameraLerpAmount);
   }
 
   exit() { // close game, remove all sprites.
