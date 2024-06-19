@@ -20,14 +20,36 @@ class Player extends Sprite {
 
     Object.assign(this, data);
 
+    // offset for first half (this took FOREVER to get right)
+    this.offset.x = -16.666;
+    // second half of the thing
+    this.addCollider(-16.666, 0, [[0, 0], [50, 50], [0, -70], [0, 0]]);
+    this.resetCenterOfMass();
+
+    // set attributes
+    this.rotationLock = true;
+    this.autoDraw = false;
+    this.autoFire = false;
+    this.scale = {x: 0.5, y: 0.5};
+    this.pos = {x:0, y:0}
+    // this keeps being inconsistent for some reason
+    this.offset.y = -3.666;
+    this.rotation = 90;
+    this.strokeWeight = 0.2;
+    this.stroke = this.fill;
+
+    // subdetails should already be created in the constructor
+    this.subdetails ||= new Group();
+    // indicators like health and such - rings around the player
+    this.arcindics = new this.subdetails.Group();
+    this.arcindics.push(new ArcIndicator(this));
+
     // weapons, bullets, etc
     // in future figure out how to make this into classes
     // for easier addition of new weapons, use of extends, etc
-
     // array of available weapon classes
     // group of all projectiles
     // allow for use with enemies as well?
-
     // if this.weapons is not already an array, create it
     this.weapons ||= [];
     // this.activeWeapon will be the currently active weapon
@@ -39,34 +61,11 @@ class Player extends Sprite {
       weapon.initialise(this);
     });
 
+    this.fixlist = [];
 
-    // subdetails should already be created in the constructor
-    this.subdetails ||= new Group();
-    // indicators like health and such - rings around the player
-    this.arcindics = new this.subdetails.Group();
-    this.arcindics.push(new ArcIndicator(this));
-
-    // offset for first half (this took FOREVER to get right)
-    this.offset = {x:-16.666, y:0}
-    // second half of the thing
-    this.addCollider(-16.666, 0, [[0, 0], [50, 50], [0, -70], [0, 0]]);
-    this.resetCenterOfMass();
-
-    // delete any bullets that touch the player
-    this.overlaps(this.projectiles, (_p, b) => b.remove());
-
-    // set attributes
-    this.rotationLock = true;
-    this.strokeWeight = 1;
-
-    this.autoDraw = false;
-    this.autoFire = false;
-    this.scale = {x: 0.5, y: 0.5};
-
-    this.pos = {x:0, y:0}
-    // not sure why this needs to be here???
-    this.offset.y = -1.666;
-    this.rotation = 90;
+    for(let fxt = this.body.m_fixtureList; fxt; fxt = fxt.getNext()) {
+      if(!fxt.isSensor()) this.fixlist.push(fxt);
+    }
   }
 
   directionalVelocity(angle) { // calculate velocity respective of an angle
@@ -118,5 +117,16 @@ class Player extends Sprite {
 
     // shoot controls
     if(kb.pressing("space") || this.autoFire) this.weapons[this.activeWeapon].fire();
+  }
+
+  tdebug() { // toggle debug
+    if(this.debug) {
+      this.debug = false;
+      this.strokeWeight = 0.2;
+      this.stroke = this.fill;
+    } else {
+      this.debug = true;
+      this.strokeWeight = 1;
+    }
   }
 }

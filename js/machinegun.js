@@ -9,29 +9,32 @@ class machineGun {
     this.lastFired = 0;
     // total bullets fired
     this.bulletsFired = 0;
-    // remove bullet when it collides/overlaps with random object (temporary)
-    // this.group.collides(allSprites, b => b.remove());
+    this.fireRate = 100; // time between firing
   }
 
   initialise(player) {
     this.group = new player.projectiles.Group();
 
     // ~~ PROPERTIES ~~ //
-    this.fireRate = 100; // time between firing
     // sprite soft inheritance properties
     this.group.diameter = 10;
-    // todo: figure out how to make bullets always shoot from the tip of the player
-    // and travel in the right direction accordingly
-    this.group.x = () => player.x + 41;
+    this.group.x = () => player.x + 15;
     this.group.y = () => player.y;
     this.group.vel.x = 20; // bullet velocity
-    // kinematic collider - will not be affected by other objects
-    // this.group.collider = "kinematic";
     // bouncy
     this.bounciness = 1;
     // visual properties
     this.group.stroke = 255;
     this.group.strokeWeight = 2;
+
+    // todo: figure out how to make bullets always shoot from the tip of the player
+    // and travel in the right direction accordingly
+
+    // delete any bullets that touch the player
+    this.group.overlaps(player, b => {
+      const life = 2147483647 - b.life;
+      if(life > 10) b.remove();
+    });
 
     this.group.update = (a) => {
       // a is amount of sprites in group

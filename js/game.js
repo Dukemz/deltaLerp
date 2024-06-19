@@ -30,7 +30,6 @@ class Game { // game class
       projectiles: new this.projectiles.Group(),
       subdetails: new this.playerDetails.Group(),
       layer: 1,
-      stroke: color(0,0,0,0),
       fill: color(122, 122, 255),
       weapons: [
         new machineGun()
@@ -43,6 +42,8 @@ class Game { // game class
 
     // wall test - vertex mode
     this.wall = new this.objects.Sprite([[100, 100], [200, -100]], 's');
+    this.wall.stroke = "white";
+    this.wall.strokeWeight = 2
 
     // various objects
     this.randomObjs = new this.objects.Group();
