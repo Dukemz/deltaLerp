@@ -21,7 +21,7 @@ class GameHUD extends Sprite {
     // right HUD
     textAlign(RIGHT, TOP);
     text(`player: ${Math.round(game.player.x)}, ${Math.round(game.player.y)} || mouse: ${Math.round(mouse.x)}, ${Math.round(mouse.y)}`, width-10, 10);
-    text(`bullets fired: ${game.player.weapons[game.player.activeWeapon].bulletsFired}, speed: ${game.player.speed.toFixed(3)}`, width-10, 40);
+    text(`bullets fired: ${game.player.weapons[game.player.activeWeapon].bulletsFired}, total ${game.player.projectiles.amount} speed: ${game.player.speed.toFixed(3)}`, width-10, 40);
     // bottom left HUD
     textAlign(LEFT, BOTTOM);
     text(`${frameRate().toFixed(0)}fps, avg ${avgFPS.toFixed(0)}`, 10, height-40);

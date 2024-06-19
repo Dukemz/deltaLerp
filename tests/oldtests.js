@@ -29,3 +29,34 @@ function getBranchedSprites(spr, ignore) {
   });
   return branchedSprites;
 }
+
+
+// RANDOM OBJECTS
+// various objects
+this.randomObjs = new this.objects.Group();
+this.randomObjs.height = 50;
+this.randomObjs.width = 50;
+this.randomObjs.drag = 1;
+this.randomObjs.rotationDrag = 1;
+// assume center is 0, 0
+// this needs to be updated to account for camera position
+this.randomObjs.x = () => random(-canvas.hw, canvas.hw);
+this.randomObjs.y = () => random(-canvas.hh, canvas.hh);
+// visual properties
+this.randomObjs.stroke = 255;
+this.randomObjs.strokeWeight = 2;
+// set layer
+this.randomObjs.layer = () => {
+  const layer = this.objects._getTopLayer() + 1 || 5;
+  return layer;
+}
+
+this.rocks = new this.randomObjs.Group();
+this.rocks.image = () => random(["🗿", "💀"]);
+this.rocks.collides(this.player.projectiles, (_p, b) => b.remove());
+this.rocks.amount = 5;
+
+this.stars = new this.randomObjs.Group();
+this.stars.image = "✨";
+this.stars.overlaps(this.player.projectiles, (_p, b) => b.remove());
+this.stars.amount = 2;

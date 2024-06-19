@@ -41,38 +41,13 @@ class Game { // game class
     this.players.push(this.player);
 
     // wall test - vertex mode
-    this.wall = new this.objects.Sprite([[100, 100], [200, -100]], 's');
-    this.wall.stroke = "white";
-    this.wall.strokeWeight = 2
+    this.walls = new this.objects.Group();
+    this.walls.stroke = "white";
+    this.walls.strokeWeight = 2
 
-    // various objects
-    this.randomObjs = new this.objects.Group();
-    this.randomObjs.height = 50;
-    this.randomObjs.width = 50;
-    this.randomObjs.drag = 1;
-    this.randomObjs.rotationDrag = 1;
-    // assume center is 0, 0
-    // this needs to be updated to account for camera position
-    this.randomObjs.x = () => random(-canvas.hw, canvas.hw);
-    this.randomObjs.y = () => random(-canvas.hh, canvas.hh);
-    // visual properties
-    this.randomObjs.stroke = 255;
-    this.randomObjs.strokeWeight = 2;
-    // set layer
-    this.randomObjs.layer = () => {
-      const layer = this.objects._getTopLayer() + 1 || 5;
-      return layer;
-    }
+    this.wall = new this.walls.Sprite([[100, 100], [200, -100]], 's');
 
-    this.rocks = new this.randomObjs.Group();
-    this.rocks.image = () => random(["🗿", "💀"]);
-    this.rocks.collides(this.player.projectiles, (_p, b) => b.remove());
-    this.rocks.amount = 5;
-
-    this.stars = new this.randomObjs.Group();
-    this.stars.image = "✨";
-    this.stars.overlaps(this.player.projectiles, (_p, b) => b.remove());
-    this.stars.amount = 2;
+    this.wall2 = new this.walls.Sprite([[-100, -100], [-100, 100]], 's');
 
     // just move the camera to center, why not?
     camera.pos = { x: 0, y: 0 };
@@ -96,13 +71,6 @@ class Game { // game class
     // hud is drawn last and with the camera disabled
     camera.off();
     this.hud.draw();
-
-    this.randomObjs.cull(50, 50, 50, 50);
-    this.randomObjs.amount = 10;
-
-    // the attractive
-    // this.stars.attractTo(this.player, 1);
-    this.stars.overlaps(this.player);
   }
 
   exit() { // close game, remove all sprites.

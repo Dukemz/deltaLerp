@@ -49,7 +49,7 @@ class machineGun {
     // this is just called at the end of player update if the player is currently requesting to fire
 
     // elapsed time since last bullet fired
-    const elapseFired = Date.now() - this.lastFired;
+    const elapseFired = world.physicsTime*1000 - this.lastFired;
     if(elapseFired > this.fireRate) {
       const bullet = new this.group.Sprite();
       // set bullet's update function since for some reason you can't define it before
@@ -57,7 +57,7 @@ class machineGun {
         if(bullet.speed < 3) bullet.remove();
       }
       this.bulletsFired++;
-      this.lastFired = Date.now();
+      this.lastFired = world.physicsTime*1000;
       if(this.group.amount > 15) {
         this.group[0].remove();
       }
