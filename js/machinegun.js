@@ -9,7 +9,7 @@ class machineGun {
     this.lastFired = 0;
     // total bullets fired
     this.bulletsFired = 0;
-    this.fireRate = 100; // time between firing
+    this.fireRate = 100; // time between firing in ms
   }
 
   initialise(player) {
@@ -30,11 +30,13 @@ class machineGun {
     // todo: figure out how to make bullets always shoot from the tip of the player
     // and travel in the right direction accordingly
 
-    // delete any bullets that touch the player
-    this.group.overlaps(player, b => {
-      const life = 2147483647 - b.life;
-      if(life > 10) b.remove();
-    });
+    // bullets overlap with the player
+    this.group.overlaps(player);
+    // // thing to remove bullets if they touch player, but it's unnecessary
+    // {
+    //   const life = 2147483647 - b.life;
+    //   if(life > 10) b.remove();
+    // }
 
     this.group.update = (a) => {
       // a is amount of sprites in group
