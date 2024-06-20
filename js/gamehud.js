@@ -18,6 +18,7 @@ class GameHUD extends Sprite {
     textAlign(LEFT, TOP);
     text(`frames: ${frameCount}`, 10, 10);
     text(`realtime: ${world.realTime.toFixed(3)}, physics: ${world.physicsTime.toFixed(3)}`, 10, 40);
+    text(`step time: ${window.stepTime}, upd rate: ${window.fixedUpdateRate}`, 10, 70)
     // top right HUD
     textAlign(RIGHT, TOP);
     text(`player: ${Math.round(game.player.x)}, ${Math.round(game.player.y)} || mouse: ${Math.round(mouse.x)}, ${Math.round(mouse.y)}`, width-10, 10);

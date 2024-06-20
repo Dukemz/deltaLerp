@@ -2,7 +2,7 @@
 "use strict";
 console.log("[HELLO WORLD]");
 
-let fpsList = [], fpsPush, avgFPS, avgDeltaTime;
+let fpsList = [], fpsPush, avgFPS, avgDeltaTime, stepInterval;
 let scriptList = [
   'player',
   'windowResized',
@@ -63,6 +63,13 @@ async function setup() {
     if (fpsList.length > 30) fpsList.shift();
   }, 100);
 
+  // disable automatic world stepping
+  world.autoStep = false;
+  world.stepRate = 1/30;
+
+  // set fixed update interval
+  stepInterval = setInterval(fixedUpdate, world.stepRate*1000);
+
   // background colour
   window.bgcol = color("#24283880");
   
@@ -91,8 +98,24 @@ function draw() {
 // by default sprites are drawn in the order they were created in
 // each sprite's update function is called after it is drawn
 
+window.timeSinceLastFixedUpdate = performance.now()
+
+function fixedUpdate() {
+  // fixed update, runs 50 times a second (20ms between fixedupdates)
+  // updates physics and so on
+  const startStep = performance.now();
+  window.fixedUpdateRate = startStep - window.timeSinceLastFixedUpdate
+  window.timeSinceLastFixedUpdate = startStep;
+
+  // step world forward
+  world.step(world.stepRate);
+  const endStep = performance.now();
+  window.stepTime = endStep - startStep;
+}
+
 function deltaLerp(a, b, f) { // lerp with deltatime
   // f is the factor between 0 and 1 deciding how quickly it catches up
   // e.g. if f = 0.25, it will cover 25% the remaining distance every second
-  return lerp(a, b, 1 - pow(1-f, avgDeltaTime));
+  // return lerp(a, b, 1 - pow(1-f, avgDeltaTime));
+  return lerp(a, b, 1 - pow(1-f, deltaTime/1000));
 }
