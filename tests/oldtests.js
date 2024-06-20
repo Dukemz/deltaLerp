@@ -31,6 +31,22 @@ function getBranchedSprites(spr, ignore) {
 }
 
 
+// OLD MOVEMENT SYSTEM
+if(kb.pressing("up")) {
+  this.vel.y = -5;
+} else if(kb.pressing("down")) {
+  this.vel.y = 5;
+} else {
+  this.vel.y = deltaLerp(this.vel.y, 0, 0.999);
+}
+if(kb.pressing("left")) {
+  this.vel.x = -5;
+} else if(kb.pressing("right")) {
+  this.vel.x = 5;
+} else {
+  this.vel.x = deltaLerp(this.vel.x, 0, 0.999);
+}
+
 // RANDOM OBJECTS
 // various objects
 this.randomObjs = new this.objects.Group();

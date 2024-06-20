@@ -10,7 +10,8 @@ let scriptList = [
   'machinegun',
   'arcindicator',
   'game',
-  'gamehud'
+  'gamehud',
+  'kbinput'
 ];
 
 // will hold game instance

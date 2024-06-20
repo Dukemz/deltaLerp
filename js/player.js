@@ -93,21 +93,8 @@ class Player extends Sprite {
       this.applyForceScaled(world.gravity.x);
     }
 
-    // movement
-    if(kb.pressing("up")) {
-      this.vel.y = -5;
-    } else if(kb.pressing("down")) {
-      this.vel.y = 5;
-    } else {
-      this.vel.y = deltaLerp(this.vel.y, 0, 0.999);
-    }
-    if(kb.pressing("left")) {
-      this.vel.x = -5;
-    } else if(kb.pressing("right")) {
-      this.vel.x = 5;
-    } else {
-      this.vel.x = deltaLerp(this.vel.x, 0, 0.999);
-    }
+    // new movement system
+    this.vel = this.input.getMoveVel(this.vel);
 
     // toggle auto fire
     if(kb.presses("e")) this.autoFire = !this.autoFire;

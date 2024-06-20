@@ -36,6 +36,7 @@ class Game { // game class
       subdetails: new this.playerDetails.Group(),
       layer: 1,
       fill: color(122, 122, 255),
+      input: new kbInput(),
       weapons: [
         new machineGun()
       ]
