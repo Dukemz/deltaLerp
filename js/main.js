@@ -4,7 +4,6 @@ console.log("[HELLO WORLD]");
 
 let fpsList = [], fpsPush, avgFPS, avgDeltaTime;
 let scriptList = [
-  'draw',
   'player',
   'windowResized',
   'machinegun',
@@ -74,6 +73,23 @@ async function setup() {
   // initial setup complete - create game
   game = new Game();
 }
+
+function draw() {
+  if(document.hidden) {
+    window.lastHidden = Date.now();
+  }
+  background(window.bgcol);
+  // background(color("#242838"))
+
+  // average deltatime, fps calcs
+  avgFPS = fpsList.reduce((a, b) => a + b, 0)/fpsList.length || frameRate();
+  avgDeltaTime = 1/avgFPS;
+
+  game.draw();
+}
+// after this the draw functions of sprites are called
+// by default sprites are drawn in the order they were created in
+// each sprite's update function is called after it is drawn
 
 function deltaLerp(a, b, f) { // lerp with deltatime
   // f is the factor between 0 and 1 deciding how quickly it catches up
