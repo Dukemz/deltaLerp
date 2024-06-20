@@ -29,7 +29,6 @@ class Player extends Sprite {
     // set attributes
     this.rotationLock = true;
     this.autoDraw = false;
-    this.autoFire = false;
     this.scale = {x: 0.5, y: 0.5};
     this.pos = {x:0, y:0}
     // this keeps being inconsistent for some reason
@@ -37,6 +36,10 @@ class Player extends Sprite {
     this.rotation = 90;
     this.strokeWeight = 0.2;
     this.stroke = this.fill;
+
+    // custom attribs
+    this.autoFire = false;
+    this.targetSpeed ||= 6;
 
     // subdetails should already be created in the constructor
     this.subdetails ||= new Group();
@@ -61,11 +64,10 @@ class Player extends Sprite {
       weapon.initialise(this);
     });
 
-    this.fixlist = [];
-
-    for(let fxt = this.body.m_fixtureList; fxt; fxt = fxt.getNext()) {
-      if(!fxt.isSensor()) this.fixlist.push(fxt);
-    }
+    // this.fixlist = [];
+    // for(let fxt = this.body.m_fixtureList; fxt; fxt = fxt.getNext()) {
+    //   if(!fxt.isSensor()) this.fixlist.push(fxt);
+    // }
   }
 
   directionalVelocity(angle) { // calculate velocity respective of an angle
@@ -94,7 +96,7 @@ class Player extends Sprite {
     }
 
     // new movement system
-    this.vel = this.input.getMoveVel(this.vel);
+    this.vel = this.input.getMoveVel(this.vel, this.targetSpeed);
 
     // toggle auto fire
     if(kb.presses("e")) this.autoFire = !this.autoFire;

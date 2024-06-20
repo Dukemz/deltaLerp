@@ -20,8 +20,8 @@ class kbInput {
     return (kb.pressing(this.up) || kb.pressing(this.down) || kb.pressing(this.left) || kb.pressing(this.right))
   }
 
-  getMoveVel(currentVel) { // get vector for velocity
-    let vector = createVector(5, 0);
+  getMoveVel(currentVel, targetSpeed) { // get vector for velocity
+    let vector = createVector(targetSpeed, 0);
 
     if(kb.pressing(this.up) && kb.pressing(this.right)) {
       vector.setHeading(-45);
