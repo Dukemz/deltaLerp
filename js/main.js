@@ -76,7 +76,7 @@ async function setup() {
 
 function draw() {
   if(document.hidden) {
-    window.lastHidden = Date.now();
+    window.lastHidden = performance.now();
   }
   background(window.bgcol);
   // background(color("#242838"))

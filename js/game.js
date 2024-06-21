@@ -10,8 +10,13 @@ class Game { // game class
 
     // camera config
     this.cameraSpeed = 0;
-    this.targetCameraSpeed = 0;
-    this.cameraLerpAmount = 0.05;
+    this.targetCameraSpeed = 0.1;
+    this.cameraLerpAmount = 0.1;
+
+    // pause config
+    this.setPaused = false;
+    this.paused = false;
+    this.timeScale = 1;
 
     // heads-up display, info like framerate and things
     this.hud = new GameHUD();
@@ -32,6 +37,7 @@ class Game { // game class
 
     // set main player if it doesn't exist
     this.player ||= new Player({
+      game: this,
       projectiles: new this.projectiles.Group(),
       subdetails: new this.playerDetails.Group(),
       layer: 1,
@@ -56,10 +62,17 @@ class Game { // game class
 
     this.wall2 = new this.walls.Sprite([[-100, -100], [-100, 100]], 's');
 
+    this.funnysound = new Howl({
+      src: ['./assets/quackmp3.mp3'],
+      html5: true,
+      autoplay: false
+    })
+
     // just move the camera to center, why not?
     camera.pos = { x: 0, y: 0 };
 
-    // disable auto draw
+    // disable auto draw and auto update
+    this.players.autoDraw = false;
     this.objects.autoDraw = false;
     this.projectiles.autoDraw = false;
 
@@ -70,6 +83,29 @@ class Game { // game class
   }
 
   draw() { // runs at the end of the main draw function
+    
+    // pause logic
+    if(kb.presses("p")) this.setPaused = !this.setPaused;
+
+    if(this.setPaused) {
+      this.paused = true;
+    } else if(document.visibilityState !== "visible") {
+      this.paused = true;
+    } else {
+      this.paused = false;
+    }
+
+    if(this.paused) {
+      world.timeScale = 0;
+    } else {
+      world.timeScale = this.timeScale;
+
+      // calculation for camera movement
+      // this is about as accurate as i can make it lol
+      camera.x += this.cameraSpeed * deltaTime;
+      this.cameraSpeed = deltaLerp(this.cameraSpeed, this.targetCameraSpeed, this.cameraLerpAmount);
+    }
+
     camera.on();
     this.projectiles.draw();
     this.objects.draw();
@@ -78,11 +114,6 @@ class Game { // game class
     // hud is drawn last and with the camera disabled
     camera.off();
     this.hud.draw();
-
-    // calculation for camera movement
-    // this is about as accurate as i can make it lol
-    camera.x += this.cameraSpeed * deltaTime;
-    this.cameraSpeed = lerp(this.cameraSpeed, this.targetCameraSpeed, this.cameraLerpAmount);
   }
 
   exit() { // close game, remove all sprites.

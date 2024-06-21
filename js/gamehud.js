@@ -28,7 +28,8 @@ class GameHUD extends Sprite {
     text(`deltaTime = ${deltaTime}, avg ${Math.round(avgDeltaTime*1000)}`, 10, height-10);
     // bottom right HUD
     textAlign(RIGHT, BOTTOM);
-    text(`speed: ${game.player.speed.toFixed(3)}`, width-10, height-40);
+    text(`speed: ${game.player.speed.toFixed(3)}`, width-10, height-70);
+    text(`true speed: x`, width-10, height-40);
     text(`direction: ${game.player.direction.toFixed(3)}`, width-10, height-10);
     pop();
   }

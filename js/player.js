@@ -28,7 +28,6 @@ class Player extends Sprite {
 
     // set attributes
     this.rotationLock = true;
-    this.autoDraw = false;
     this.scale = {x: 0.5, y: 0.5};
     this.pos = {x:0, y:0}
     // this keeps being inconsistent for some reason
@@ -80,11 +79,7 @@ class Player extends Sprite {
   }
 
   // ~~ UPDATE FUNCTION ~~ //
-  update() { // this is called after the sprite's internal draw function
-    // difference between camera position and player position
-    // const camDevX = camera.x-this.x;
-    // const camDevY = camera.y-this.y;
-
+  playerUpdate() {
     // counteract gravity if there is any
     if(world.gravity.y) {
       this.bearing = -90;
@@ -106,6 +101,16 @@ class Player extends Sprite {
 
     // shoot controls
     if(kb.pressing("space") || this.autoFire) this.weapons[this.activeWeapon].fire();
+
+    if(kb.presses("b")) this.game.funnysound.play()
+  }
+
+  update() { // this is called after the sprite's internal draw function
+    // difference between camera position and player position
+    // const camDevX = camera.x-this.x;
+    // const camDevY = camera.y-this.y;
+
+    if(!this.game.paused) this.playerUpdate();
   }
 
   tdebug() { // toggle debug
