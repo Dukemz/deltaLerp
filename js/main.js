@@ -68,7 +68,14 @@ async function setup() {
   
   const opaquebgcol = color(red(bgcol), green(bgcol), blue(bgcol));
   background(opaquebgcol);
-  console.log(opaquebgcol)
+
+  // disable world auto step
+  // world.autoStep = false;
+
+  // annoying thing to make all sprites in a group run my update func
+  Group.prototype.runUpdate = function() {
+    this.forEach(s => s.runUpdate());
+  }
 
   // initial setup complete - create game
   game = new Game();
@@ -94,5 +101,5 @@ function draw() {
 function deltaLerp(a, b, f) { // lerp with deltatime
   // f is the factor between 0 and 1 deciding how quickly it catches up
   // e.g. if f = 0.25, it will cover 25% the remaining distance every second
-  return lerp(a, b, 1 - pow(1-f, avgDeltaTime));
+  return lerp(a, b, 1 - pow(1-f, deltaTime/1000));
 }

@@ -10,8 +10,8 @@ class Game { // game class
 
     // camera config
     this.cameraSpeed = 0;
-    this.targetCameraSpeed = 0.1;
-    this.cameraLerpAmount = 0.1;
+    this.targetCameraSpeed = 0;
+    this.cameraLerpAmount = 0.5;
 
     // pause config
     this.setPaused = false;
@@ -28,6 +28,8 @@ class Game { // game class
 
     // all physical objects in the game that aren't players or projectiles
     this.objects = new Group();
+    this.objects.stroke = "white";
+    this.objects.strokeWeight = 2
 
     // all players
     this.players = new Group();
@@ -54,13 +56,14 @@ class Game { // game class
 
     // wall test - vertex mode
     this.walls = new this.objects.Group();
-    this.walls.stroke = "white";
-    this.walls.strokeWeight = 2
     this.walls.collides(this.projectiles, (_w, p) => p.remove());
 
     this.wall = new this.walls.Sprite([[100, 100], [200, -100]], 's');
-
     this.wall2 = new this.walls.Sprite([[-100, -100], [-100, 100]], 's');
+
+    // goober test
+    this.thingy = new this.objects.Sprite(-canvas.hw+50,-150, 30, 30);
+    this.thingy.vel.x = 1
 
     this.funnysound = new Howl({
       src: ['./assets/quackmp3.mp3'],
@@ -103,9 +106,12 @@ class Game { // game class
       // calculation for camera movement
       // this is about as accurate as i can make it lol
       camera.x += this.cameraSpeed * deltaTime;
-      this.cameraSpeed = deltaLerp(this.cameraSpeed, this.targetCameraSpeed, this.cameraLerpAmount);
+      if(this.cameraSpeed !== this.targetCameraSpeed) {
+        this.cameraSpeed = deltaLerp(this.cameraSpeed, this.targetCameraSpeed, this.cameraLerpAmount);
+      }
     }
 
+    // draw sprites
     camera.on();
     this.projectiles.draw();
     this.objects.draw();
@@ -114,6 +120,10 @@ class Game { // game class
     // hud is drawn last and with the camera disabled
     camera.off();
     this.hud.draw();
+
+    // update sprites
+    this.playerDetails.runUpdate();
+    this.players.runUpdate();
   }
 
   exit() { // close game, remove all sprites.

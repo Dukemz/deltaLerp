@@ -105,7 +105,7 @@ class Player extends Sprite {
     if(kb.presses("b")) this.game.funnysound.play()
   }
 
-  update() { // this is called after the sprite's internal draw function
+  runUpdate() { // this is called after the sprite's internal draw function
     // difference between camera position and player position
     // const camDevX = camera.x-this.x;
     // const camDevY = camera.y-this.y;

@@ -37,11 +37,6 @@ class machineGun {
     //   const life = 2147483647 - b.life;
     //   if(life > 10) b.remove();
     // }
-
-    this.group.update = (a) => {
-      // a is amount of sprites in group
-      // note: this doesn't seem to be useful
-    }
   } 
 
   fire() { // FIRE IN THE HOLE

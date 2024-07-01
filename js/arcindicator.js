@@ -12,9 +12,14 @@ class ArcIndicator extends Sprite { // arc indicator thing
     this.layer = parent.layer - 1;
     this.stroke = color(255);
     this.strokeWeight = 2;
-    this.start = 0;
-    this.stop = 0;
     this.autoDraw = false;
+
+    this.start = 0;
+    this.targetStart = 0;
+    this.startLerpAmount = 0.8;
+    this.stop = 0;
+    this.targetStop = 180;
+    this.stopLerpAmount = 0.8;
   }
 
   draw() {
@@ -29,8 +34,9 @@ class ArcIndicator extends Sprite { // arc indicator thing
     pop();
   }
 
-  update() {
+  runUpdate() {
     // using normal lerp for this since the time difference doesn't matter so much
-    this.stop = lerp(this.stop, 180, 0.1);
+    if(this.start !== this.targetStart) this.start = deltaLerp(this.start, this.targetStart, this.startLerpAmount);
+    if(this.stop !== this.targetStop) this.stop = deltaLerp(this.stop, this.targetStop, this.stopLerpAmount);
   }
 }
