@@ -52,7 +52,7 @@ async function setup() {
   await loadScripts(scriptList);
   console.log("All scripts loaded!");
 
-  new Canvas(windowWidth - 100, windowHeight - 100);
+  new Canvas(windowWidth - 50, windowHeight - 50);
   document.getElementById("canvasContainer").appendChild(canvas);
   document.getElementById("loadtext").innerHTML = "";
 

@@ -1,6 +1,6 @@
 function windowResized() {
   // resize canvas to fit the new window size
-  canvas.resize(windowWidth - 100, windowHeight - 100);
+  canvas.resize(windowWidth - 50, windowHeight - 50);
 
   // move the camera to center - change/fix later when scroll logic is added
   camera.pos = {x: 0, y: 0};

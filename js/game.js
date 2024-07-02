@@ -69,7 +69,7 @@ class Game { // game class
       src: ['./assets/quackmp3.mp3'],
       html5: true,
       autoplay: false
-    })
+    });
 
     // just move the camera to center, why not?
     camera.pos = { x: 0, y: 0 };
