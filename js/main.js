@@ -1,16 +1,17 @@
 // main script
 "use strict";
 console.log("[HELLO WORLD]");
+const version = "pre-alpha";
 
 let fpsList = [], fpsPush, avgFPS, avgDeltaTime;
 let scriptList = [
-  'player',
-  'windowResized',
-  'machinegun',
-  'arcindicator',
-  'game',
-  'gamehud',
-  'kbinput'
+  'js/player.js',
+  'js/windowResized.js',
+  'js/machinegun.js',
+  'js/arcindicator.js',
+  'js/game.js',
+  'js/gamehud.js',
+  'js/kbinput.js'
 ];
 
 // will hold game instance
@@ -27,7 +28,7 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
     promises.push(new Promise((resolve, reject) => {
       // create script element and set its source
       const script = document.createElement('script');
-      script.src = `js/${scriptUrl}.js`;
+      script.src = scriptUrl;
       script.async = false; // ensure synchronous loading
       script.onload = resolve; // resolve the Promise when the script is loaded
       script.onerror = reject; // reject the Promise if the script fails to load
@@ -39,11 +40,14 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
   await Promise.all(promises);
 }
 
-function preload() { // preload assets
+function preload() {
+  // this function doesn't do much, but it's called before setup
+  // console log helps with debugging 
   console.log("[PRELOAD]");
-  document.getElementById("loadtext").innerHTML = "loading assets...";
-  // don't actually have any assets to load yet lol
-  // but music will be loaded here
+  noLoop();
+
+  const testimg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAdCAIAAABE/PnQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAG1SURBVEhLzZY/UoNAFMZZx8bO1rEylXcQKi8BHkHkBHEmOGNS2UU8gnAJKziApZUewxK/t99mk3GAhQQcf0M2uw/yvvdnl4kKw9CbjKIoRCCOY2MYlSzLtgL3yxNjHo+z0ycIHJvVvjzOvzEGQVCW5a8Ji3+Ez6QcKoBIQeOETN5k0wMsOBmLbdDIAG3BWI8KfcL/P2tytMGsezBAAH5zDeqrlDJWF+6Dpm4eMIb1B8aqqux2gF6hLmGHJC2NODKA9/p1sV4urlbixfd9uz3gHbdg787GVaI8hcbdhYeL2Azg/fnLS+aSXwetAvArxYlSLm1jbQa0lLfXGDuS6MoAMXJEpBabAUqEtN7Pfez69WfdptHeZBRHf7MN3ipPZgpHX9sExC4lmqlkk2UjPbZpLr9HsIwUFyeI3dkAoe1VwYMO6FRmiDRK5XXPkKMUj/HtD/gri/tVgd2N5+gLdTBO9U5FTpRE9YKXN0zkyRZ6lMiiayVbi5J66cQhgE6KLz2RMBH7Um8tjWjkUij9bDMOARSEvqQyGuoR3jKLFoaUaKeTZt2DYQJ78Cd/vIxhAnZP/jR43g8mcFyLHdrIDAAAAABJRU5ErkJggg==";
+  window.oogle = loadImage(testimg);
 }
 
 async function setup() {
@@ -79,9 +83,16 @@ async function setup() {
 
   // initial setup complete - create game
   game = new Game();
+  window.setupDone = true;
+  loop();
 }
 
 function draw() {
+  if(!window.setupDone) {
+    console.log(`Setup incomplete - skipping frame ${frameCount}`);
+    return;
+  }
+
   if(document.hidden) {
     window.lastHidden = performance.now();
   }
@@ -92,14 +103,51 @@ function draw() {
   avgFPS = fpsList.reduce((a, b) => a + b, 0)/fpsList.length || frameRate();
   avgDeltaTime = 1/avgFPS;
 
+  // set actual camera position to game's set position
+  camera.pos = game.camPos;
   game.draw();
 }
 // after this the draw functions of sprites are called
 // by default sprites are drawn in the order they were created in
-// each sprite's update function is called after it is drawn
 
-function deltaLerp(a, b, f) { // lerp with deltatime
+function deltaLerp(a, b, f) { // hey look, it's the game's namesake!
   // f is the factor between 0 and 1 deciding how quickly it catches up
   // e.g. if f = 0.25, it will cover 25% the remaining distance every second
   return lerp(a, b, 1 - pow(1-f, deltaTime/1000));
 }
+
+// Error handling
+window.onerror = (event, source, lineno, colno, error) => {
+  // human readable message explaining the problem
+  const style = "font-size: 27px";
+  console.error(`%coh no\n%c${event}\nSource = ${source}\nLine ${lineno}, col ${colno}`, style, "");
+  if(error) {
+    console.error(`Stack trace:\n${error.stack}`);
+  }
+  noLoop();
+
+  push();
+  background(0, 0, 0, 200);
+  noStroke();
+  fill(255, 60, 60);
+  textAlign(LEFT, TOP);
+  textStyle(BOLD);
+  textWrap(WORD);
+  textSize(20);
+
+  const maxtextwidth = canvas.w - 20;
+  text(`Whoops, an uncaught exception occurred.`, 10, 10, maxtextwidth);
+  textStyle(NORMAL);
+  let errmsg = `${event}\nSource: ${source}\n`;
+  if(error) {
+    errmsg += `Line ${lineno}, col ${colno}\n`;
+  }
+  errmsg += `\nPlease check the console for more details.`;
+  text(errmsg, 10, 40, maxtextwidth);
+  // text(`Please check the console for more details.`, 10, 200, maxtextwidth);
+
+  pop();
+};
+
+const titlestyle = "font-size: 27px; color: lightblue; text-shadow: 2px 2px dodgerblue";
+console.log(`%cdeltaLerp\n%cby dukemz - ${version}`, titlestyle, "color: cornflowerblue");

@@ -25,11 +25,11 @@ class GameHUD extends Sprite {
     // bottom left HUD
     textAlign(LEFT, BOTTOM);
     text(`${frameRate().toFixed(0)}fps, avg ${avgFPS.toFixed(0)}`, 10, height-40);
-    text(`deltaTime = ${deltaTime}, avg ${Math.round(avgDeltaTime*1000)}`, 10, height-10);
+    text(`deltaTime = ${deltaTime.toFixed(0)}, avg ${Math.round(avgDeltaTime*1000)}`, 10, height-10);
     // bottom right HUD
     textAlign(RIGHT, BOTTOM);
     text(`speed: ${game.player.speed.toFixed(3)}`, width-10, height-70);
-    text(`true speed: x`, width-10, height-40);
+    text(`seek: ${game.funnysound.seek().toFixed(3)}`, width-10, height-40);
     text(`direction: ${game.player.direction.toFixed(3)}`, width-10, height-10);
     pop();
   }

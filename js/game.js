@@ -12,6 +12,7 @@ class Game { // game class
     this.cameraSpeed = 0;
     this.targetCameraSpeed = 0;
     this.cameraLerpAmount = 0.5;
+    this.camPos = { x: 0, y: 0 };
 
     // pause config
     this.setPaused = false;
@@ -65,6 +66,11 @@ class Game { // game class
     this.thingy = new this.objects.Sprite(-canvas.hw+50,-150, 30, 30);
     this.thingy.vel.x = 1
 
+    // bounds box for debug
+    this.boundsbox = new this.objects.Sprite(0, 0, canvas.w, canvas.h, "n");
+    this.boundsbox.layer = 0;
+    this.boundsbox.colour.setAlpha(30);
+
     this.funnysound = new Howl({
       src: ['./assets/quackmp3.mp3'],
       html5: true,
@@ -105,7 +111,7 @@ class Game { // game class
 
       // calculation for camera movement
       // this is about as accurate as i can make it lol
-      camera.x += this.cameraSpeed * deltaTime;
+      this.camPos.x += this.cameraSpeed * deltaTime;
       if(this.cameraSpeed !== this.targetCameraSpeed) {
         this.cameraSpeed = deltaLerp(this.cameraSpeed, this.targetCameraSpeed, this.cameraLerpAmount);
       }
