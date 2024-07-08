@@ -116,9 +116,35 @@ function deltaLerp(a, b, f) { // hey look, it's the game's namesake!
   return lerp(a, b, 1 - pow(1-f, deltaTime/1000));
 }
 
+// calculate camera bounds
+function calculateBounds(canvasWidth, canvasHeight, zoom) {
+  // calculate the visible width and height based on the zoom level
+  const visibleWidth = canvasWidth / zoom;
+  const visibleHeight = canvasHeight / zoom;
+
+  // assuming the camera is centered, calculate the bounds
+  const halfVisibleWidth = visibleWidth / 2;
+  const halfVisibleHeight = visibleHeight / 2;
+
+  // define the bounds as top-left and bottom-right coordinates
+  const bounds = {
+    topLeft: {
+      x: -halfVisibleWidth,
+      y: -halfVisibleHeight
+    },
+    bottomRight: {
+      x: halfVisibleWidth,
+      y: halfVisibleHeight
+    }
+  };
+
+  return bounds;
+}
+
+
 // Error handling
 window.onerror = (event, source, lineno, colno, error) => {
-  // human readable message explaining the problem
+  // according to mdzn, event should be human readable message explaining the problem
   const style = "font-size: 27px";
   console.error(`%coh no\n%c${event}\nSource = ${source}\nLine ${lineno}, col ${colno}`, style, "");
   if(error) {
