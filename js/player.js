@@ -103,8 +103,6 @@ class Player extends Sprite {
     if(kb.pressing("space") || this.autoFire) this.weapons[this.activeWeapon].fire();
 
     if(kb.presses("b")) this.game.funnysound.play();
-
-    if(kb.presses("c")) throw Error("Congrats, you found the crash button!");
   }
 
   runUpdate() { // this is called after the sprite's internal draw function

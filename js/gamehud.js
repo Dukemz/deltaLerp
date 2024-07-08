@@ -31,6 +31,11 @@ class GameHUD extends Sprite {
     text(`speed: ${game.player.speed.toFixed(3)}`, width-10, height-70);
     text(`seek: ${game.funnysound.seek().toFixed(3)}`, width-10, height-40);
     text(`direction: ${game.player.direction.toFixed(3)}`, width-10, height-10);
+
+    if(game.paused) {
+      textAlign(CENTER, CENTER);
+      text("[Paused - press P to unpause]", canvas.hw, canvas.hh);
+    }
     pop();
   }
 }

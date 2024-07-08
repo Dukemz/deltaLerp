@@ -6,11 +6,33 @@ function windowResized() {
   canvas.resize(windowWidth - 50, windowHeight - 50);
 
   // change zoom
-  const setZoom = canvas.w / 1400;
+  // const setZoom = canvas.w / 1400;
+  const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
   camera.zoom = setZoom;
   console.log(`Resized! [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]\nZoom: [${oldZoom.toFixed(3)}] => [${setZoom.toFixed(3)}]`);
   
   // set the bg colour again to avoid that weird messy effect
   const opaquebgcol = color(red(bgcol), green(bgcol), blue(bgcol));
   background(opaquebgcol);
+}
+
+function calculateZoom(currentWidth, currentHeight, maxWidth) {
+  const defaultWidth = 1000;
+  const defaultHeight = 652;
+  // Calculate the width and height ratios
+  const widthRatio = currentWidth / defaultWidth;
+  const heightRatio = currentHeight / defaultHeight;
+  
+  // Calculate the initial zoom based on the average ratio
+  let newZoom = (widthRatio + heightRatio) / 2;
+
+  // Calculate the visible width based on the new zoom
+  let visibleWidth = currentWidth / newZoom;
+
+  // If the visible width exceeds the maximum allowed width, adjust the zoom
+  if (visibleWidth > maxWidth) {
+    newZoom = currentWidth / maxWidth;
+  }
+
+  return newZoom;
 }

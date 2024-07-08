@@ -66,11 +66,6 @@ class Game { // game class
     this.thingy = new this.objects.Sprite(-canvas.hw+50,-150, 30, 30);
     this.thingy.vel.x = 1
 
-    // bounds box for debug
-    this.boundsbox = new this.objects.Sprite(0, 0, canvas.w, canvas.h, "n");
-    this.boundsbox.layer = 0;
-    this.boundsbox.colour.setAlpha(30);
-
     this.funnysound = new Howl({
       src: ['./assets/quackmp3.mp3'],
       html5: true,
@@ -85,8 +80,27 @@ class Game { // game class
     this.objects.autoDraw = false;
     this.projectiles.autoDraw = false;
 
+    const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
+    camera.zoom = setZoom;
+    // calculate bounds
+    const camBounds = calculateBounds(canvas.w, canvas.h, setZoom);
+
+    // bounds box for debug
+    // this.boundsbox = new this.objects.Sprite([
+    //   [camBounds.topLeft.x, camBounds.topLeft.y],
+    //   [camBounds.bottomRight.x, camBounds.topLeft.y],
+    //   [camBounds.bottomRight.x, camBounds.bottomRight.y],
+    //   [camBounds.topLeft.x, camBounds.bottomRight.y],
+    //   [camBounds.topLeft.x, camBounds.topLeft.y]
+    // ]);
+    this.boundsbox = new this.objects.Sprite(0, 0, 1500, canvas.h);
+    this.boundsbox.overlaps(allSprites);
+    this.boundsbox.layer = 0;
+    this.boundsbox.colour.setAlpha(1);
+
     // save timestamp on when the thing starts
-    // at some point game will be a class, so setup opens the menu rather than jumping straight into the game
+    // main.js setup will open the menu rather than jumping straight into the game
+    // new Game() will be called when entering a level
     this.startTimestamp = Date.now();
     console.log("Game initialisation complete!");
   }
@@ -130,6 +144,9 @@ class Game { // game class
     // update sprites
     this.playerDetails.runUpdate();
     this.players.runUpdate();
+
+    // crash lol
+    if(kb.presses("c")) throw Error("Congrats, you found the crash button!");
   }
 
   exit() { // close game, remove all sprites.

@@ -82,9 +82,38 @@ async function setup() {
   }
 
   // initial setup complete - create game
-  game = new Game();
-  window.setupDone = true;
-  loop();
+  try {
+    game = new Game();
+    window.setupDone = true;
+    loop();
+  } catch(err) {
+    console.error(`%coh no\n%cGame setup failed to complete.\n${err.name}: ${err.message}`, "font-size: 27px", "");
+    console.error(err.stack);
+    noLoop();
+
+    push();
+    background(0, 0, 0, 200);
+    noStroke();
+    fill(255, 90, 100);
+    textAlign(LEFT, TOP);
+    textStyle(BOLD);
+    textWrap(WORD);
+    textSize(20);
+
+    const maxtextwidth = canvas.w - 20;
+    text(`Whoops, looks like something went wrong.`, 10, 10, maxtextwidth);
+    textStyle(NORMAL);
+    let errmsg = `Game setup failed to complete.\n${err.name}: ${err.message}\n`;
+    if(err.fileName) {
+      errmsg += `\nSource: ${err.fileName}\nLine ${err.lineNumber}, col ${err.columnNumber}\n`;
+    } else {
+      errmsg += `\nMore information can be provided when running the game in Firefox.\n`;
+    }
+    errmsg += `\nPlease check the console for more details.`;
+    text(errmsg, 10, 40, maxtextwidth);
+
+    pop();
+  }
 }
 
 function draw() {
@@ -145,8 +174,7 @@ function calculateBounds(canvasWidth, canvasHeight, zoom) {
 // Error handling
 window.onerror = (event, source, lineno, colno, error) => {
   // according to mdzn, event should be human readable message explaining the problem
-  const style = "font-size: 27px";
-  console.error(`%coh no\n%c${event}\nSource = ${source}\nLine ${lineno}, col ${colno}`, style, "");
+  console.error(`%coh no\n%c${event}\nSource = ${source}\nLine ${lineno}, col ${colno}`, "font-size: 27px", "");
   if(error) {
     console.error(`Stack trace:\n${error.stack}`);
   }
@@ -155,14 +183,14 @@ window.onerror = (event, source, lineno, colno, error) => {
   push();
   background(0, 0, 0, 200);
   noStroke();
-  fill(255, 60, 60);
+  fill(255, 90, 100);
   textAlign(LEFT, TOP);
   textStyle(BOLD);
   textWrap(WORD);
   textSize(20);
 
   const maxtextwidth = canvas.w - 20;
-  text(`Whoops, an uncaught exception occurred.`, 10, 10, maxtextwidth);
+  text(`Whoops, looks like something went wrong.`, 10, 10, maxtextwidth);
   textStyle(NORMAL);
   let errmsg = `${event}\nSource: ${source}\n`;
   if(error) {
@@ -170,10 +198,33 @@ window.onerror = (event, source, lineno, colno, error) => {
   }
   errmsg += `\nPlease check the console for more details.`;
   text(errmsg, 10, 40, maxtextwidth);
-  // text(`Please check the console for more details.`, 10, 200, maxtextwidth);
 
   pop();
 };
+
+// unhandled promise rejection
+addEventListener("unhandledrejection", (event) => {
+  console.error(`%coh no\n%cUnhandled promise rejection: ${event.reason}`, "font-size: 27px", "");
+  noLoop();
+
+  push();
+  background(0, 0, 0, 200);
+  noStroke();
+  fill(255, 90, 100);
+  textAlign(LEFT, TOP);
+  textStyle(BOLD);
+  textWrap(WORD);
+  textSize(20);
+
+  const maxtextwidth = canvas.w - 20;
+  text(`Whoops, looks like something went wrong.`, 10, 10, maxtextwidth);
+  textStyle(NORMAL);
+  let errmsg = `Unhandled promise rejection: ${event.reason}\negg\n`;
+  errmsg += `\nPlease check the console for more details.`;
+  text(errmsg, 10, 40, maxtextwidth);
+
+  pop();
+});
 
 const titlestyle = "font-size: 27px; color: lightblue; text-shadow: 2px 2px dodgerblue";
 console.log(`%cdeltaLerp\n%cby dukemz - ${version}`, titlestyle, "color: cornflowerblue");

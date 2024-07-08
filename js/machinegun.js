@@ -53,13 +53,13 @@ class machineGun {
       }
       this.bulletsFired++;
       this.lastFired = world.physicsTime*1000;
-      if(this.group.amount > 15) {
+      if(this.group.amount > 20) {
         this.group[0].remove();
       }
     }
     // culling - remove bullets if they go more than 10 units offscreen
     // note - if screen size is changed then cull boundary changes too
-    this.group.cull(50, 50, 50, 50);
+    // this.group.cull(50, 50, 50, 50);
   }
 }
 
