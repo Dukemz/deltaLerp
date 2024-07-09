@@ -6,12 +6,13 @@ const version = "pre-alpha";
 let fpsList = [], fpsPush, avgFPS, avgDeltaTime;
 let scriptList = [
   'js/player.js',
-  'js/windowResized.js',
+  'js/resizeAndZoom.js',
   'js/machinegun.js',
   'js/arcindicator.js',
   'js/game.js',
   'js/gamehud.js',
-  'js/kbinput.js'
+  'js/kbinput.js',
+  'js/crashhandler.js'
 ];
 
 // will hold game instance
@@ -56,6 +57,9 @@ async function setup() {
   await loadScripts(scriptList);
   console.log("All scripts loaded!");
 
+  
+  window.crashHandler = new CrashHandler();
+  // setup canvas
   new Canvas(windowWidth - 50, windowHeight - 50);
   document.getElementById("canvasContainer").appendChild(canvas);
   document.getElementById("loadtext").innerHTML = "";
@@ -86,40 +90,18 @@ async function setup() {
     game = new Game();
     window.setupDone = true;
     loop();
-  } catch(err) {
-    console.error(`%coh no\n%cGame setup failed to complete.\n${err.name}: ${err.message}`, "font-size: 27px", "");
-    console.error(err.stack);
-    noLoop();
-
-    push();
-    background(0, 0, 0, 200);
-    noStroke();
-    fill(255, 90, 100);
-    textAlign(LEFT, TOP);
-    textStyle(BOLD);
-    textWrap(WORD);
-    textSize(20);
-
-    const maxtextwidth = canvas.w - 20;
-    text(`Whoops, looks like something went wrong.`, 10, 10, maxtextwidth);
-    textStyle(NORMAL);
-    let errmsg = `Game setup failed to complete.\n${err.name}: ${err.message}\n`;
-    if(err.fileName) {
-      errmsg += `\nSource: ${err.fileName}\nLine ${err.lineNumber}, col ${err.columnNumber}\n`;
-    } else {
-      errmsg += `\nMore information can be provided when running the game in Firefox.\n`;
-    }
-    errmsg += `\nPlease check the console for more details.`;
-    text(errmsg, 10, 40, maxtextwidth);
-
-    pop();
+  } catch(error) {
+    // setup error crash
+    crashHandler.crash({ type: "setupError", error });
   }
 }
 
 function draw() {
   if(!window.setupDone) {
-    console.log(`Setup incomplete - skipping frame ${frameCount}`);
-    return;
+    return console.log(`Skipping frame ${frameCount} as setup is incomplete.`);
+  }
+  if(crashHandler.crashed) {
+    return console.warn(`Skipping frame ${frameCount} due to game crash.`);
   }
 
   if(document.hidden) {
@@ -145,85 +127,18 @@ function deltaLerp(a, b, f) { // hey look, it's the game's namesake!
   return lerp(a, b, 1 - pow(1-f, deltaTime/1000));
 }
 
-// calculate camera bounds
-function calculateBounds(canvasWidth, canvasHeight, zoom) {
-  // calculate the visible width and height based on the zoom level
-  const visibleWidth = canvasWidth / zoom;
-  const visibleHeight = canvasHeight / zoom;
-
-  // assuming the camera is centered, calculate the bounds
-  const halfVisibleWidth = visibleWidth / 2;
-  const halfVisibleHeight = visibleHeight / 2;
-
-  // define the bounds as top-left and bottom-right coordinates
-  const bounds = {
-    topLeft: {
-      x: -halfVisibleWidth,
-      y: -halfVisibleHeight
-    },
-    bottomRight: {
-      x: halfVisibleWidth,
-      y: halfVisibleHeight
-    }
-  };
-
-  return bounds;
-}
-
-
 // Error handling
 window.onerror = (event, source, lineno, colno, error) => {
-  // according to mdzn, event should be human readable message explaining the problem
-  console.error(`%coh no\n%c${event}\nSource = ${source}\nLine ${lineno}, col ${colno}`, "font-size: 27px", "");
-  if(error) {
-    console.error(`Stack trace:\n${error.stack}`);
-  }
-  noLoop();
-
-  push();
-  background(0, 0, 0, 200);
-  noStroke();
-  fill(255, 90, 100);
-  textAlign(LEFT, TOP);
-  textStyle(BOLD);
-  textWrap(WORD);
-  textSize(20);
-
-  const maxtextwidth = canvas.w - 20;
-  text(`Whoops, looks like something went wrong.`, 10, 10, maxtextwidth);
-  textStyle(NORMAL);
-  let errmsg = `${event}\nSource: ${source}\n`;
-  if(error) {
-    errmsg += `Line ${lineno}, col ${colno}\n`;
-  }
-  errmsg += `\nPlease check the console for more details.`;
-  text(errmsg, 10, 40, maxtextwidth);
-
-  pop();
+  crashHandler.crash({
+    type: "error",
+    eventmsg: event,
+    source, lineno, colno, error
+  });
 };
 
 // unhandled promise rejection
 addEventListener("unhandledrejection", (event) => {
-  console.error(`%coh no\n%cUnhandled promise rejection: ${event.reason}`, "font-size: 27px", "");
-  noLoop();
-
-  push();
-  background(0, 0, 0, 200);
-  noStroke();
-  fill(255, 90, 100);
-  textAlign(LEFT, TOP);
-  textStyle(BOLD);
-  textWrap(WORD);
-  textSize(20);
-
-  const maxtextwidth = canvas.w - 20;
-  text(`Whoops, looks like something went wrong.`, 10, 10, maxtextwidth);
-  textStyle(NORMAL);
-  let errmsg = `Unhandled promise rejection: ${event.reason}\negg\n`;
-  errmsg += `\nPlease check the console for more details.`;
-  text(errmsg, 10, 40, maxtextwidth);
-
-  pop();
+  crashHandler.crash({ type: "promiseReject", event });
 });
 
 const titlestyle = "font-size: 27px; color: lightblue; text-shadow: 2px 2px dodgerblue";
