@@ -20,17 +20,17 @@ class GameHUD extends Sprite {
     text(`realtime: ${world.realTime.toFixed(3)}, physics: ${world.physicsTime.toFixed(3)}`, 10, 40);
     // top right HUD
     textAlign(RIGHT, TOP);
-    text(`player: ${Math.round(game.player.x)}, ${Math.round(game.player.y)} || mouse: ${Math.round(mouse.x)}, ${Math.round(mouse.y)}`, width-10, 10);
-    text(`bullets fired: ${game.player.weapons[game.player.activeWeapon].bulletsFired}, total ${game.player.projectiles.amount}`, width-10, 40);
+    text(`player: ${Math.round(player.x)}, ${Math.round(player.y)} || mouse: ${Math.round(mouse.x)}, ${Math.round(mouse.y)}`, width-10, 10);
+    text(`bullets fired: ${player.weapons[player.activeWeapon].bulletsFired}, total ${player.projectiles.amount}`, width-10, 40);
     // bottom left HUD
     textAlign(LEFT, BOTTOM);
-    text(`${frameRate().toFixed(0)}fps, avg ${avgFPS.toFixed(0)}`, 10, height-40);
-    text(`deltaTime = ${deltaTime.toFixed(0)}, avg ${Math.round(avgDeltaTime*1000)}`, 10, height-10);
+    text(`${frameRate().toFixed(0)}fps, avg ${manager.avgFPS.toFixed(0)}`, 10, height-40);
+    text(`deltaTime = ${deltaTime.toFixed(0)}, avg ${Math.round(manager.avgDeltaTime*1000)}`, 10, height-10);
     // bottom right HUD
     textAlign(RIGHT, BOTTOM);
-    text(`speed: ${game.player.speed.toFixed(3)}`, width-10, height-70);
+    text(`speed: ${player.speed.toFixed(3)}`, width-10, height-70);
     text(`seek: ${game.funnysound.seek().toFixed(3)}`, width-10, height-40);
-    text(`direction: ${game.player.direction.toFixed(3)}`, width-10, height-10);
+    text(`direction: ${player.direction.toFixed(3)}`, width-10, height-10);
 
     if(game.paused) {
       textAlign(CENTER, CENTER);

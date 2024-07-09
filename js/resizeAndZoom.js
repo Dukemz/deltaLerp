@@ -5,9 +5,9 @@ function windowResized() {
   // resize canvas to fit the new window size
   canvas.resize(windowWidth - 50, windowHeight - 50);
 
-  if(crashHandler.crashed) {
+  if(manager.crashed) {
     console.log("Redrawing crash handler data.");
-    crashHandler.draw();
+    manager.crashdraw();
   } else {
     // change zoom
     // const setZoom = canvas.w / 1400;
@@ -16,8 +16,8 @@ function windowResized() {
     console.log(`Resized! [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]\nZoom: [${oldZoom.toFixed(3)}] => [${setZoom.toFixed(3)}]`);
     
     // set the bg colour again to avoid that weird messy effect
-    const opaquebgcol = color(red(bgcol), green(bgcol), blue(bgcol));
-    background(opaquebgcol);
+    manager.opaquebgcol = color(red(manager.bgcol), green(manager.bgcol), blue(manager.bgcol));
+    background(manager.opaquebgcol);
   }
 }
 

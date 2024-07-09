@@ -39,7 +39,7 @@ class Game { // game class
     this.projectiles = new Group();
 
     // set main player if it doesn't exist
-    this.player ||= new Player({
+    window.player ||= new Player({
       game: this,
       projectiles: new this.projectiles.Group(),
       subdetails: new this.playerDetails.Group(),
@@ -53,7 +53,7 @@ class Game { // game class
 
     // in future this.player won't exist
     // at the moment the game is only single-player though
-    this.players.push(this.player);
+    this.players.push(player);
 
     // wall test - vertex mode
     this.walls = new this.objects.Group();
@@ -140,6 +140,7 @@ class Game { // game class
     // hud is drawn last and with the camera disabled
     camera.off();
     this.hud.draw();
+    camera.on();
 
     // update sprites
     this.playerDetails.runUpdate();

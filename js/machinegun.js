@@ -20,7 +20,7 @@ class machineGun {
     this.group.diameter = 10;
     this.group.x = () => player.x + 15;
     this.group.y = () => player.y;
-    this.group.vel.x = 20; // bullet velocity
+    this.group.vel.x = () => player.vel.x + 20; // bullet velocity
     // bouncy
     this.bounciness = 1;
     // visual properties

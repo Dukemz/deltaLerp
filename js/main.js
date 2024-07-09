@@ -3,7 +3,6 @@
 console.log("[HELLO WORLD]");
 const version = "pre-alpha";
 
-let fpsList = [], fpsPush, avgFPS, avgDeltaTime;
 let scriptList = [
   'js/player.js',
   'js/resizeAndZoom.js',
@@ -12,7 +11,7 @@ let scriptList = [
   'js/game.js',
   'js/gamehud.js',
   'js/kbinput.js',
-  'js/crashhandler.js'
+  'js/gamemanager.js'
 ];
 
 // will hold game instance
@@ -54,65 +53,63 @@ function preload() {
 async function setup() {
   console.log("[SETUP]");
   document.getElementById("loadtext").innerHTML = "loading scripts...";
-  await loadScripts(scriptList);
-  console.log("All scripts loaded!");
-
-  
-  window.crashHandler = new CrashHandler();
-  // setup canvas
-  new Canvas(windowWidth - 50, windowHeight - 50);
-  document.getElementById("canvasContainer").appendChild(canvas);
-  document.getElementById("loadtext").innerHTML = "";
-
-  // get the current fps 10 times a second
-  // used to get average FPS over the last 3 seconds
-  fpsPush = setInterval(() => {
-    fpsList.push(frameRate());
-    if (fpsList.length > 30) fpsList.shift();
-  }, 100);
-
-  // background colour
-  window.bgcol = color("#24283880");
-  
-  const opaquebgcol = color(red(bgcol), green(bgcol), blue(bgcol));
-  background(opaquebgcol);
-
-  // disable world auto step
-  // world.autoStep = false;
-
-  // annoying thing to make all sprites in a group run my update func
-  Group.prototype.runUpdate = function() {
-    this.forEach(s => s.runUpdate());
+  try {
+    await loadScripts(scriptList);
+    console.log("All scripts loaded!");
+    
+    window.manager = new GameManager();
+  } catch {
+    document.getElementById("loadtext").innerHTML = "oops... something went wrong loading one of the scripts. please check the console for more info!";
   }
 
-  // initial setup complete - create game
   try {
+    // setup canvas
+    new Canvas(windowWidth - 50, windowHeight - 50);
+    document.getElementById("canvasContainer").appendChild(canvas);
+    document.getElementById("loadtext").innerHTML = "";
+
+    // background colour
+    manager.bgcol = color("#24283880");
+    
+    manager.opaquebgcol = color(red(manager.bgcol), green(manager.bgcol), blue(manager.bgcol));
+    background(manager.opaquebgcol);
+
+    // disable world auto step
+    // world.autoStep = false;
+
+    // annoying thing to make all sprites in a group run my update func
+    Group.prototype.runUpdate = function() {
+      this.forEach(s => s.runUpdate());
+    }
+
+    // initial setup complete - create game
     game = new Game();
-    window.setupDone = true;
+    manager.setupDone = true;
     loop();
   } catch(error) {
     // setup error crash
-    crashHandler.crash({ type: "setupError", error });
+    manager.crash({ type: "setupError", error });
   }
 }
 
 function draw() {
-  if(!window.setupDone) {
+  if(!window.manager) {
+    return console.log(`Waiting for manager to load...`);
+  } else if(!manager.setupDone) {
     return console.log(`Skipping frame ${frameCount} as setup is incomplete.`);
-  }
-  if(crashHandler.crashed) {
+  } else if(manager.crashed) {
     return console.warn(`Skipping frame ${frameCount} due to game crash.`);
   }
 
   if(document.hidden) {
-    window.lastHidden = performance.now();
+    manager.lastHidden = performance.now();
   }
-  background(window.bgcol);
+  background(manager.bgcol);
   // background(color("#242838"))
 
   // average deltatime, fps calcs
-  avgFPS = fpsList.reduce((a, b) => a + b, 0)/fpsList.length || frameRate();
-  avgDeltaTime = 1/avgFPS;
+  manager.avgFPS = manager.fpsList.reduce((a, b) => a + b, 0)/manager.fpsList.length || frameRate();
+  manager.avgDeltaTime = 1/manager.avgFPS;
 
   // set actual camera position to game's set position
   camera.pos = game.camPos;
@@ -126,20 +123,6 @@ function deltaLerp(a, b, f) { // hey look, it's the game's namesake!
   // e.g. if f = 0.25, it will cover 25% the remaining distance every second
   return lerp(a, b, 1 - pow(1-f, deltaTime/1000));
 }
-
-// Error handling
-window.onerror = (event, source, lineno, colno, error) => {
-  crashHandler.crash({
-    type: "error",
-    eventmsg: event,
-    source, lineno, colno, error
-  });
-};
-
-// unhandled promise rejection
-addEventListener("unhandledrejection", (event) => {
-  crashHandler.crash({ type: "promiseReject", event });
-});
 
 const titlestyle = "font-size: 27px; color: lightblue; text-shadow: 2px 2px dodgerblue";
 console.log(`%cdeltaLerp\n%cby dukemz - ${version}`, titlestyle, "color: cornflowerblue");
