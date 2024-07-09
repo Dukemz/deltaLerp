@@ -24,6 +24,7 @@ class machineGun {
     // bouncy
     this.bounciness = 1;
     // visual properties
+    this.group.fill = player.fill;
     this.group.stroke = 255;
     this.group.strokeWeight = 2;
 

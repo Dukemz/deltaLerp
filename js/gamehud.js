@@ -1,15 +1,10 @@
-class GameHUD extends Sprite {
+class GameHUD {
   constructor() {
-    super();
-    this.collider = "none";
-    this.x = 0;
-    this.y = 0;
-    this.autoDraw = false;
+    this.tophudoffset = 0;
   }
 
   draw() {
     push();
-    translate(this.x, this.y);
     noStroke();
     fill(255);
     textSize(20);
