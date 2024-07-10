@@ -85,12 +85,14 @@ class GameManager {
         msg += `Source: ${this.source}`
       } else {
         msg += `Unable to provide more error information.`;
-        // check browser platform!
       }
     } else {
       msg += `No error data available.`;
-      // check browser platform!
     }
+    if(navigator.userAgent.indexOf("Firefox") === -1) {
+      msg += `\n\nNote: If little or no error data is provided, try running the game in Firefox for additional debug information.`;
+    }
+
     this.errmsg = msg;
   }
 
