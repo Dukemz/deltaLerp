@@ -9,18 +9,18 @@ class machineGun {
     this.lastFired = 0;
     // total bullets fired
     this.bulletsFired = 0;
-    this.fireRate = 100; // time between firing in ms
+    this.fireRate = 80; // time between firing in ms
   }
 
   initialise(player) {
     this.group = new player.projectiles.Group();
 
     // ~~ PROPERTIES ~~ //
-    // sprite soft inheritance properties
+    // sprite soft & dynamic inheritance properties
     this.group.diameter = 10;
     this.group.x = () => player.x + 15;
     this.group.y = () => player.y;
-    this.group.vel.x = () => player.vel.x + 20; // bullet velocity
+    this.group.vel.x = 20; // bullet velocity
     // bouncy
     this.bounciness = 1;
     // visual properties

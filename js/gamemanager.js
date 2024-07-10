@@ -16,13 +16,24 @@ class GameManager {
     }, 100);
 
     // set error handling
-    window.onerror = (event, source, lineno, colno, error) => {
+    // window.onerror = (event, source, lineno, colno, error) => {
+    //   console.log(event)
+    //   this.crash({
+    //     type: "error",
+    //     eventmsg: event,
+    //     source, lineno, colno, error
+    //   });
+    // };
+    addEventListener("error", (ev) => {
+      const { message, filename, lineno, colno, error } = ev;
+      console.log(ev)
       this.crash({
         type: "error",
-        eventmsg: event,
-        source, lineno, colno, error
+        eventmsg: message,
+        source: filename,
+        lineno, colno, error
       });
-    };
+    });
 
     // unhandled promise rejection
     addEventListener("unhandledrejection", (event) => {
@@ -53,7 +64,14 @@ class GameManager {
     } else if(this.errdata.type === "setupError") {
       msg += `Game setup failed to complete.\n${this.errdata.error.name}: ${this.errdata.error.message}\n`;
     } else if(this.errdata.type === "error") {
-      msg += `An uncaught exception occurred.\n${this.errdata.error.name}: ${this.errdata.error.message}\n`
+      msg += `An uncaught exception occurred.\n`;
+      if(this.errdata.error) {
+        msg += `${this.errdata.error.name}: ${this.errdata.error.message}\n`;
+      } else if(this.errdata.eventmsg) {
+        msg += `Event message: ${this.errdata.eventmsg}\n`;
+      } else {
+        msg += `No error data.\n`;
+      }
     } else {
       msg += `Invalid or no error type.\n`;
     }
@@ -66,12 +84,12 @@ class GameManager {
       } else if(this.source) {
         msg += `Source: ${this.source}`
       } else {
-        msg += `Unable to provide more info - try running the game in Firefox.`;
+        msg += `Unable to provide more error information.`;
+        // check browser platform!
       }
-    } else if(this.eventmsg) {
-      msg += `Event message: ${this.eventmsg}\n`;
     } else {
-      msg += `No error data available - likely no information was passed to the crash handler.`;
+      msg += `No error data available.`;
+      // check browser platform!
     }
     this.errmsg = msg;
   }

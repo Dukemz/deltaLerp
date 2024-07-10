@@ -90,6 +90,9 @@ class Player extends Sprite {
       this.applyForceScaled(world.gravity.x);
     }
 
+    // cull projectiles
+    this.projectiles.cull(10,10,10,10);
+
     // new movement system
     this.vel = this.input.getMoveVel(this.vel, this.targetSpeed);
 
@@ -102,7 +105,23 @@ class Player extends Sprite {
     // shoot controls
     if(kb.pressing("space") || this.autoFire) this.weapons[this.activeWeapon].fire();
 
-    if(kb.presses("b")) this.game.funnysound.play();
+    // temporary testing stuff below
+    if(kb.presses("q")) this.game.funnysound.play();
+
+    if(kb.presses("m")) {
+      if(game.targetCameraSpeed === 0) {
+        game.targetCameraSpeed = 0.1
+      } else {
+        game.targetCameraSpeed = 0;
+      }
+    }
+    if(kb.presses("b")) {
+      if(game.targetCameraSpeed === 0) {
+        game.targetCameraSpeed = -0.1
+      } else {
+        game.targetCameraSpeed = 0;
+      }
+    }
   }
 
   runUpdate() { // this is called after the sprite's internal draw function

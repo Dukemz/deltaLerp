@@ -1,7 +1,7 @@
 // main script
 "use strict";
 console.log("[HELLO WORLD]");
-const version = "pre-alpha";
+const version = "pre-alpha OFLV";
 
 let scriptList = [
   'js/player.js',
@@ -88,7 +88,11 @@ async function setup() {
     loop();
   } catch(error) {
     // setup error crash
-    manager.crash({ type: "setupError", error });
+    if(window.manager) {
+      manager.crash({ type: "setupError", error });
+    } else {
+      document.getElementById("loadtext").innerHTML = "oops... an error occurred but the crash handler failed to run. check the console for more information!";
+    }
   }
 }
 
