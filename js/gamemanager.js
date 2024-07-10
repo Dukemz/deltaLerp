@@ -31,8 +31,13 @@ class GameManager {
   }
 
   crash(data) { // data is an object, should contain error
-    this.crashed = true;
-    this.errdata = data;
+    if(!this.crashed) {
+      this.crashed = true;
+    } else {
+      console.error(`WARNING: Attempted to handle a crash on frame ${frameCount} while the game was already crashed (frame ${this.errdata.crashFrame}).`);
+    }
+    this.errdata = data || {};
+    this.errdata.crashFrame = frameCount;
     noLoop();
     
     this.setMessage();
@@ -49,6 +54,8 @@ class GameManager {
       msg += `Game setup failed to complete.\n${this.errdata.error.name}: ${this.errdata.error.message}\n`;
     } else if(this.errdata.type === "error") {
       msg += `An uncaught exception occurred.\n${this.errdata.error.name}: ${this.errdata.error.message}\n`
+    } else {
+      msg += `No error type specified - likely no data was passed to the crash handler.`;
     }
 
     if(this.eventmsg) {
