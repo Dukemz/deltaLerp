@@ -12,6 +12,7 @@ class kbInput {
     this.down ||= "down";
     this.left ||= "left";
     this.right ||= "right";
+    this.slow ||= "shift";
 
     // todo: migrate other actions to here too, like shoot, autofire, etc
   }
@@ -43,10 +44,14 @@ class kbInput {
 
     // there's probably a much more efficient way to do this but whatever
     if(!kb.pressing(this.left) && !kb.pressing(this.right)) {
-      vector.x = deltaLerp(currentVel.x, 0, 0.999);
+      vector.x = deltaLerp(currentVel.x, 0, 0.99999);
     }
     if(!kb.pressing(this.up) && !kb.pressing(this.down)) {
-      vector.y = deltaLerp(currentVel.y, 0, 0.999);
+      vector.y = deltaLerp(currentVel.y, 0, 0.99999);
+    }
+    if(kb.pressing(this.slow)) { // hold shift to slow down
+      // decrease the vector's magnitude
+      vector.setMag(vector.mag()/2);
     }
     return vector;
   }
