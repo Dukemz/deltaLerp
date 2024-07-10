@@ -45,7 +45,7 @@ class GameManager {
     this.crashdraw();
   }
 
-  setMessage() { // set this.errmsg based on data in this handler
+  setMessage() { // set this.errmsg based on data in this instance
     let msg = ``;
     // error type
     if(this.errdata.type === "promiseReject") {
@@ -55,12 +55,9 @@ class GameManager {
     } else if(this.errdata.type === "error") {
       msg += `An uncaught exception occurred.\n${this.errdata.error.name}: ${this.errdata.error.message}\n`
     } else {
-      msg += `No error type specified - likely no data was passed to the crash handler.`;
+      msg += `Invalid or no error type.\n`;
     }
 
-    if(this.eventmsg) {
-      msg += `Event message: ${this.eventmsg}\n`;
-    }
     if(this.errdata.error) {
       if(this.errdata.fileName) {
         msg += `Source: ${this.errdata.fileName}\nLine ${this.errdata.lineNumber}, col ${this.errdata.columnNumber}`;
@@ -71,17 +68,21 @@ class GameManager {
       } else {
         msg += `Unable to provide more info - try running the game in Firefox.`;
       }
+    } else if(this.eventmsg) {
+      msg += `Event message: ${this.eventmsg}\n`;
+    } else {
+      msg += `No error data available - likely no information was passed to the crash handler.`;
     }
     this.errmsg = msg;
   }
 
-  crashlog() {
+  crashlog() { // log crash report to console
     let msg = `%coh no\n%c${this.errmsg}`;
     console.error(msg, "font-size: 27px", "");
     if(this.errdata.error) console.error(this.errdata.error.stack);
   }
 
-  crashdraw() {
+  crashdraw() { // draw crash report to the canvas
     camera.off();
 
     push();
