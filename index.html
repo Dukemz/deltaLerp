@@ -2,28 +2,17 @@
 <html>
 
 <head>
-    <title>SIDESCROLL GAME TEST</title>
+    <title>deltaLerp (OFLV)</title>
     <!-- p5.js 1.9.4 (graphics engine) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.js"
-        integrity="sha512-pdHIQH5GDrd5eTHck+rfKnQhgRjKYtSw8UCQ9blobxwzQhE9LXLw5aTk78ktWY526mS0EwIcaJ/fROeIzHD34w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- q5.js (supposed to be a p5 replacement, but seems to be broken currently) -->
-    <!-- <script src="https://q5js.org/q5.min.js"></script> -->
-    <!-- howler.js core (audio lib) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.core.min.js"
-        integrity="sha512-d00Brs/+XQUUaO0Y9Uo8Vw63o7kS6ZcLM2P++17kALrI8oihAfL4pl1jQObeRBgv06j7xG0GHOhudAW0BdrycA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="lib/p5.js"></script>
+    <!-- howler.js 2.2.4 core (audio lib) -->
+    <script type="text/javascript" src="lib/howler.core.min.js"></script>
+    <!-- planck.js (p5play 3.22.11) (physics engine) -->
+    <script type="text/javascript" src="lib/planck.min.js"></script>
+    <!-- p5play 3.22.11 (game framework) -->
+    <script type="text/javascript" src="lib/p5play.min.js"></script>
 
-    <!-- planck.js (p5play 3.22.6) (physics engine) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5play/3.22.6/planck.min.js"
-        integrity="sha512-I701HcSeemOVpJKS3ve9fhWWPGFUO4fwpRuVirypzxj4D9AzJiVe0d5OCnipYYNSiY8ev9NrRHX2s3XIxwjgqA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- p5play 3.22.6 (game framework) -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5play/3.22.6/p5play.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5play/3.22.6/p5play.min.js"
-        integrity="sha512-Ik6fAuV8lYv2HNsGNijquJoiRfVgtxnkl0NVIO8CtmzqFkkN1LffzokVUquP0uE+SL9mvBtxorAT2xuvnizpKQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+    <!-- main game script -->
     <script type="text/javascript" src="js/main.js"></script>
 
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -31,8 +20,14 @@
 </head>
 
 <body>
+    <!-- deltaLerp, a game by Dukemz: https://dukemz.github.io -->
+    <!-- view the source code at https://github.com/Dukemz/deltaLerp -->
+    <!-- thanks for playing :) -->
+
     <div id="canvasContainer">
-        <p id="loadtext">loading...<br>(if you see this text for more than 5 seconds, please check if JavaScript is enabled)</p>
+        <p id="loadtext">
+            loading...<br>(if you see this text for more than 5 seconds, please check the console)
+        </p>
     </div>
 </body>
 
