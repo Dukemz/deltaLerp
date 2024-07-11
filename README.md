@@ -12,7 +12,7 @@ To try the first test version, download dlpoffline.min.html and open it in your 
 
 You can also optionally download the quackmp3.mp3 file and place it into a folder named assets in the same directory as the HTML, to test if audio is working.
 
-### Libraries used in this project:
+## Libraries Used
 
 - [p5.js](https://p5js.org/)
 
