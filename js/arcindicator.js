@@ -1,3 +1,5 @@
+"use strict";
+
 class ArcIndicator extends Sprite { // arc indicator thing
   // may be used to show health, forcefield or etc
   // multiple arc layers, each with their own color, size, etc?

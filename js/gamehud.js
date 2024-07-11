@@ -1,3 +1,5 @@
+"use strict";
+
 class GameHUD {
   constructor() {
     this.tophudoffset = 0;

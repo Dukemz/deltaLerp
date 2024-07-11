@@ -1,3 +1,5 @@
+"use strict";
+
 function windowResized() {
   const oldWidth = canvas.w;
   const oldHeight = canvas.h;

@@ -4,15 +4,16 @@ console.log("[HELLO WORLD]");
 const version = "pre-alpha OFLV";
 
 let scriptList = [
-  'js/player.js',
+  'js/gamemanager.js',
   'js/resizeAndZoom.js',
-  'js/machinegun.js',
-  'js/arcindicator.js',
-  'js/game.js',
   'js/gamehud.js',
+  'js/arcindicator.js',
+  'js/machinegun.js',
   'js/kbinput.js',
-  'js/gamemanager.js'
+  'js/player.js',
+  'js/game.js',
 ];
+
 
 // will hold game instance
 let game;

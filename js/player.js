@@ -70,7 +70,7 @@ class Player extends Sprite {
   }
 
   directionalVelocity(angle) { // calculate velocity respective of an angle
-    if(typeof angle !== "number") throw new Error("Invalid or missing argument for directionalVelocity() function!");
+    if(typeof angle !== "number") throw Error("Invalid or missing argument for directionalVelocity() function!");
     
     // convert from degrees to radians
     const angleRad = angle * Math.PI/180;
