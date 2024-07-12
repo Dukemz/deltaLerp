@@ -8,7 +8,7 @@ It's also a proof of concept to show that it's possible to make large HTML/JS ga
 
 ## Try It Yourself
 
-To try the first test version, download dlpoffline.min.html and open it in your browser - no additional setup needed.
+To try the first test version, download dlpoffline.min.html from the offlinemode folder and open it in your browser - no additional setup needed.
 
 You can also optionally download the quackmp3.mp3 file and place it into a folder named assets in the same directory as the HTML, to test if audio is working.
 
