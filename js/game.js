@@ -83,20 +83,19 @@ class Game { // game class
     const camBounds = calculateBounds(canvas.w, canvas.h, setZoom);
 
     // bounds box for debug
-    // this.boundsbox = new this.objects.Sprite([
-    //   [camBounds.topLeft.x, camBounds.topLeft.y],
-    //   [camBounds.bottomRight.x, camBounds.topLeft.y],
-    //   [camBounds.bottomRight.x, camBounds.bottomRight.y],
-    //   [camBounds.topLeft.x, camBounds.bottomRight.y],
-    //   [camBounds.topLeft.x, camBounds.topLeft.y]
-    // ]);
-    this.boundsbox = new Sprite(0, 0, 1500, canvas.h, "n");
-    // this.boundsbox.overlaps(allSprites);
-    this.boundsbox.fill = color(0,0,0,0);
-    this.boundsbox.layer = 0;
-    this.boundsbox.stroke = "white";
-    this.boundsbox.strokeWeight = 2;
-    this.boundsbox.stroke.setAlpha(50);
+    this.testbounds = new Sprite(0, 0, 1500, canvas.h, "n");
+    // this.testbounds.overlaps(allSprites);
+    this.testbounds.fill = color(0,0,0,0);
+    this.testbounds.layer = 0;
+    this.testbounds.stroke = "white";
+    this.testbounds.strokeWeight = 2;
+    this.testbounds.stroke.setAlpha(50);
+
+    // actual physical boundary boxes
+    this.boundaries = new Group();
+
+    // this.upperboundary = new Sprite(0, 0, 50, 50);
+
 
     // save timestamp on when the thing starts
     // main.js setup will open the menu rather than jumping straight into the game
@@ -137,13 +136,6 @@ class Game { // game class
     this.objects.draw();
     this.players.draw();
     this.players.forEach(p => p.drawSubDetails());
-    
-    // push();
-    // // draw rectangles to cover boundsbox
-    // noStroke();
-    // fill(color("#263264"));
-    // rect(camera.x, camera.y, 20, 20);
-    // pop();
 
     // hud is drawn last and with the camera disabled
     camera.off();

@@ -27,6 +27,7 @@ class machineGun {
     this.group.fill = player.fill;
     this.group.stroke = 255;
     this.group.strokeWeight = 2;
+    this.group.overlaps(this.group);
 
     // todo: figure out how to make bullets always shoot from the tip of the player
     // and travel in the right direction accordingly
@@ -53,7 +54,7 @@ class machineGun {
       const bullet = new this.group.Sprite();
       // set bullet's update function since for some reason you can't define it before
       bullet.update = () => {
-        if(bullet.speed < 3) bullet.remove();
+        if(bullet.speed < 10) bullet.remove();
       }
       this.bulletsFired++;
       this.lastFired = world.physicsTime*1000;
