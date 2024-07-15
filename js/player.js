@@ -20,6 +20,9 @@ class Player extends Sprite {
 
     Object.assign(this, data);
 
+    this.game ||= game;
+    this.input ||= new kbInput();
+
     // offset for first half (this took FOREVER to get right)
     this.offset.x = -16.666;
     // second half of the thing
@@ -40,10 +43,8 @@ class Player extends Sprite {
     this.autoFire = false;
     this.targetSpeed ||= 6;
 
-    // subdetails should already be created in the constructor
-    this.subdetails ||= new Group();
     // indicators like health and such - rings around the player
-    this.arcindics = new this.subdetails.Group();
+    this.arcindics = [];
     this.arcindics.push(new ArcIndicator(this));
 
     // weapons, bullets, etc
@@ -53,11 +54,12 @@ class Player extends Sprite {
     // group of all projectiles
     // allow for use with enemies as well?
     // if this.weapons is not already an array, create it
-    this.weapons ||= [];
+    this.weapons ||= [new machineGun()];
     // this.activeWeapon will be the currently active weapon
     // at the end of update, if pressing down fire key or autofire is on, call the fire function
     // the weapon class should handle everything from there
     this.projectiles ||= new Group();
+    this.projectiles.overlaps(this.game.players);
     this.activeWeapon = 0;
     this.weapons.forEach(weapon => { // initialise all weapons
       weapon.initialise(this);
@@ -79,7 +81,7 @@ class Player extends Sprite {
   }
 
   // ~~ UPDATE FUNCTION ~~ //
-  playerUpdate() {
+  runUpdate() {
     // counteract gravity if there is any
     if(world.gravity.y) {
       this.bearing = -90;
@@ -91,7 +93,7 @@ class Player extends Sprite {
     }
 
     // cull projectiles
-    this.projectiles.cull(10,10,10,10);
+    // this.projectiles.cull(10,10,10,10);
 
     // new movement system
     this.vel = this.input.getMoveVel(this.vel, this.targetSpeed);
@@ -106,30 +108,22 @@ class Player extends Sprite {
     if(kb.pressing("space") || this.autoFire) this.weapons[this.activeWeapon].fire();
 
     // temporary testing stuff below
-    if(kb.presses("q")) this.game.funnysound.play();
+    if(kb.presses("y")) this.game.funnysound.play();
 
     if(kb.presses("m")) {
-      if(game.targetCameraSpeed === 0) {
-        game.targetCameraSpeed = 0.1
+      if(this.game.targetCameraSpeed === 0) {
+        this.game.targetCameraSpeed = 0.1
       } else {
-        game.targetCameraSpeed = 0;
+        this.game.targetCameraSpeed = 0;
       }
     }
     if(kb.presses("b")) {
-      if(game.targetCameraSpeed === 0) {
-        game.targetCameraSpeed = -0.1
+      if(this.game.targetCameraSpeed === 0) {
+        this.game.targetCameraSpeed = -0.1
       } else {
-        game.targetCameraSpeed = 0;
+        this.game.targetCameraSpeed = 0;
       }
     }
-  }
-
-  runUpdate() { // this is called after the sprite's internal draw function
-    // difference between camera position and player position
-    // const camDevX = camera.x-this.x;
-    // const camDevY = camera.y-this.y;
-
-    if(!this.game.paused) this.playerUpdate();
   }
 
   tdebug() { // toggle debug
@@ -141,5 +135,9 @@ class Player extends Sprite {
       this.debug = true;
       this.strokeWeight = 1;
     }
+  }
+
+  drawSubDetails() {
+    this.arcindics.forEach(a => a.draw());
   }
 }

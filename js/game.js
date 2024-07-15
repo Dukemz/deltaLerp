@@ -31,18 +31,17 @@ class Game { // game class
     this.objects = new Group();
     this.objects.stroke = "white";
     this.objects.strokeWeight = 2
+    // terrain
+    this.walls = new this.objects.Group();
 
     // all players
     this.players = new Group();
-    // group of all player details e.g. shields and such
-    this.playerDetails = new Group();
     this.projectiles = new Group();
 
     // set main player if it doesn't exist
     window.player ||= new Player({
       game: this,
       projectiles: new this.projectiles.Group(),
-      subdetails: new this.playerDetails.Group(),
       layer: 1,
       fill: color(122, 122, 255),
       input: new kbInput(),
@@ -56,9 +55,6 @@ class Game { // game class
     this.players.push(player);
 
     // wall test - vertex mode
-    this.walls = new this.objects.Group();
-    this.walls.collides(this.projectiles, (_w, p) => p.remove());
-
     this.wall = new this.walls.Sprite([[100, 100], [200, -100]], 's');
     this.wall2 = new this.walls.Sprite([[-100, -100], [-100, 100]], 's');
 
@@ -80,7 +76,8 @@ class Game { // game class
     this.objects.autoDraw = false;
     this.projectiles.autoDraw = false;
 
-    const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
+    const setZoom = canvas.w / 1400;
+    // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
     camera.zoom = setZoom;
     // calculate bounds
     const camBounds = calculateBounds(canvas.w, canvas.h, setZoom);
@@ -93,10 +90,13 @@ class Game { // game class
     //   [camBounds.topLeft.x, camBounds.bottomRight.y],
     //   [camBounds.topLeft.x, camBounds.topLeft.y]
     // ]);
-    this.boundsbox = new this.objects.Sprite(0, 0, 1500, canvas.h);
-    this.boundsbox.overlaps(allSprites);
+    this.boundsbox = new Sprite(0, 0, 1500, canvas.h, "n");
+    // this.boundsbox.overlaps(allSprites);
+    this.boundsbox.fill = color(0,0,0,0);
     this.boundsbox.layer = 0;
-    this.boundsbox.colour.setAlpha(1);
+    this.boundsbox.stroke = "white";
+    this.boundsbox.strokeWeight = 2;
+    this.boundsbox.stroke.setAlpha(50);
 
     // save timestamp on when the thing starts
     // main.js setup will open the menu rather than jumping straight into the game
@@ -135,16 +135,25 @@ class Game { // game class
     camera.on();
     this.projectiles.draw();
     this.objects.draw();
-    this.playerDetails.draw();
     this.players.draw();
+    this.players.forEach(p => p.drawSubDetails());
+    
+    // push();
+    // // draw rectangles to cover boundsbox
+    // noStroke();
+    // fill(color("#263264"));
+    // rect(camera.x, camera.y, 20, 20);
+    // pop();
+
     // hud is drawn last and with the camera disabled
     camera.off();
     this.hud.draw();
     camera.on();
 
-    // update sprites
-    this.playerDetails.runUpdate();
-    this.players.runUpdate();
+    if(!this.paused) {
+      // update sprites
+      this.players.runUpdate();
+    }
 
     // crash lol
     if(kb.presses("c")) throw Error("Congrats, you found the crash button!");
@@ -152,11 +161,9 @@ class Game { // game class
 
   exit() { // close game, remove all sprites.
     // game cannot be reused after this
-    this.players.remove();
-    this.playerDetails.remove();
-    this.objects.remove();
-    this.projectiles.remove();
-    this.hud.remove();
+    this.players.removeAll();
+    this.objects.removeAll();
+    this.projectiles.removeAll();
     this.draw = () => {};
     this.active = false;
   }

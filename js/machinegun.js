@@ -30,9 +30,12 @@ class machineGun {
 
     // todo: figure out how to make bullets always shoot from the tip of the player
     // and travel in the right direction accordingly
+    
+    // remove when touching game objects
+    // player.game.objects.collides(this.group, (_o, p) => p.remove());
 
     // bullets overlap with the player
-    this.group.overlaps(player);
+    // this.group.overlaps(player);
     // // thing to remove bullets if they touch player, but it's unnecessary
     // {
     //   const life = 2147483647 - b.life;

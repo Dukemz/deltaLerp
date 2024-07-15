@@ -111,7 +111,7 @@ class GameManager {
     fill(255, 90, 100);
     textAlign(LEFT, TOP);
     textStyle(BOLD);
-    textWrap(WORD);
+    // textWrap(WORD);
     textSize(20);
 
     const maxtextwidth = canvas.w - 20;

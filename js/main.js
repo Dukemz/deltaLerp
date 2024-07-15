@@ -76,7 +76,7 @@ async function setup() {
     background(manager.opaquebgcol);
 
     // disable world auto step
-    // world.autoStep = false;
+    world.autoStep = false;
 
     // annoying thing to make all sprites in a group run my update func
     Group.prototype.runUpdate = function() {
@@ -101,24 +101,33 @@ function draw() {
   if(!window.manager) {
     return console.log(`Waiting for manager to load...`);
   } else if(!manager.setupDone) {
-    return console.log(`Skipping frame ${frameCount} as setup is incomplete.`);
+    return console.warn(`Skipping frame ${frameCount} as setup is incomplete.`);
   } else if(manager.crashed) {
     return console.warn(`Skipping frame ${frameCount} due to game crash.`);
   }
 
   if(document.hidden) {
     manager.lastHidden = performance.now();
+  } else {
+    // average deltatime, fps calcs
+    manager.avgFPS = manager.fpsList.reduce((a, b) => a + b, 0)/manager.fpsList.length || frameRate();
+    manager.avgDeltaTime = 1/manager.avgFPS;
   }
   background(manager.bgcol);
   // background(color("#242838"))
 
-  // average deltatime, fps calcs
-  manager.avgFPS = manager.fpsList.reduce((a, b) => a + b, 0)/manager.fpsList.length || frameRate();
-  manager.avgDeltaTime = 1/manager.avgFPS;
-
   // set actual camera position to game's set position
   camera.pos = game.camPos;
   game.draw();
+
+  // step world
+  // world.calcTimeStep = (manager.avgDeltaTime || 1 / (frameRate() || 60)) * world.timeScale;
+  world.calcTimeStep = 1/(frameRate() || 60) * world.timeScale;
+  world.step(
+    world.calcTimeStep,
+    world.velocityIterations,
+    world.positionIterations
+  );
 }
 // after this the draw functions of sprites are called
 // by default sprites are drawn in the order they were created in
