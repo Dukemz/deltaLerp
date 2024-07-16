@@ -8,7 +8,7 @@ It's also a proof of concept to show that it's possible to make large HTML/JS ga
 
 ## Try the game
 
-You can run the latest build [here](https://dukemz.github.io/deltaLerp/), or clone/download the repository and open index.html.
+You can run the latest build [here](https://dukemz.github.io/deltaLerp/), or clone/[download](https://github.com/Dukemz/deltaLerp/archive/refs/heads/main.zip) the repository and open index.html.
 
 Be aware that the latest build is considered bleeding-edge and will likely be unstable.
 
