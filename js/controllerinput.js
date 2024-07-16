@@ -72,7 +72,9 @@ class controllerInput {
       // targetVector.setHeading(stickVector.heading());
 
       // limit magnitude to 1
-      if(stickVector.mag() > 1) stickVector.setMag(1);
+      // if(stickVector.mag() > 1) stickVector.setMag(1);
+      // normalize
+      stickVector.normalize();
       // multiply by target speed
       stickVector.setMag(stickVector.mag()*targetSpeed);
 
