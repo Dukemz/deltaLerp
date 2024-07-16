@@ -8,6 +8,8 @@ class kbInput {
     //   down: "s"
     //   // etc...
     // }
+    this.inputType = "kb";
+    // note to self: potentially make both input classes extend a base input class?
 
     // directional movement
     this.c ||= {};

@@ -8,6 +8,7 @@ class controllerInput {
     //   down: "s"
     //   // etc...
     // }
+    this.inputType = "controller";
 
     // directional movement
     this.contro ||= window.contro;
