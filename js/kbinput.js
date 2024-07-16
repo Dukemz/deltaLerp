@@ -4,52 +4,70 @@ class kbInput {
   constructor(data) {
     Object.assign(this, data);
     // data = {
-    //   up: "W",
-    //   down: "S"
+    //   up: "w",
+    //   down: "s"
     //   // etc...
     // }
-    this.up ||= "up";
-    this.down ||= "down";
-    this.left ||= "left";
-    this.right ||= "right";
-    this.slow ||= "shift";
 
-    // todo: migrate other actions to here too, like shoot, autofire, etc
+    // directional movement
+    this.c ||= {};
+    this.c.up ||= "up";
+    this.c.down ||= "down";
+    this.c.left ||= "left";
+    this.c.right ||= "right";
+    this.c.slow ||= "shift";
+
+    // fire controls
+    this.c.fire ||= "space";
+    this.c.autoFire ||= "e";
+    this.c.cycleWeapon ||= "q";
+
+    this.autoFireEnabled = false;
   }
 
+  // input checks //
+  firing() {
+    // toggle autofire enabled
+    if(kb.presses(this.c.autoFire)) this.autoFireEnabled = !this.autoFireEnabled;
+    return this.autoFireEnabled || kb.pressing(this.c.fire);
+  }
+  cycleWeapon() { return kb.presses(this.c.cycleWeapon) }
+
+
+  // other methods //
   isMoving() {
-    return (kb.pressing(this.up) || kb.pressing(this.down) || kb.pressing(this.left) || kb.pressing(this.right))
+    return (kb.pressing(this.c.up) || kb.pressing(this.c.down) || kb.pressing(this.c.left) || kb.pressing(this.c.right))
   }
 
-  getMoveVel(currentVel, targetSpeed) { // get vector for velocity
+  getMoveVel(targetSpeed, currentVel) { // get vector for velocity
     let vector = createVector(targetSpeed, 0);
 
-    if(kb.pressing(this.up) && kb.pressing(this.right)) {
+    if(kb.pressing(this.c.up) && kb.pressing(this.c.right)) {
       vector.setHeading(-45);
-    } else if(kb.pressing(this.up) && kb.pressing(this.left)) {
+    } else if(kb.pressing(this.c.up) && kb.pressing(this.c.left)) {
       vector.setHeading(-135);
-    } else if(kb.pressing(this.down) && kb.pressing(this.right)) {
+    } else if(kb.pressing(this.c.down) && kb.pressing(this.c.right)) {
       vector.setHeading(45);
-    } else if(kb.pressing(this.down) && kb.pressing(this.left)) {
+    } else if(kb.pressing(this.c.down) && kb.pressing(this.c.left)) {
       vector.setHeading(135);
-    } else if(kb.pressing(this.up)) {
+    } else if(kb.pressing(this.c.up)) {
       vector.setHeading(-90);
-    } else if(kb.pressing(this.down)) {
+    } else if(kb.pressing(this.c.down)) {
       vector.setHeading(90);
-    } else if(kb.pressing(this.right)) {
+    } else if(kb.pressing(this.c.right)) {
       vector.setHeading(0);
-    } else if(kb.pressing(this.left)) {
+    } else if(kb.pressing(this.c.left)) {
       vector.setHeading(180);
     }
 
     // there's probably a much more efficient way to do this but whatever
-    if(!kb.pressing(this.left) && !kb.pressing(this.right)) {
+    if(!kb.pressing(this.c.left) && !kb.pressing(this.c.right)) {
       vector.x = deltaLerp(currentVel.x, 0, 0.99999);
     }
-    if(!kb.pressing(this.up) && !kb.pressing(this.down)) {
+    if(!kb.pressing(this.c.up) && !kb.pressing(this.c.down)) {
       vector.y = deltaLerp(currentVel.y, 0, 0.99999);
     }
-    if(kb.pressing(this.slow)) { // hold shift to slow down
+    if(kb.pressing(this.c.slow)) { // hold shift to slow down
       // decrease the vector's magnitude
       vector.setMag(vector.mag()/2);
     }

@@ -81,11 +81,11 @@ class GameManager {
         msg += `Source: ${this.errdata.fileName}\nLine ${this.errdata.lineNumber}, col ${this.errdata.columnNumber}`;
       } else if(this.errdata.error.fileName) {
         msg += `Source: ${this.errdata.error.fileName}\nLine ${this.errdata.error.lineNumber}, col ${this.errdata.error.columnNumber}`;
-      } else if(this.source) {
-        msg += `Source: ${this.source}`
       } else {
         msg += `Unable to provide more error information.`;
       }
+    } else if(this.errdata.source) {
+      msg += `Source: ${this.errdata.source}`
     } else {
       msg += `No error data available.`;
     }

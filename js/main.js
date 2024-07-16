@@ -1,7 +1,7 @@
 // main script
 "use strict";
 console.log("[HELLO WORLD]");
-const version = "pre-alpha OFLV";
+const version = "pre-alpha";
 
 let scriptList = [
   'js/gamemanager.js',
@@ -10,6 +10,7 @@ let scriptList = [
   'js/arcindicator.js',
   'js/machinegun.js',
   'js/kbinput.js',
+  'js/controllerinput.js',
   'js/player.js',
   'js/game.js',
 ];

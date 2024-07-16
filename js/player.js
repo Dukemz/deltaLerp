@@ -96,28 +96,26 @@ class Player extends Sprite {
     // this.projectiles.cull(10,10,10,10);
 
     // new movement system
-    this.vel = this.input.getMoveVel(this.vel, this.targetSpeed);
-
-    // toggle auto fire
-    if(kb.presses("e")) this.autoFire = !this.autoFire;
+    this.vel = this.input.getMoveVel(this.targetSpeed, this.vel);
 
     // cycle weapon
-    if(kb.presses("q")) this.activeWeapon = (this.activeWeapon + 1) % this.weapons.length
+    if(this.input.cycleWeapon()) this.activeWeapon = (this.activeWeapon + 1) % this.weapons.length;
 
     // shoot controls
-    if(kb.pressing("space") || this.autoFire) this.weapons[this.activeWeapon].fire();
+    if(this.input.firing()) this.weapons[this.activeWeapon].fire();
+
 
     // temporary testing stuff below
     if(kb.presses("y")) this.game.funnysound.play();
 
-    if(kb.presses("m")) {
+    if(kb.presses("m") || this.input.contro?.presses("rt")) {
       if(this.game.targetCameraSpeed === 0) {
         this.game.targetCameraSpeed = 0.1
       } else {
         this.game.targetCameraSpeed = 0;
       }
     }
-    if(kb.presses("b")) {
+    if(kb.presses("b") || this.input.contro?.presses("lt")) {
       if(this.game.targetCameraSpeed === 0) {
         this.game.targetCameraSpeed = -0.1
       } else {
