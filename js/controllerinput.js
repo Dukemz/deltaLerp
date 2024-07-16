@@ -17,7 +17,6 @@ class controllerInput {
     this.c.down ||= "down";
     this.c.left ||= "left";
     this.c.right ||= "right";
-    this.c.slow ||= "lsb";
 
     // analog stuff
     this.deadzone = 0.3;
@@ -71,16 +70,12 @@ class controllerInput {
     if(stickVector.mag() > this.deadzone) {
       // targetVector.setHeading(stickVector.heading());
 
-      // limit magnitude to 1
-      // if(stickVector.mag() > 1) stickVector.setMag(1);
       // normalize
-      stickVector.normalize();
+      // this solution isn't the best but it's good enough
+      if(stickVector.mag() > 1) stickVector.normalize();
       // multiply by target speed
-      stickVector.setMag(stickVector.mag()*targetSpeed);
+      stickVector.mult(targetSpeed);
 
-      // TODO WHEN COMING BACK TO THIS:
-      // need to figure out how to get effectively how much the joystick is pushed, then map that from 0 - targetspeed
-      // problem is when pushed in diagonal direction, mag > 1 because pythagoras??
 
     } else {
       stickVector.setMag(0);
@@ -115,10 +110,6 @@ class controllerInput {
     }
     if(!this.contro.pressing(this.c.up) && !this.contro.pressing(this.c.down)) {
       vector.y = deltaLerp(currentVel.y, 0, 0.99999);
-    }
-    if(this.contro.pressing(this.c.slow)) { // hold shift to slow down
-      // decrease the vector's magnitude
-      vector.setMag(vector.mag()/2);
     }
     return vector;
   }

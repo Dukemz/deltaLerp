@@ -69,10 +69,10 @@ class kbInput {
     if(!kb.pressing(this.c.up) && !kb.pressing(this.c.down)) {
       vector.y = deltaLerp(currentVel.y, 0, 0.99999);
     }
-    if(kb.pressing(this.c.slow)) { // hold shift to slow down
-      // decrease the vector's magnitude
-      vector.setMag(vector.mag()/2);
-    }
+    // if(kb.pressing(this.c.slow)) { // hold shift to slow down
+    //   // decrease the vector's magnitude
+    //   vector.setMag(vector.mag()/2);
+    // }
     return vector;
   }
 }

@@ -23,6 +23,11 @@ class Player extends Sprite {
     this.game ||= game;
     this.input ||= new kbInput();
 
+    if(this.game.players) this.game.players.push(this);
+
+    // hopefully fixes the weird offset bug
+    this.removeSensors();
+
     // offset for first half (this took FOREVER to get right)
     this.offset.x = -16.666;
     // second half of the thing
@@ -36,11 +41,12 @@ class Player extends Sprite {
     // this keeps being inconsistent for some reason
     this.offset.y = -3.666;
     this.rotation = 90;
-    this.strokeWeight = 0.2;
+    this.strokeWeight = 0.25;
     this.stroke = this.fill;
 
     // custom attribs
     this.maxSpeed ||= 6;
+    this.framesAlive = 0;
 
     // indicators like health and such - rings around the player
     this.arcindics = [];
@@ -57,17 +63,16 @@ class Player extends Sprite {
     // this.activeWeapon will be the currently active weapon
     // at the end of update, call the fire function
     // the weapon class should handle everything from there
-    this.projectiles ||= new Group();
-    this.projectiles.overlaps(this.game.players);
+    this.projectiles ||= new this.game.playerProjectiles.Group();
+
     this.activeWeapon = 0;
     this.weapons.forEach(weapon => { // initialise all weapons
       weapon.initialise(this);
     });
 
-    // this.fixlist = [];
-    // for(let fxt = this.body.m_fixtureList; fxt; fxt = fxt.getNext()) {
-    //   if(!fxt.isSensor()) this.fixlist.push(fxt);
-    // }
+    // for some reason these overlaps keep breaking everything
+    this.overlaps(this.game.playerProjectiles);
+    this.overlaps(this.game.players);
   }
 
   directionalVelocity(angle) { // calculate velocity respective of an angle
@@ -81,6 +86,9 @@ class Player extends Sprite {
 
   // ~~ UPDATE FUNCTION ~~ //
   runUpdate() {
+    // blegghhhhh
+    this.framesAlive++;
+
     // counteract gravity if there is any
     if(world.gravity.y) {
       this.bearing = -90;
@@ -104,33 +112,25 @@ class Player extends Sprite {
     if(this.input.firing()) this.weapons[this.activeWeapon].fire();
 
 
-    // temporary testing stuff below
-    if(kb.presses("y")) this.game.funnysound.play();
-
-    if(kb.presses("m") || this.input.contro?.presses("rt")) {
-      if(this.game.targetCameraSpeed === 0) {
-        this.game.targetCameraSpeed = 0.1
-      } else {
-        this.game.targetCameraSpeed = 0;
-      }
-    }
-    if(kb.presses("b") || this.input.contro?.presses("lt")) {
-      if(this.game.targetCameraSpeed === 0) {
-        this.game.targetCameraSpeed = -0.1
-      } else {
-        this.game.targetCameraSpeed = 0;
-      }
-    }
+    // crash lol
+    if(kb.presses("c")) throw Error("Congrats, you found the crash button!");
   }
 
   tdebug() { // toggle debug
     if(this.debug) {
       this.debug = false;
-      this.strokeWeight = 0.2;
+      this.strokeWeight = 0.25;
       this.stroke = this.fill;
     } else {
       this.debug = true;
       this.strokeWeight = 1;
+    }
+  }
+
+  setCol(colour) {
+    if(!this.debug) {
+      this.fill = colour;
+      this.stroke = colour;
     }
   }
 

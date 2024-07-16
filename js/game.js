@@ -37,13 +37,14 @@ class Game { // game class
     // all players
     this.players = new Group();
     this.projectiles = new Group();
+    this.playerProjectiles = new this.projectiles.Group();
 
     // set main player if it doesn't exist
     window.player ||= new Player({
       game: this,
-      projectiles: new this.projectiles.Group(),
+      projectiles: new this.playerProjectiles.Group(),
       layer: 1,
-      fill: color(122, 122, 255),
+      fill: color("hsb(240, 60%, 100%)"),
       input: new kbInput(),
       weapons: [
         new machineGun()
@@ -52,7 +53,7 @@ class Game { // game class
 
     // in future this.player won't exist
     // at the moment the game is only single-player though
-    this.players.push(player);
+    // this.players.push(player);
 
     // wall test - vertex mode
     this.wall = new this.walls.Sprite([[100, 100], [200, -100]], 's');
@@ -83,7 +84,7 @@ class Game { // game class
     const camBounds = calculateBounds(canvas.w, canvas.h, setZoom);
 
     // bounds box for debug
-    this.testbounds = new Sprite(0, 0, 1500, canvas.h, "n");
+    this.testbounds = new Sprite(0, 0, 1400, canvas.h, "n");
     // this.testbounds.overlaps(allSprites);
     this.testbounds.fill = color(0,0,0,0);
     this.testbounds.layer = 0;
@@ -147,8 +148,23 @@ class Game { // game class
       this.players.runUpdate();
     }
 
-    // crash lol
-    if(kb.presses("c")) throw Error("Congrats, you found the crash button!");
+    // temporary testing stuff below
+    if(kb.presses("y")) this.funnysound.play();
+
+    if(kb.presses("m") || player.input.contro?.presses("rt")) {
+      if(this.targetCameraSpeed === 0) {
+        this.targetCameraSpeed = 0.1
+      } else {
+        this.targetCameraSpeed = 0;
+      }
+    }
+    if(kb.presses("b") || player.input.contro?.presses("lt")) {
+      if(this.targetCameraSpeed === 0) {
+        this.targetCameraSpeed = -0.1
+      } else {
+        this.targetCameraSpeed = 0;
+      }
+    }
   }
 
   exit() { // close game, remove all sprites.
