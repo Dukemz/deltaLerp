@@ -40,8 +40,7 @@ class Player extends Sprite {
     this.stroke = this.fill;
 
     // custom attribs
-    this.autoFire = false;
-    this.targetSpeed ||= 6;
+    this.maxSpeed ||= 6;
 
     // indicators like health and such - rings around the player
     this.arcindics = [];
@@ -56,7 +55,7 @@ class Player extends Sprite {
     // if this.weapons is not already an array, create it
     this.weapons ||= [new machineGun()];
     // this.activeWeapon will be the currently active weapon
-    // at the end of update, if pressing down fire key or autofire is on, call the fire function
+    // at the end of update, call the fire function
     // the weapon class should handle everything from there
     this.projectiles ||= new Group();
     this.projectiles.overlaps(this.game.players);
@@ -96,7 +95,7 @@ class Player extends Sprite {
     // this.projectiles.cull(10,10,10,10);
 
     // new movement system
-    this.vel = this.input.getMoveVel(this.targetSpeed, this.vel);
+    this.vel = this.input.getMoveVel(this.maxSpeed, this.vel);
 
     // cycle weapon
     if(this.input.cycleWeapon()) this.activeWeapon = (this.activeWeapon + 1) % this.weapons.length;
