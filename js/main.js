@@ -137,7 +137,7 @@ function draw() {
 function deltaLerp(a, b, f) { // hey look, it's the game's namesake!
   // f is the factor between 0 and 1 deciding how quickly it catches up
   // e.g. if f = 0.25, it will cover 25% the remaining distance every second
-  return lerp(a, b, 1 - pow(1-f, deltaTime/1000));
+  return lerp(a, b, (1 - pow(1-f, deltaTime/1000)) * world.timeScale);
 }
 
 const titlestyle = "font-size: 27px; color: lightblue; text-shadow: 2px 2px dodgerblue";

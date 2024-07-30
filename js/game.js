@@ -50,9 +50,13 @@ class Game { // game class
       ]
     });
 
-    // in future this.player won't exist
-    // at the moment the game is only single-player though
-    // this.players.push(player);
+    // add extra players for additional controllers connected
+    contros.forEach(c => {
+      const p = new Player({ game: this });
+      p.input = new controllerInput({
+        contro: c,
+      })
+    });
 
     // wall test - vertex mode
     this.wall = new this.walls.Sprite([[100, 100], [200, -100]], 's');
@@ -96,7 +100,6 @@ class Game { // game class
 
     // this.upperboundary = new Sprite(0, 0, 50, 50);
 
-
     // save timestamp on when the thing starts
     // main.js setup will open the menu rather than jumping straight into the game
     // new Game() will be called when entering a level
@@ -105,9 +108,11 @@ class Game { // game class
   }
 
   draw() { // runs at the end of the main draw function
-    
+
     // pause logic
-    if(kb.presses("p")) this.setPaused = !this.setPaused;
+    this.players.forEach(p => {
+      if(p.input.pause()) this.setPaused = !this.setPaused;
+    }) 
 
     if(this.setPaused) {
       this.paused = true;
@@ -124,7 +129,7 @@ class Game { // game class
 
       // calculation for camera movement
       // this is about as accurate as i can make it lol
-      this.camPos.x += this.cameraSpeed * deltaTime;
+      this.camPos.x += this.cameraSpeed * deltaTime * world.timeScale;
       if(this.cameraSpeed !== this.targetCameraSpeed) {
         this.cameraSpeed = deltaLerp(this.cameraSpeed, this.targetCameraSpeed, this.cameraLerpAmount);
       }
@@ -141,6 +146,7 @@ class Game { // game class
     camera.off();
     this.hud.draw();
     camera.on();
+    this.projectiles.cull(10)
 
     if(!this.paused) {
       // update sprites
@@ -148,16 +154,27 @@ class Game { // game class
     }
 
     // temporary testing stuff below
+    // sound test
     if(kb.presses("y")) this.funnysound.play();
 
-    if(kb.presses("m") || player.input.contro?.presses("rt")) {
+    // game speed test
+    if(kb.presses("j") || contro.presses("l")) {
+      if(game.timeScale === 1) {
+        game.timeScale = 0.2;
+      } else {
+        game.timeScale = 1;
+      }
+    }
+
+    // cam scroll test
+    if(kb.presses("m") || contro.presses("rt")) {
       if(this.targetCameraSpeed === 0) {
         this.targetCameraSpeed = 0.1
       } else {
         this.targetCameraSpeed = 0;
       }
     }
-    if(kb.presses("b") || player.input.contro?.presses("lt")) {
+    if(kb.presses("b") || contro.presses("lt")) {
       if(this.targetCameraSpeed === 0) {
         this.targetCameraSpeed = -0.1
       } else {

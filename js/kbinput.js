@@ -28,11 +28,15 @@ class kbInput {
   }
 
   // input checks //
+
+  pause() { return kb.presses("p") }
+
   firing() {
     // toggle autofire enabled
     if(kb.presses(this.c.autoFire)) this.autoFireEnabled = !this.autoFireEnabled;
     return this.autoFireEnabled || kb.pressing(this.c.fire);
   }
+
   cycleWeapon() { return kb.presses(this.c.cycleWeapon) }
 
 

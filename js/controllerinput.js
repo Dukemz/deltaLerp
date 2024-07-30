@@ -30,11 +30,14 @@ class controllerInput {
   }
 
   // input checks //
+  pause() { return this.contro.presses("start") }
+
   firing() {
     // toggle autofire enabled
     if(this.contro.presses(this.c.autoFire)) this.autoFireEnabled = !this.autoFireEnabled;
     return this.autoFireEnabled || this.contro.pressing(this.c.fire);
   }
+
   cycleWeapon() { return this.contro.presses(this.c.cycleWeapon) }
 
 

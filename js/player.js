@@ -82,6 +82,7 @@ class Player extends Sprite {
     // for some reason these overlaps keep breaking everything
     this.overlaps(this.game.playerProjectiles);
     this.overlaps(this.game.players);
+    this.projectiles.overlaps(this.game.playerProjectiles);
   }
 
   directionalVelocity(angle) { // calculate velocity respective of an angle
@@ -119,7 +120,6 @@ class Player extends Sprite {
 
     // shoot controls
     if(this.input.firing()) this.weapons[this.activeWeapon].fire();
-
 
     // crash lol
     if(kb.presses("c")) throw Error("Congrats, you found the crash button!");
