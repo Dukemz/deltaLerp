@@ -44,7 +44,6 @@ class Game { // game class
       game: this,
       projectiles: new this.playerProjectiles.Group(),
       layer: 1,
-      fill: color("hsb(240, 60%, 100%)"),
       input: new kbInput(),
       weapons: [
         new machineGun()

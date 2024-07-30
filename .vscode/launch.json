@@ -9,7 +9,13 @@
       "type": "firefox",
       "request": "launch",
       "reAttach": true,
-      "file": "${workspaceFolder}/index.html"
+      "file": "${workspaceFolder}/index.html",
+      "pathMappings": [
+        {
+          "url": "file:///C:/Users/MDA/OneDrive/Documents/Coding%20&%20Programming/html%20et%20php",
+          "path": "c:/Users/MDA/OneDrive/Documents/Coding & Programming/html et php"
+        }
+      ]
     },
     {
       "name": "Launch localhost",

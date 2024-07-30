@@ -113,6 +113,7 @@ function draw() {
     // average deltatime, fps calcs
     manager.avgFPS = manager.fpsList.reduce((a, b) => a + b, 0)/manager.fpsList.length || frameRate();
     manager.avgDeltaTime = 1/manager.avgFPS;
+    if(manager.avgFPS < 2) console.warn(`Warning: Average FPS is ${manager.avgFPS.toFixed(3)}!`);
   }
   background(manager.bgcol);
   // background(color("#242838"))

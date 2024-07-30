@@ -19,7 +19,7 @@ class controllerInput {
     this.c.right ||= "right";
 
     // analog stuff
-    this.deadzone = 0.3;
+    this.deadzone = 0.1;
 
     // fire controls
     this.c.fire ||= "r";

@@ -25,6 +25,15 @@ class Player extends Sprite {
 
     if(this.game.players) this.game.players.push(this);
 
+    // player colours
+    const pcols = [
+      color("#6666ff"),
+      color("#f44049"),
+      color("#43bf8b"),
+      color("#c37ee6")
+    ]
+    this.fill = pcols[this.game.players.indexOf(this)] || "black";
+
     // hopefully fixes the weird offset bug
     this.removeSensors();
 
@@ -41,7 +50,7 @@ class Player extends Sprite {
     // this keeps being inconsistent for some reason
     this.offset.y = -3.666;
     this.rotation = 90;
-    this.strokeWeight = 0.25;
+    this.strokeWeight = 0.8;
     this.stroke = this.fill;
 
     // custom attribs
@@ -119,7 +128,7 @@ class Player extends Sprite {
   tdebug() { // toggle debug
     if(this.debug) {
       this.debug = false;
-      this.strokeWeight = 0.25;
+      this.strokeWeight = 0.8;
       this.stroke = this.fill;
     } else {
       this.debug = true;

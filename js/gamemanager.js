@@ -11,8 +11,11 @@ class GameManager {
     // get the current fps 10 times a second
     // used to get average FPS over the last 3 seconds
     this.fpsPush = setInterval(() => {
-      this.fpsList.push(frameRate());
-      if (this.fpsList.length > 30) this.fpsList.shift();
+      if(!document.hidden) {
+        this.fpsList.push(frameRate());
+        // remove first item in list if it goes above 30
+        if(this.fpsList.length > 30) this.fpsList.shift();
+      }
     }, 100);
 
     // set error handling
