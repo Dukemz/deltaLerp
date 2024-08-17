@@ -8,6 +8,10 @@ class Game { // game class
     Object.assign(this, data);
     this.active = true;
 
+    // background colour
+    this.bgcol = color("#242838");
+    this.bgopacity = 128;
+
     // camera config
     this.cameraSpeed = 0;
     this.targetCameraSpeed = 0;
@@ -98,7 +102,10 @@ class Game { // game class
     // actual physical boundary boxes
     this.boundaries = new Group();
 
-    // this.upperboundary = new Sprite(0, 0, 50, 50);
+    // this.upperboundary = new boundaries.Sprite(0, 0, 50, 50);
+
+    // draw opaque bg
+    background(this.bgcol);
 
     // save timestamp on when the thing starts
     // main.js setup will open the menu rather than jumping straight into the game
@@ -108,6 +115,12 @@ class Game { // game class
   }
 
   draw() { // runs at the end of the main draw function
+    // set actual camera position to game's set position
+    camera.pos = game.camPos;
+
+    const backgroundcol = color(this.bgcol);
+    backgroundcol.setAlpha(this.bgopacity);
+    background(backgroundcol);
 
     // pause logic
     this.players.forEach(p => {
@@ -146,7 +159,8 @@ class Game { // game class
     camera.off();
     this.hud.draw();
     camera.on();
-    this.projectiles.cull(10)
+    // cull seems to be broken at the moment whenever the zoom is not 1?
+    // this.projectiles.cull(10);
 
     if(!this.paused) {
       // update sprites
@@ -181,6 +195,17 @@ class Game { // game class
         this.targetCameraSpeed = 0;
       }
     }
+  }
+
+  windowResized(oldWidth, oldHeight, oldZoom) {
+    // change zoom
+    const setZoom = canvas.w / 1400;
+    // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
+    camera.zoom = setZoom;
+    console.log(`Resized! [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]\nZoom: [${oldZoom.toFixed(3)}] => [${setZoom.toFixed(3)}]`);
+    
+    // set the bg colour again to avoid that weird messy effect
+    background(this.bgcol);
   }
 
   exit() { // close game, remove all sprites.

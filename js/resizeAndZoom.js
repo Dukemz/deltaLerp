@@ -10,16 +10,8 @@ function windowResized() {
   if(manager.crashed) {
     console.log("Redrawing crash handler data.");
     manager.crashdraw();
-  } else {
-    // change zoom
-    const setZoom = canvas.w / 1400;
-    // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
-    camera.zoom = setZoom;
-    console.log(`Resized! [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]\nZoom: [${oldZoom.toFixed(3)}] => [${setZoom.toFixed(3)}]`);
-    
-    // set the bg colour again to avoid that weird messy effect
-    manager.opaquebgcol = color(red(manager.bgcol), green(manager.bgcol), blue(manager.bgcol));
-    background(manager.opaquebgcol);
+  } else if(game) { // run game window resize func
+    game.windowResized(oldWidth, oldHeight, oldZoom);
   }
 }
 

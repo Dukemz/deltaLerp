@@ -13,11 +13,12 @@ let scriptList = [
   'js/controllerinput.js',
   'js/player.js',
   'js/game.js',
+  'js/menu.js'
 ];
 
 
-// will hold game instance
-let game;
+// menu/game instance
+let menu, game;
 
 async function loadScripts(scriptUrls) { // load scripts and add them to the page
   // may be able to reuse this function for level loading and/or modding
@@ -70,12 +71,6 @@ async function setup() {
     document.getElementById("canvasContainer").appendChild(canvas);
     document.getElementById("loadtext").innerHTML = "";
 
-    // background colour
-    manager.bgcol = color("#24283880");
-    
-    manager.opaquebgcol = color(red(manager.bgcol), green(manager.bgcol), blue(manager.bgcol));
-    background(manager.opaquebgcol);
-
     // disable world auto step
     world.autoStep = false;
 
@@ -84,8 +79,8 @@ async function setup() {
       this.forEach(s => s.runUpdate());
     }
 
-    // initial setup complete - create game
-    game = new Game();
+    // initial setup complete - create menu
+    menu = new Menu();
     manager.setupDone = true;
     loop();
   } catch(error) {
@@ -115,12 +110,8 @@ function draw() {
     manager.avgDeltaTime = 1/manager.avgFPS;
     if(manager.avgFPS < 2) console.warn(`Warning: Average FPS is ${manager.avgFPS.toFixed(3)}!`);
   }
-  background(manager.bgcol);
-  // background(color("#242838"))
 
-  // set actual camera position to game's set position
-  camera.pos = game.camPos;
-  game.draw();
+  if(game) game.draw();
 
   // step world
   // world.calcTimeStep = (manager.avgDeltaTime || 1 / (frameRate() || 60)) * world.timeScale;
@@ -134,10 +125,12 @@ function draw() {
 // after this the draw functions of sprites are called
 // by default sprites are drawn in the order they were created in
 
-function deltaLerp(a, b, f) { // hey look, it's the game's namesake!
+function deltaLerp(a, b, f, ignoreTimeScale) { // hey look, it's the game's namesake!
+  let tsc = world.timeScale;
+  if(ignoreTimeScale) tsc = 1;
   // f is the factor between 0 and 1 deciding how quickly it catches up
   // e.g. if f = 0.25, it will cover 25% the remaining distance every second
-  return lerp(a, b, (1 - pow(1-f, deltaTime/1000)) * world.timeScale);
+  return lerp(a, b, (1 - pow(1-f, deltaTime/1000)) * tsc);
 }
 
 const titlestyle = "font-size: 27px; color: lightblue; text-shadow: 2px 2px dodgerblue";
