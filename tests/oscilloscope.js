@@ -37,37 +37,58 @@ function setup() {
   sourceNode.connect(audioContext.destination);
 
   document.getElementById("loadtext").innerHTML = "";
+
+  background(0,0,0);
+  noStroke()
+  fill(255, 255, 255)
+  text(`click to start\nmusic by nukegameplay`, 10, 20);
 }
 
 function draw() {
-  background(0, 0, 0, 100);
 
   // Get waveform data
   analyserL.getFloatTimeDomainData(dataArrayL);
   analyserR.getFloatTimeDomainData(dataArrayR);
 
-  stroke("#0077ff");
-  strokeWeight(1)
+  stroke(0, 119, 255);
+  strokeWeight(2);
   noFill();
-  beginShape();
-  for (let i = 0; i < bufferLength; i++) {
-    let x = map(dataArrayL[i], -1, 1, width / 2 - size / 2, width / 2 + size / 2);
-    let y = map(dataArrayR[i], -1, 1, height / 2 + size / 2, height / 2 - size / 2);
-    vertex(x, y);
+
+  // beginShape();
+  // for (let i = 0; i < bufferLength; i++) {
+  //   let x = map(dataArrayL[i], -1, 1, width / 2 - size / 2, width / 2 + size / 2);
+  //   let y = map(dataArrayR[i], -1, 1, height / 2 + size / 2, height / 2 - size / 2);
+  //   vertex(x, y);
+  // }
+  // endShape();
+  let prevX;
+  let prevY;
+
+  if (!audio.paused) {
+    blendMode(BLEND)
+    background(0, 0, 0, 100);
+    blendMode(ADD)
+
+    for (let i = 0; i < bufferLength; i++) {
+      let x = map(dataArrayL[i], -1, 1, width / 2 - size / 2, width / 2 + size / 2);
+      let y = map(dataArrayR[i], -1, 1, height / 2 + size / 2, height / 2 - size / 2);
+      if (prevX) line(prevX, prevY, x, y);
+      prevX = x;
+      prevY = y;
+    }
+
+    noStroke()
+    fill(255, 255, 255)
+
+    if (frameRate() > 30) {
+      if (frameCount % 10 === 0) lastfps = Math.round(frameRate());
+    } else {
+      lastfps = Math.round(frameRate());
+    }
+
+    text(`${Math.round(lastfps)}fps`, 10, 20)
+    text(`buffer length: ${bufferLength}`, 10, 40)
   }
-  endShape();
-
-  noStroke()
-  fill(255, 255, 255)
-
-  if(frameRate() > 30) {
-    if(frameCount % 10 === 0) lastfps = Math.round(frameRate());
-  } else {
-    lastfps = Math.round(frameRate());
-  }
-
-  text(`${Math.round(lastfps)}fps`, 10, 20)
-  text(`buffer length: ${bufferLength}`, 10, 40)
 }
 
 function mouseClicked() {
