@@ -81,6 +81,8 @@ async function setup() {
 
     // initial setup complete - create menu
     menu = new Menu();
+    game = new Game();
+
     manager.setupDone = true;
     loop();
   } catch(error) {
