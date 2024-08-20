@@ -9,6 +9,9 @@ let fpsPush, avgFPS, avgDeltaTime;
 
 let branchStructure;
 
+const baseSpringiness = 0.05;
+const stretchSpringiness = 0.3;
+
 function setup() {
   new Canvas(windowWidth - 100, windowHeight - 100);
   document.getElementById("canvasContainer").appendChild(canvas);
@@ -152,8 +155,12 @@ function draw() {
 }
 
 function setActiveSprite(thing) {
+  // unspringy the joints of the currently active sprite
+  if(window.activeSpr) window.activeSpr.joints.forEach(j => j.springiness = baseSpringiness);
   // set hovered sprite to active
   window.activeSpr = thing;
+  // springy the new ones
+  window.activeSpr.joints.forEach(j => j.springiness = stretchSpringiness);
   // list of all squares connected to active (middle) square
   window.connectedToActive = getConnectedSprites(thing);
   
@@ -209,7 +216,8 @@ function branchMake(maingroup, data, basespr) {
   if(basespr instanceof Sprite) { // create a sprite below the provided base sprite
     spr = new maingroup.Sprite(basespr.x, basespr.y + 100);
     // join them with a distance joint
-    new DistanceJoint(basespr, spr);    
+    const j = new DistanceJoint(basespr, spr);
+    j.springiness = baseSpringiness;
   } else { // no base sprite data provided, make one
     spr = new maingroup.Sprite(0, 0);
   }
