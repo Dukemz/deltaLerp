@@ -7,6 +7,7 @@ class Game { // game class
     console.log("[NEW GAME]");
     Object.assign(this, data);
     this.active = true;
+    manager.ingame = true;
 
     // background colour
     this.bgcol = color("#242838");
@@ -118,7 +119,8 @@ class Game { // game class
     // set actual camera position to game's set position
     camera.pos = game.camPos;
 
-    const backgroundcol = color(this.bgcol);
+    // copy bg colour
+    const backgroundcol = color(this.bgcol.levels);
     backgroundcol.setAlpha(this.bgopacity);
     background(backgroundcol);
 
@@ -215,5 +217,6 @@ class Game { // game class
     this.projectiles.removeAll();
     this.draw = () => {};
     this.active = false;
+    manager.ingame = false;
   }
 }

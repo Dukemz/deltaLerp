@@ -3,5 +3,10 @@
 class Menu {
   constructor() {
     console.log("[MENU]");
+
+  }
+
+  draw() {
+    
   }
 }

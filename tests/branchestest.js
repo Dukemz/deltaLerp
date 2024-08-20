@@ -34,6 +34,7 @@ function setup() {
   things.textSize = 15;
   things.autoDraw = false;
   things.mass = 3;
+  // things.rotation = 45;
 
   // automatic branch creation system
   // group as 1st argument, structure data as 2nd (optional base sprite as 3rd)
@@ -70,27 +71,27 @@ function draw() {
   camera.zoom = lerp(camera.zoom, targetZoom, zoomSpeed);
 
   // code to move each square in a circular motion
-  connectedToActive.forEach(sub => {
-    const distToActive = sub.distanceTo(activeSpr);
-    // rotation speed is based on distance to active sprite
-    const baseForce = 500;
-    const adjustedForce = baseForce / (distToActive + 1);
+  // connectedToActive.forEach(sub => {
+  //   const distToActive = sub.distanceTo(activeSpr);
+  //   // rotation speed is based on distance to active sprite
+  //   const baseForce = 500;
+  //   const adjustedForce = baseForce / (distToActive + 1);
 
-    // set angle
-    sub.bearing = sub.angleTo(activeSpr) + 90;
-    // apply force based on total branch mass
-    sub.applyForce(sub.totalBranchMass * adjustedForce);
-    sub.text = `${sub.totalBranchMass.toFixed(1)}/${sub.speed.toFixed(2)}`;
+  //   // set angle
+  //   sub.bearing = sub.angleTo(activeSpr) + 90;
+  //   // apply force based on total branch mass
+  //   sub.applyForce(sub.totalBranchMass * adjustedForce);
+  //   sub.text = `${sub.totalBranchMass.toFixed(1)}/${sub.speed.toFixed(2)}`;
 
-    // visualisation
-    const visvec = createVector(0, sub.totalBranchMass * adjustedForce);
-    visvec.setHeading(sub.bearing);
-    push();
-    strokeWeight(3);
-    stroke(255, 0, 255);
-    line(sub.canvasPos.x, sub.canvasPos.y, sub.canvasPos.x+visvec.x*5, sub.canvasPos.y+visvec.y*5);
-    pop();
-  });
+  //   // visualisation
+  //   const visvec = createVector(0, sub.totalBranchMass * adjustedForce);
+  //   visvec.setHeading(sub.bearing);
+  //   push();
+  //   strokeWeight(3);
+  //   stroke(255, 0, 255);
+  //   line(sub.canvasPos.x, sub.canvasPos.y, sub.canvasPos.x+visvec.x*5, sub.canvasPos.y+visvec.y*5);
+  //   pop();
+  // });
 
   // loop runs for every square
   things.forEach(thing => { // thing is the current square
@@ -106,7 +107,7 @@ function draw() {
       const distance = thing.distanceTo(t);
       let force = ((gravconst * thing.mass * t.mass) / distance);
       // increase repulsion force if nodes are too close
-      if(distance < 50) force *= 2;
+      if(distance < 50) force *= 5;
       
       // anti stuck logic
       thing.stuckWith ||= [];

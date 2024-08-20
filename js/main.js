@@ -113,7 +113,13 @@ function draw() {
     if(manager.avgFPS < 2) console.warn(`Warning: Average FPS is ${manager.avgFPS.toFixed(3)}!`);
   }
 
-  if(game) game.draw();
+  if(!manager.ingame) {
+    if(menu) {
+      menu.draw();
+    }
+  } else {
+    game.draw();
+  }
 
   // step world
   // world.calcTimeStep = (manager.avgDeltaTime || 1 / (frameRate() || 60)) * world.timeScale;

@@ -2,6 +2,7 @@
 
 class GameManager {
   constructor() {
+    this.ingame = false;
     this.crashed = false;
     this.errdata = {};
 
@@ -45,6 +46,7 @@ class GameManager {
   }
 
   crash(data) { // data is an object, should contain error
+    this.ingame = false;
     if(!this.crashed) {
       this.crashed = true;
     } else {
