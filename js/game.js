@@ -92,18 +92,37 @@ class Game { // game class
     const camBounds = calculateBounds(canvas.w, canvas.h, setZoom);
 
     // bounds box for debug
-    this.testbounds = new Sprite(0, 0, 1400, canvas.h, "n");
-    // this.testbounds.overlaps(allSprites);
-    this.testbounds.fill = color(0,0,0,0);
-    this.testbounds.layer = 0;
-    this.testbounds.stroke = "white";
-    this.testbounds.strokeWeight = 2;
-    this.testbounds.stroke.setAlpha(50);
+    // this.testbounds = new Sprite(0, 0, 1400, canvas.h, "n");
+    // // this.testbounds.overlaps(allSprites);
+    // this.testbounds.fill = color(0,0,0,0);
+    // this.testbounds.layer = 0;
+    // this.testbounds.stroke = "white";
+    // this.testbounds.strokeWeight = 2;
+    // this.testbounds.stroke.setAlpha(50);
 
     // actual physical boundary boxes
     this.boundaries = new Group();
+    this.boundaries.autoDraw = false;
+    this.boundaries.collider = "s";
+    this.boundaries.fill = () => this.bgcol
+    this.boundaries.stroke = color(255, 255, 255, 50);
+    this.boundaries.strokeWeight = 2;
+    // calculate offset based on position and height
+    this.boundaries.offset = i => { // i is index in group
+      const thisBoundary = this.boundaries[i];
+      const halfHeight = thisBoundary.height/2;
+      const isNegative = thisBoundary.y < 0;
 
-    // this.upperboundary = new boundaries.Sprite(0, 0, 50, 50);
+      const x = 0;
+      // flip offset if y is negative      
+      const y = isNegative ? -halfHeight : halfHeight;
+      thisBoundary.y
+      return { x, y };
+    }
+
+    // create boundaries
+    this.upperboundary = new this.boundaries.Sprite(0, 305, canvas.width, 200);
+    this.lowerboundary = new this.boundaries.Sprite(0, -305, canvas.width, 200);
 
     // draw opaque bg
     background(this.bgcol);
@@ -152,6 +171,7 @@ class Game { // game class
 
     // draw sprites
     camera.on();
+    this.boundaries.draw();
     this.projectiles.draw();
     this.objects.draw();
     this.players.draw();
