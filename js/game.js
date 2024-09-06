@@ -18,6 +18,10 @@ class Game { // game class
     this.targetCameraSpeed = 0;
     this.cameraLerpAmount = 0.5;
     this.camPos = { x: 0, y: 0 };
+    // width of the visible area
+    this.playareaWidth = 1400;
+    // last time the window was resized
+    this.lastWindowResize = world.realTime;
 
     // pause config
     this.setPaused = false;
@@ -85,7 +89,7 @@ class Game { // game class
     this.objects.autoDraw = false;
     this.projectiles.autoDraw = false;
 
-    const setZoom = canvas.w / 1400;
+    const setZoom = canvas.w / this.playareaWidth;
     // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
     camera.zoom = setZoom;
     // calculate bounds
@@ -139,9 +143,9 @@ class Game { // game class
     camera.pos = game.camPos;
 
     // copy bg colour
-    const backgroundcol = color(this.bgcol.levels);
-    backgroundcol.setAlpha(this.bgopacity);
-    background(backgroundcol);
+    const backgroundCol = color(this.bgcol.levels);
+    backgroundCol.setAlpha(this.bgopacity);
+    background(backgroundCol);
 
     // pause logic
     this.players.forEach(p => {
@@ -184,12 +188,15 @@ class Game { // game class
     // cull seems to be broken at the moment whenever the zoom is not 1?
     // this.projectiles.cull(10);
 
+    // update stuff //
+
     if(!this.paused) {
       // update sprites
       this.players.runUpdate();
     }
 
-    // temporary testing stuff below
+    // TEMPORARY TESTING KEYS //
+    
     // sound test
     if(kb.presses("y")) this.funnysound.play();
 
@@ -221,7 +228,7 @@ class Game { // game class
 
   windowResized(oldWidth, oldHeight, oldZoom) {
     // change zoom
-    const setZoom = canvas.w / 1400;
+    const setZoom = canvas.w / this.playareaWidth;
     // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
     camera.zoom = setZoom;
     console.log(`Resized! [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]\nZoom: [${oldZoom.toFixed(3)}] => [${setZoom.toFixed(3)}]`);
