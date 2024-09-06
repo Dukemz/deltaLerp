@@ -112,8 +112,15 @@ class Player extends Sprite {
     // cull projectiles
     // this.projectiles.cull(10,10,10,10);
 
-    // new movement system
+    // set new movement speed based on input
     this.vel = this.input.getMoveVel(this.maxSpeed, this.vel);
+
+    // push player if they go offscreen
+    if(this.x < camera.x - (game.playareaWidth/2)) this.vel.x += this.maxSpeed + game.cameraSpeed * 50;
+    if(this.x > camera.x + (game.playareaWidth/2)) this.vel.x -= this.maxSpeed - game.cameraSpeed * 50;
+
+    // kill player if they go too far lmao
+    if(this.x < camera.x - (game.playareaWidth/2) - 200) this.remove();
 
     // cycle weapon
     if(this.input.cycleWeapon()) this.activeWeapon = (this.activeWeapon + 1) % this.weapons.length;

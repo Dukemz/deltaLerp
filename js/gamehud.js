@@ -32,6 +32,9 @@ class GameHUD {
     if(game.paused) {
       textAlign(CENTER, CENTER);
       text("[Paused - press P to unpause]", canvas.hw, canvas.hh);
+    } else if(!game.players[0]) {
+      textAlign(CENTER, CENTER);
+      text("lol you died", canvas.hw, canvas.hh);
     }
     pop();
   }

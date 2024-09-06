@@ -41,6 +41,9 @@ class kbInput {
 
 
   // other methods //
+
+  // what if when you hold down right shift for 5 seconds it opens the sticky keys popup
+  
   isMoving() {
     return (kb.pressing(this.c.up) || kb.pressing(this.c.down) || kb.pressing(this.c.left) || kb.pressing(this.c.right))
   }
