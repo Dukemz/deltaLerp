@@ -125,8 +125,8 @@ class Game { // game class
     }
 
     // create boundaries
-    this.upperboundary = new this.boundaries.Sprite(0, 305, canvas.width, 200);
-    this.lowerboundary = new this.boundaries.Sprite(0, -305, canvas.width, 200);
+    this.lowerboundary = new this.boundaries.Sprite(0, 305, canvas.width, 200);
+    this.upperboundary = new this.boundaries.Sprite(0, -305, canvas.width, 200);
 
     // draw opaque bg
     background(this.bgcol);
@@ -172,6 +172,8 @@ class Game { // game class
         this.cameraSpeed = deltaLerp(this.cameraSpeed, this.targetCameraSpeed, this.cameraLerpAmount);
       }
     }
+
+    if(!this.players.length) this.targetCameraSpeed = 0;
 
     // draw sprites
     camera.on();
