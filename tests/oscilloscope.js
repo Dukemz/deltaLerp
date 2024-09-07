@@ -1,6 +1,7 @@
 let audio, audioContext, analyserL, analyserR, sourceNode, splitter;
 let dataArrayL, dataArrayR;
 let size;
+let followMouse = false;
 
 const bufferLength = 256;
 let lastfps = 0;
@@ -65,20 +66,34 @@ function draw() {
   let prevY;
 
   if (!audio.paused) {
-    blendMode(BLEND)
+    blendMode(BLEND);
     background(0, 0, 0, 100);
-    blendMode(ADD)
+    blendMode(ADD);
+
+    // calculate mouse angle
+    const mx = mouseX - width/2;
+    const my = mouseY - height/2;
+    const mouseAngle = atan2(my, mx);
+
+    push();
+    translate(width/2, height/2);
+    // rotate by mouse angle
+    if(followMouse) rotate(mouseAngle);
 
     for (let i = 0; i < bufferLength; i++) {
-      let x = map(dataArrayL[i], -1, 1, width / 2 - size / 2, width / 2 + size / 2);
-      let y = map(dataArrayR[i], -1, 1, height / 2 + size / 2, height / 2 - size / 2);
+      // let x = map(dataArrayL[i], -1, 1, (width / 2) - (size / 2), (width / 2) + (size / 2));
+      // let y = map(dataArrayR[i], -1, 1, (height / 2) + (size / 2), (height / 2) - (size / 2));
+      let x = map(dataArrayL[i], -1, 1, -(size / 2), (size / 2));
+      let y = map(dataArrayR[i], -1, 1, (size / 2), -(size / 2));
+      // draw actual line
       if (prevX) line(prevX, prevY, x, y);
       prevX = x;
       prevY = y;
     }
+    pop();
 
     noStroke()
-    fill(255, 255, 255)
+    fill(255, 255, 255);
 
     if (frameRate() > 30) {
       if (frameCount % 10 === 0) lastfps = Math.round(frameRate());
