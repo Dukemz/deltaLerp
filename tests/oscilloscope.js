@@ -3,7 +3,7 @@ let dataArrayL, dataArrayR;
 let size;
 let followMouse = false;
 
-const bufferLength = 256;
+const bufferLength = 512;
 let lastfps = 0;
 
 function setup() {
@@ -51,7 +51,7 @@ function draw() {
   analyserL.getFloatTimeDomainData(dataArrayL);
   analyserR.getFloatTimeDomainData(dataArrayR);
 
-  stroke(0, 119, 255);
+  stroke(0, 50, 255);
   strokeWeight(2);
   noFill();
 
@@ -101,8 +101,9 @@ function draw() {
       lastfps = Math.round(frameRate());
     }
 
-    text(`${Math.round(lastfps)}fps`, 10, 20)
-    text(`buffer length: ${bufferLength}`, 10, 40)
+    text(`${Math.round(lastfps)}fps`, 10, 20);
+    text(`buffer length: ${bufferLength}`, 10, 40);
+    text(`audio time: ${audio.currentTime.toFixed(2)}`, 10, 60);
   }
 }
 
