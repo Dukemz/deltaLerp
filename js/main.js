@@ -5,7 +5,6 @@ const version = "pre-alpha";
 
 let scriptList = [
   'js/gamemanager.js',
-  'js/resizeAndZoom.js',
   'js/gamehud.js',
   'js/arcindicator.js',
   'js/machinegun.js',
@@ -67,6 +66,7 @@ async function setup() {
 
   try {
     // setup canvas
+    console.log(`Creating canvas - w: ${windowWidth - 50}px, h: ${windowHeight - 50}px`);
     new Canvas(windowWidth - 50, windowHeight - 50);
     document.getElementById("canvasContainer").appendChild(canvas);
     document.getElementById("loadtext").innerHTML = "";
@@ -132,6 +132,21 @@ function draw() {
 }
 // after this the draw functions of sprites are called
 // by default sprites are drawn in the order they were created in
+
+function windowResized() {
+  const oldWidth = canvas.w;
+  const oldHeight = canvas.h;
+  const oldZoom = camera.zoom;
+  // resize canvas to fit the new window size
+  canvas.resize(windowWidth - 50, windowHeight - 50);
+
+  if(manager.crashed) {
+    console.log("Redrawing crash handler data.");
+    manager.crashdraw();
+  } else if(game) { // run game window resize func
+    game.windowResized(oldWidth, oldHeight, oldZoom);
+  }
+}
 
 function deltaLerp(a, b, f, ignoreTimeScale) { // hey look, it's the game's namesake!
   let tsc = world.timeScale;

@@ -1,3 +1,5 @@
+// DEPRECATED FILE //
+
 "use strict";
 
 function windowResized() {

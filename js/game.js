@@ -93,18 +93,9 @@ class Game { // game class
     // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
     camera.zoom = setZoom;
     // calculate bounds
-    const camBounds = calculateBounds(canvas.w, canvas.h, setZoom);
+    // const camBounds = this.calculateBounds(canvas.w, canvas.h, setZoom);
 
-    // bounds box for debug
-    // this.testbounds = new Sprite(0, 0, 1400, canvas.h, "n");
-    // // this.testbounds.overlaps(allSprites);
-    // this.testbounds.fill = color(0,0,0,0);
-    // this.testbounds.layer = 0;
-    // this.testbounds.stroke = "white";
-    // this.testbounds.strokeWeight = 2;
-    // this.testbounds.stroke.setAlpha(50);
-
-    // actual physical boundary boxes
+    // top and bottom boundary walls
     this.boundaries = new Group();
     this.boundaries.autoDraw = false;
     this.boundaries.collider = "s";
@@ -233,10 +224,34 @@ class Game { // game class
     const setZoom = canvas.w / this.playareaWidth;
     // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
     camera.zoom = setZoom;
-    console.log(`Resized! [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]\nZoom: [${oldZoom.toFixed(3)}] => [${setZoom.toFixed(3)}]`);
+    console.log(`Resized game canvas: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]\nZoom: [${oldZoom.toFixed(3)}] => [${setZoom.toFixed(3)}]`);
     
     // set the bg colour again to avoid that weird messy effect
     background(this.bgcol);
+  }
+
+  // function to calculate visible area
+  calculateBounds() {
+    const visibleWidth = canvas.w / camera.zoom;
+    const visibleHeight = canvas.h / camera.zoom;
+
+    // assuming the camera is centered, calculate the bounds
+    const halfVisibleWidth = visibleWidth / 2;
+    const halfVisibleHeight = visibleHeight / 2;
+
+    // define the bounds as top-left and bottom-right coordinates
+    const bounds = {
+      topLeft: {
+        x: -halfVisibleWidth,
+        y: -halfVisibleHeight
+      },
+      bottomRight: {
+        x: halfVisibleWidth,
+        y: halfVisibleHeight
+      }
+    };
+
+    return bounds;
   }
 
   exit() { // close game, remove all sprites.
@@ -244,7 +259,7 @@ class Game { // game class
     this.players.removeAll();
     this.objects.removeAll();
     this.projectiles.removeAll();
-    this.draw = () => {};
+    // this.draw = () => {};
     this.active = false;
     manager.ingame = false;
   }
