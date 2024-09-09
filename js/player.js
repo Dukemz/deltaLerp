@@ -83,6 +83,8 @@ class Player extends Sprite {
     this.overlaps(this.game.playerProjectiles);
     this.overlaps(this.game.players);
     this.projectiles.overlaps(this.game.playerProjectiles);
+
+    this.y = 100
   }
 
   directionalVelocity(angle) { // calculate velocity respective of an angle

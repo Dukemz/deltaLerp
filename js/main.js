@@ -78,7 +78,9 @@ async function setup() {
 
     // annoying thing to make all sprites in a group run my update func
     Group.prototype.runUpdate = function() {
-      this.forEach(s => s.runUpdate());
+      this.forEach(s => {
+        if(s.runUpdate) s.runUpdate();
+      });
     }
 
     // initial setup complete - create menu

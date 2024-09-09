@@ -50,7 +50,8 @@ class Game { // game class
     this.playerProjectiles = new this.projectiles.Group();
     this.enemyProjectiles = new this.projectiles.Group();
     // enemies
-    this.enemies = new Group();
+    this.enemies = [];
+    this.enemyObjects = new Group();
 
     // set main player if it doesn't exist
     window.player ||= new Player({
@@ -75,9 +76,9 @@ class Game { // game class
     this.wall = new this.walls.Sprite([[100, 100], [200, -100]], 's');
     this.wall2 = new this.walls.Sprite([[-100, -100], [-100, 100]], 's');
 
-    // goober test
-    this.thingy = new this.objects.Sprite(-canvas.hw+50,-150, 30, 30);
-    this.thingy.vel.x = 1
+    // // goober test
+    // this.thingy = new this.objects.Sprite(-canvas.hw+50,-150, 30, 30);
+    // this.thingy.vel.x = 1
 
     this.funnysound = new Howl({
       src: ['./assets/quackmp3.mp3'],
@@ -92,6 +93,7 @@ class Game { // game class
     this.players.autoDraw = false;
     this.objects.autoDraw = false;
     this.projectiles.autoDraw = false;
+    this.enemyObjects.autoDraw = false;
 
     const setZoom = canvas.w / this.playareaWidth;
     // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
@@ -128,6 +130,9 @@ class Game { // game class
 
     // log user activation status for debug
     console.log(navigator.userActivation);
+
+    // TESTING STUFFS //
+    this.e = new basicSplitter({ game: this })
 
     // save timestamp on when the thing starts
     // main.js setup will open the menu rather than jumping straight into the game
@@ -176,6 +181,7 @@ class Game { // game class
     // draw sprites
     camera.on();
     this.boundaries.draw();
+    this.enemyObjects.draw();
     this.projectiles.draw();
     this.objects.draw();
     this.players.draw();
@@ -192,10 +198,16 @@ class Game { // game class
 
     if(!this.paused) {
       // update sprites
+      this.enemies.forEach(en => en.update());
       this.players.runUpdate();
     }
 
-    // TEMPORARY TESTING KEYS //
+    // TEMPORARY TESTING THINGS //
+
+    this.e.pvertices.forEach(pv => {
+      ellipse(pv.x, pv.y, 10)
+    })
+    // ellipse(this.e.pvertices[0].x, this.e.pvertices[0].y, 10)
     
     // sound test
     if(kb.presses("y")) this.funnysound.play();
