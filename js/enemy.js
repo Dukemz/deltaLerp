@@ -14,6 +14,8 @@ class Enemy {
     this.x ||= 0;
     this.y ||= 0;
 
+    this.health = 20;
+
     // array of arguments passed to base sprite constructor
     this.baseConstructor ||= [this.x, this.y];
     this.sprites = new this.game.enemyObjects.Group();

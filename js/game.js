@@ -203,10 +203,10 @@ class Game { // game class
     }
 
     // TEMPORARY TESTING THINGS //
-
-    this.e.pvertices.forEach(pv => {
-      ellipse(pv.x, pv.y, 10)
-    });
+    push();
+    stroke(255)
+    line(this.e.baseSprite.x, this.e.baseSprite.y, this.e.baseSprite.x+this.e.calcVec.x, this.e.baseSprite.y+this.e.calcVec.y);
+    pop();
     
     // sound test
     // if(kb.presses("y")) this.funnysound.play();
