@@ -148,6 +148,7 @@ function windowResized() {
     console.log("Redrawing crash handler data.");
     manager.crashdraw();
   } else if(game) { // run game window resize func
+    console.log(`Canvas resized: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]`);
     game.windowResized(oldWidth, oldHeight, oldZoom);
   }
 }

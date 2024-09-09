@@ -242,7 +242,7 @@ class Game { // game class
     const setZoom = canvas.w / this.playareaWidth;
     // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
     camera.zoom = setZoom;
-    console.log(`Resized game canvas: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]\nZoom: [${oldZoom.toFixed(3)}] => [${setZoom.toFixed(3)}]`);
+    console.log(`Changed zoom: [${oldZoom.toFixed(3)}] => [${setZoom.toFixed(3)}]`);
     
     // set the bg colour again to avoid that weird messy effect
     background(this.bgcol);
