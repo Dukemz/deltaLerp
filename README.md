@@ -32,8 +32,6 @@ You can also optionally download the quackmp3.mp3 file and place it into a folde
 
 - [planck.js](https://piqnt.com/planck.js)
 
-- [howler.js](https://howlerjs.com/)
-
 - [q5.js](https://q5js.org/) (beta)
 
 If you'd like to know more about this project or give feedback on it, please contact me on Discord.
