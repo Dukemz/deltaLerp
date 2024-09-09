@@ -4,15 +4,15 @@ class basicSplitter extends Enemy {
   constructor(data) {
     super(data);
 
-    this.sideLength ||= 100;
+    this.sideLength ||= 30;
     this.sprites.fill ||= "red";
 
     this.baseConstructor = [this.x, this.y, this.sideLength, 'pentagon'];
     this.create();
 
     this.pvertices = this.baseSprite.vertices.map(vr => {
-      const x = vr.x - this.baseSprite.x;
-      const y = vr.y - this.baseSprite.y;
+      const x = vr.x// - this.baseSprite.x;
+      const y = vr.y// - this.baseSprite.y;
       return { x, y };
     });
     // this.pvertices.pop();
@@ -22,8 +22,6 @@ class basicSplitter extends Enemy {
   }
 
   update() {
-    this.pvertices = this.pvertices.map(pv => {
-      
-    });
+
   }
 }

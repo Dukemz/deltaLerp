@@ -25,8 +25,8 @@ class GameHUD {
     text(`deltaTime = ${deltaTime.toFixed(0)}, avg ${Math.round(manager.avgDeltaTime*1000)}`, 10, height-10);
     // bottom right HUD
     textAlign(RIGHT, BOTTOM);
-    text(`speed: ${player.speed.toFixed(3)}`, width-10, height-70);
-    text(`seek: ${game.funnysound.seek().toFixed(3)}`, width-10, height-40);
+    // text(`seek: ${game.funnysound.seek().toFixed(3)}`, width-10, height-70);
+    text(`speed: ${player.speed.toFixed(3)}`, width-10, height-40);
     text(`direction: ${player.direction.toFixed(3)}`, width-10, height-10);
 
     if(game.paused) {

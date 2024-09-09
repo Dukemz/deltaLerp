@@ -80,11 +80,11 @@ class Game { // game class
     // this.thingy = new this.objects.Sprite(-canvas.hw+50,-150, 30, 30);
     // this.thingy.vel.x = 1
 
-    this.funnysound = new Howl({
-      src: ['./assets/quackmp3.mp3'],
-      html5: true,
-      autoplay: false
-    });
+    // this.funnysound = new Howl({
+    //   src: ['./assets/quackmp3.mp3'],
+    //   html5: true,
+    //   autoplay: false
+    // });
 
     // just move the camera to center, why not?
     camera.pos = { x: 0, y: 0 };
@@ -132,7 +132,7 @@ class Game { // game class
     console.log(navigator.userActivation);
 
     // TESTING STUFFS //
-    this.e = new basicSplitter({ game: this })
+    this.e = new basicSplitter({ game: this , x: 500 })
 
     // save timestamp on when the thing starts
     // main.js setup will open the menu rather than jumping straight into the game
@@ -206,11 +206,10 @@ class Game { // game class
 
     this.e.pvertices.forEach(pv => {
       ellipse(pv.x, pv.y, 10)
-    })
-    // ellipse(this.e.pvertices[0].x, this.e.pvertices[0].y, 10)
+    });
     
     // sound test
-    if(kb.presses("y")) this.funnysound.play();
+    // if(kb.presses("y")) this.funnysound.play();
 
     // game speed test
     if(kb.presses("j") || contro.presses("l")) {
