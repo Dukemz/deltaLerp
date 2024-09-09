@@ -45,8 +45,12 @@ class Game { // game class
 
     // all players
     this.players = new Group();
+    // all projectiles
     this.projectiles = new Group();
     this.playerProjectiles = new this.projectiles.Group();
+    this.enemyProjectiles = new this.projectiles.Group();
+    // enemies
+    this.enemies = new Group();
 
     // set main player if it doesn't exist
     window.player ||= new Player({
@@ -99,7 +103,7 @@ class Game { // game class
     this.boundaries = new Group();
     this.boundaries.autoDraw = false;
     this.boundaries.collider = "s";
-    this.boundaries.fill = () => this.bgcol
+    this.boundaries.fill = () => this.bgcol;
     this.boundaries.stroke = color(255, 255, 255, 50);
     this.boundaries.strokeWeight = 2;
     // calculate offset based on position and height
@@ -121,6 +125,9 @@ class Game { // game class
 
     // draw opaque bg
     background(this.bgcol);
+
+    // log user activation status for debug
+    console.log(navigator.userActivation);
 
     // save timestamp on when the thing starts
     // main.js setup will open the menu rather than jumping straight into the game

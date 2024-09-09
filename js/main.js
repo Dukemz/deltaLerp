@@ -12,7 +12,9 @@ let scriptList = [
   'js/controllerinput.js',
   'js/player.js',
   'js/game.js',
-  'js/menu.js'
+  'js/menu.js',
+  'js/enemy.js',
+  'js/basicSplitter.js'
 ];
 
 
