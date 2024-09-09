@@ -11,6 +11,10 @@ body {
   min-height: 100vh;
 }
 
+canvas {
+  cursor: crosshair;
+}
+
 p {
   color: white;
 }
