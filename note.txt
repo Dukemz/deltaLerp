@@ -1,0 +1,1 @@
+note to self: ctrl+k, v opens markdown preview
