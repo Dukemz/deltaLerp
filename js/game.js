@@ -13,7 +13,7 @@ class Game { // game class
     this.bgcol = color("#242838");
     this.targetbgopacity = 128;
     this.bgopacity = 128;
-    this.bgopacitylerp = 0.1;
+    this.bgopacitylerp = 0.999;
 
     // camera config
     this.cameraSpeed = 0;
@@ -134,7 +134,7 @@ class Game { // game class
     console.log(navigator.userActivation);
 
     // TESTING STUFFS //
-    this.e = new basicSplitter({ game: this , x: 500 })
+    this.e = new basicSplitter({ game: this, x: 500 });
 
     // save timestamp on when the thing starts
     // main.js setup will open the menu rather than jumping straight into the game
@@ -182,7 +182,7 @@ class Game { // game class
       }
 
       if(this.bgopacity !== this.targetbgopacity) { // using regular lerp for this for now
-        this.bgopacity = lerp(this.bgopacity, this.targetbgopacity, this.bgopacitylerp);
+        this.bgopacity = deltaLerp(this.bgopacity, this.targetbgopacity, this.bgopacitylerp, true);
       }
     }
 
@@ -213,18 +213,11 @@ class Game { // game class
     }
 
     // TEMPORARY TESTING THINGS //
-    push();
-    stroke(255)
-    line(this.e.baseSprite.x, this.e.baseSprite.y, this.e.baseSprite.x+this.e.calcVec.x, this.e.baseSprite.y+this.e.calcVec.y);
-    pop();
-    
-    // sound test
-    // if(kb.presses("y")) this.funnysound.play();
 
     // game speed test
     if(kb.presses("j") || contro.presses("l")) {
       if(game.timeScale === 1) {
-        game.timeScale = 0.2;
+        game.timeScale = 0.3;
         this.targetbgopacity = 30;
       } else {
         game.timeScale = 1;
