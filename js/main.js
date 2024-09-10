@@ -73,6 +73,11 @@ async function setup() {
     document.getElementById("canvasContainer").appendChild(canvas);
     document.getElementById("loadtext").innerHTML = "";
 
+    // window resize listener for q5 workaround
+    if(window.Q5) addEventListener("resize", () => {
+      if(window.manager.crashed) windowResized();
+    });
+
     // disable world auto step
     world.autoStep = false;
 
