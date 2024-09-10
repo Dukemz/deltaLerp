@@ -5,19 +5,14 @@ class basicSplitter extends Enemy {
     super(data);
 
     this.sideLength ||= 30;
-    // this.sprites.fill ||= "red";
-    this.splitterShape ||= "pentagon";
+    this.sprites.fill ||= "orange";
+    this.splitterShape ||= "hexagon";
     this.splitterSpikeSize ||= 60;
 
+    this.spikeJoints = [] // change this when sprite.joints.removeAll() gets fixed
+    this.separated = false;
     this.baseConstructor = [this.x, this.y, this.sideLength, this.splitterShape];
     this.create();
-
-    // this.pvertices = this.baseSprite.vertices.map(vr => {
-    //   const x = vr.x// - this.baseSprite.x;
-    //   const y = vr.y// - this.baseSprite.y;
-    //   return { x, y };
-    // });
-    // this.pvertices.pop();
 
     this.baseSprite.mass = 10;
 
@@ -34,30 +29,35 @@ class basicSplitter extends Enemy {
     spikeVector.setHeading(angleToMidpoint);
 
     for(let i = 0; i < this.baseSprite.vertices.length-1; i++) {
+      // two corners attached to the base shape
       const v1 = this.baseSprite.vertices[i];
       const v2 = this.baseSprite.vertices[i+1];
 
       const tipX = this.baseSprite.x + spikeVector.x;
       const tipY = this.baseSprite.y + spikeVector.y;
      
-      new this.sprites.Sprite([[tipX, tipY], [v1.x, v1.y], [v2.x, v2.y], [tipX, tipY]]);
+      const newSpike = new this.sprites.Sprite([[tipX, tipY], [v1.x, v1.y], [v2.x, v2.y], [tipX, tipY]]);
+      const spikeJoint = new GlueJoint(this.baseSprite, newSpike);
+      this.spikeJoints.push(spikeJoint);
 
       spikeVector.rotate(rotateAngle);
     }
 
-    // const v1 = this.baseSprite.vertices[2];
-    // const v2 = this.baseSprite.vertices[3];
-
-    // // on generating spikes, rotate the vector by increments of 72 degrees
-    // // also when done make it a const rather than a property of this, to free up space
-    // this.calcVec = createVector(0, this.splitterSpikeSize);
-    // const calcX = this.baseSprite.x+this.calcVec.x;
-    // const calcY = this.baseSprite.y+this.calcVec.y;
-
-    // this.testspike = new this.sprites.Sprite([[calcX, calcY], [v1.x, v1.y], [v2.x, v2.y], [calcX, calcY]]);
+    // collision detector for bullets
+    this.sprites.collides(this.game.playerProjectiles, () => {
+      if(!this.separated) {
+        this.separated = true;
+        this.spikeJoints.forEach(j => j.remove());
+        this.spikeJoints = [];
+        // note - all forces seem to behave differently if applied once in a single frame in a different timescale and i have no idea why
+        // lower framerate makes the force stronger, lower timescale makes the force weaker???
+        this.sprites.attractTo(this.baseSprite, -100);
+      }
+    });
   }
 
   update() {
-
+    // uhhhh
+    // if(frameCount < 3) console.log("hi");
   }
 }
