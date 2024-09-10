@@ -28,7 +28,7 @@ class Enemy {
     this.projectiles = new this.game.enemyProjectiles.Group();
     this.baseSprite = new this.sprites.Sprite(...this.baseConstructor);
     this.baseSprite.enemyInstance = this;
-    this.game.enemies.push(this)
+    this.game.enemies.push(this);
     // this.baseSprite.pos = { x: this.x, y: this.y };
   }
 }
