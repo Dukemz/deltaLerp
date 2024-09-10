@@ -11,7 +11,9 @@ class Game { // game class
 
     // background colour
     this.bgcol = color("#242838");
+    this.targetbgopacity = 128;
     this.bgopacity = 128;
+    this.bgopacitylerp = 0.1;
 
     // camera config
     this.cameraSpeed = 0;
@@ -174,6 +176,10 @@ class Game { // game class
       if(this.cameraSpeed !== this.targetCameraSpeed) {
         this.cameraSpeed = deltaLerp(this.cameraSpeed, this.targetCameraSpeed, this.cameraLerpAmount);
       }
+
+      if(this.bgopacity !== this.targetbgopacity) { // using regular lerp for this for now
+        this.bgopacity = lerp(this.bgopacity, this.targetbgopacity, this.bgopacitylerp);
+      }
     }
 
     if(!this.players.length) this.targetCameraSpeed = 0;
@@ -215,8 +221,10 @@ class Game { // game class
     if(kb.presses("j") || contro.presses("l")) {
       if(game.timeScale === 1) {
         game.timeScale = 0.2;
+        this.targetbgopacity = 30;
       } else {
         game.timeScale = 1;
+        this.targetbgopacity = 128;
       }
     }
 
