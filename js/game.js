@@ -149,7 +149,7 @@ class Game { // game class
 
     // copy bg colour
     const backgroundCol = color(this.bgcol.levels);
-    if(Q5) { // q5.js workaround
+    if(window.Q5) { // q5.js workaround
       backgroundCol.a = this.bgopacity;
     } else {
       backgroundCol.setAlpha(this.bgopacity);
