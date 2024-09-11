@@ -8,7 +8,7 @@ class machineGun {
     // stores timestamp of last time a bullet was fired
     this.lastFired = 0;
     // total bullets fired
-    this.bulletsFired = 0;
+    this.shotsFired = 0;
     this.fireRate = 80; // time between firing in ms
   }
 
@@ -21,6 +21,7 @@ class machineGun {
     this.group.x = () => player.x + 15;
     this.group.y = () => player.y;
     this.group.vel.x = 20; // bullet velocity
+    this.group.mass = 0;
     // bouncy
     this.bounciness = 1;
     // visual properties
