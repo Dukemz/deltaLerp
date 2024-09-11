@@ -15,6 +15,8 @@ class basicSplitter extends Enemy {
     this.create();
 
     this.baseSprite.mass = 10;
+    this.baseSprite.drag = 1;
+    this.baseSprite.rotationDrag = 1;
 
     // vector used to calculate outermost vertex of each triangle
     // offsetting the vector results in funny sawblade
@@ -43,17 +45,19 @@ class basicSplitter extends Enemy {
       spikeVector.rotate(rotateAngle);
     }
 
-    // collision detector for bullets
-    this.sprites.collides(this.game.playerProjectiles, () => {
+    // triggered on a collision that should cause the splitter to separate
+    const separateCallback = () => {
       if(!this.separated) {
         this.separated = true;
         this.spikeJoints.forEach(j => j.remove());
         this.spikeJoints = [];
-        // note - all forces seem to behave differently if applied once in a single frame in a different timescale and i have no idea why
-        // lower framerate makes the force stronger, lower timescale makes the force weaker???
-        this.sprites.attractTo(this.baseSprite, -100);
+        
+        // applying force in a single frame rather than over time seems to break - use set velocity instead
+        // this.sprites.attractTo(this.baseSprite, -500);
       }
-    });
+    }
+    // separate when a player bullet hits
+    this.sprites.collides(this.game.playerProjectiles, separateCallback);
   }
 
   update() {

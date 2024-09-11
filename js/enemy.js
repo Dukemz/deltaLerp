@@ -19,6 +19,8 @@ class Enemy {
     // array of arguments passed to base sprite constructor
     this.baseConstructor ||= [this.x, this.y];
     this.sprites = new this.game.enemyObjects.Group();
+    // copy sprites info passed from instance construction
+    if(data.sprites) Object.assign(this.sprites, data.sprites);
     
     this.sprites.stroke ||= "white";
     this.sprites.strokeWeight ||= 2;
@@ -26,7 +28,13 @@ class Enemy {
 
   create() {
     this.projectiles = new this.game.enemyProjectiles.Group();
+
+    // store baseSprite info passed from instance construction
+    let storedInfo = {};
+    if(this.baseSprite) storedInfo = this.baseSprite;
     this.baseSprite = new this.sprites.Sprite(...this.baseConstructor);
+    Object.assign(this.baseSprite, storedInfo);
+
     this.baseSprite.enemyInstance = this;
     this.game.enemies.push(this);
     // this.baseSprite.pos = { x: this.x, y: this.y };
