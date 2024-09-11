@@ -20,7 +20,7 @@ class Enemy {
     this.baseConstructor ||= [this.x, this.y];
     this.sprites = new this.game.enemyObjects.Group();
     // copy sprites info passed from instance construction
-    if(data.sprites) Object.assign(this.sprites, data.sprites);
+    if(data?.sprites) Object.assign(this.sprites, data.sprites);
     
     this.sprites.stroke ||= "white";
     this.sprites.strokeWeight ||= 2;
