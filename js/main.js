@@ -88,6 +88,9 @@ async function setup() {
       });
     }
 
+    // just a funny thing to set the font
+    textFont("Trebuchet MS");
+
     // initial setup complete - create menu
     // menu = new Menu();
     game = new Game();
