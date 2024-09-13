@@ -14,6 +14,7 @@ let scriptList = [
   'js/game.js',
   'js/menu.js',
   'js/enemy.js',
+  'js/simpleEnemy.js',
   'js/basicSplitter.js'
 ];
 

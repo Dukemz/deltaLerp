@@ -134,7 +134,7 @@ class Game { // game class
     console.log(navigator.userActivation);
 
     // TESTING STUFFS //
-    this.e = new basicSplitter({ game: this, x: 500 });
+    this.e = new BasicSplitter({ game: this, x: 500 });
 
     // save timestamp on when the thing starts
     // main.js setup will open the menu rather than jumping straight into the game
