@@ -124,8 +124,8 @@ class Game { // game class
     }
 
     // create boundaries
-    this.lowerboundary = new this.boundaries.Sprite(0, 305, canvas.width, 200);
-    this.upperboundary = new this.boundaries.Sprite(0, -305, canvas.width, 200);
+    this.lowerboundary = new this.boundaries.Sprite(0, 305, this.playareaWidth, 2000);
+    this.upperboundary = new this.boundaries.Sprite(0, -305, this.playareaWidth, 2000);
 
     // draw opaque bg
     background(this.bgcol);

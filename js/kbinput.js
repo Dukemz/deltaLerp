@@ -25,6 +25,7 @@ class kbInput {
     this.c.cycleWeapon ||= "q";
 
     this.autoFireEnabled = false;
+    this.preciseMode = true;
   }
 
   // input checks //
@@ -70,11 +71,12 @@ class kbInput {
     }
 
     // there's probably a much more efficient way to do this but whatever
+    // when precisemode is on, these funcs ignore world.timeScale
     if(!kb.pressing(this.c.left) && !kb.pressing(this.c.right)) {
-      vector.x = deltaLerp(currentVel.x, 0, 0.999995);
+      vector.x = deltaLerp(currentVel.x, 0, 0.999995, this.preciseMode);
     }
     if(!kb.pressing(this.c.up) && !kb.pressing(this.c.down)) {
-      vector.y = deltaLerp(currentVel.y, 0, 0.999995);
+      vector.y = deltaLerp(currentVel.y, 0, 0.999995, this.preciseMode);
     }
     // if(kb.pressing(this.c.slow)) { // hold shift to slow down
     //   // decrease the vector's magnitude
