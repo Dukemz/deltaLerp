@@ -103,7 +103,7 @@ function draw() {
 
     text(`${Math.round(lastfps)}fps`, 10, 20);
     text(`buffer length: ${bufferLength}`, 10, 40);
-    text(`audio time: ${audio.currentTime.toFixed(2)}`, 10, 60);
+    text(`audio time: ${audio.currentTime.toFixed(2)} / ${audio.duration}`, 10, 60);
   }
 }
 
