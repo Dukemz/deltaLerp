@@ -4,7 +4,7 @@ console.log("[HELLO WORLD]");
 const version = "pre-alpha";
 
 let scriptList = [
-  'js/gamemeanager.js',
+  'js/gamemanager.js',
   'js/gamehud.js',
   'js/arcindicator.js',
   'js/machinegun.js',
