@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Converter Test</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- lz-string base64 thingy -->
+    <script src="../lib/base64-string.js"></script>
+    <script src="../lib/lz-string.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>deltaLerp Audio Converter</h1>
+
+        <p>
+            This tool converts audio files to formats that may eventually be used by deltaLerp asset files. Although MP3 and WAV are
+            supported, OGG is highly recommended.<br>
+            You can play converted files <a href="audioplayer.html">here</a>.
+        </p>
+
+        <!-- dropdown for selecting encoding options -->
+        <div class="dropdown-group">
+            <label for="encodingSelect" style="font-weight: bold;">Select Encoding:</label>
+            <select id="encodingSelect" class="styled-dropdown">
+                <option value="b64">Standard base64</option>
+                <option value="b64-compressed">b64 compressed (BROKEN)</option>
+                <option value="b64-utf16-compressed">b64 UTF-16 compressed</option>
+                <option value="lz-compressed">LZ compressed (BROKEN)</option>
+                <option value="lz-utf16-compressed">LZ UTF-16 compressed</option>
+            </select>
+        </div>
+
+
+        <!-- file input for uploading audio -->
+        <div class="input-group">
+            <input type="file" id="audioFile" accept="audio/*">
+        </div>
+
+        <p id="progressText"></p>
+
+        <!-- button group for actions -->
+        <div class="button-group">
+            <button id="convertButton">Convert</button>
+            <div id="downloadSection"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="audioconverter.js"></script>
+</body>
+
+</html>

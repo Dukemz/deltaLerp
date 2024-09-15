@@ -1,0 +1,125 @@
+body {
+  background-color: #2e3447;
+  color: #ffffff;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* style the container to center the content */
+.container {
+  background-color: #3e4559;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+h1 {
+  color: #f1f1f1;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* link click reference */
+a:visited {
+  color: mediumslateblue;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+input[type="file"] {
+  background-color: #4f576b;
+  color: #ffffff;
+  padding: 10px;
+  border: 1px solid #5a6177;
+  border-radius: 5px;
+  width: 100%;
+}
+
+input[type="file"]::file-selector-button {
+  background-color: #5a6177;
+  border: none;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: #6a738a;
+}
+
+/* align buttons horizontally */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+button {
+  background-color: #3b87f7;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #3573d9;
+}
+
+/* download link */
+#downloadSection a {
+  display: inline-block;
+  background-color: #5a6177;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+#downloadSection a:hover {
+  background-color: #6a738a;
+}
+
+#progressText {
+  color: #f1f1f1;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+/* Styling the dropdown */
+.styled-dropdown {
+  background-color: #2e3447;
+  color: #f1f1f1;
+  border: 1px solid #4f5b6b;
+  padding: 10px;
+  font-size: 14px;
+  font-family: 'Trebuchet MS', sans-serif;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.styled-dropdown:focus {
+  outline: none;
+  border-color: #5b6d82;
+}
+
+.dropdown-group {
+  margin-bottom: 20px;
+}
