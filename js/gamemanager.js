@@ -44,6 +44,7 @@ class GameManager {
     addEventListener("unhandledrejection", (event) => {
       this.crash({ type: "promiseReject", event });
     });
+    console.log("Manager loaded!");
   }
 
   crash(data) { // data is an object, should contain error

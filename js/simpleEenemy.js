@@ -1,6 +1,6 @@
 "use strict";
 
-class SimpleEnemy extends Sprite { // enemies that are just one sprite as opposed to multiple
+class SimpleEnemy extends Sprite { // this class is for enemies that are just one sprite as opposed to multiple
   constructor(data) {
     super(...data?.baseConstructor || []);
     Object.assign(this, data);
