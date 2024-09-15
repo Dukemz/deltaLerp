@@ -4,7 +4,7 @@ console.log("[HELLO WORLD]");
 const version = "pre-alpha";
 
 let scriptList = [
-  'js/gamemanager.js',
+  'js/gamemeanager.js',
   'js/gamehud.js',
   'js/arcindicator.js',
   'js/machinegun.js',
@@ -62,6 +62,7 @@ async function setup() {
     await loadScripts(scriptList);
     console.log("All scripts loaded!");
     
+    console.log("Creating manager instance...");
     window.manager = new GameManager();
   } catch {
     document.getElementById("loadtext").innerHTML = "oops... something went wrong loading one of the scripts. please check the console for more info!";
