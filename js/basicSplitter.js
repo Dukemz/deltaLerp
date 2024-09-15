@@ -1,6 +1,6 @@
 "use strict";
 
-class BasicSplitter extends Enemy {
+class BasicSplitter extends Enemy { // splits into homing triangle things
   constructor(data) {
     super(data);
 
