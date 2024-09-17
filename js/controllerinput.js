@@ -79,7 +79,6 @@ class controllerInput {
       // multiply by target speed
       stickVector.mult(targetSpeed);
 
-
     } else {
       stickVector.setMag(0);
     }

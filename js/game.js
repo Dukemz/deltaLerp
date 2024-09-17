@@ -104,7 +104,7 @@ class Game { // game class
     // const camBounds = this.calculateBounds(canvas.w, canvas.h, setZoom);
 
     // top and bottom boundary walls
-    this.boundaries = new Group();
+    this.boundaries = new this.walls.Group();
     this.boundaries.autoDraw = false;
     this.boundaries.collider = "s";
     this.boundaries.fill = () => this.bgcol;
@@ -134,7 +134,9 @@ class Game { // game class
     console.log(navigator.userActivation);
 
     // TESTING STUFFS //
-    this.e = new BasicSplitter({ game: this, x: 500 });
+    this.hexsplit = new BasicSplitter({ game: this, x: 500, y: 200 });
+    this.pentasplit = new BasicSplitter({ game: this, x: 500, y: -200, splitterShape: "pentagon", sprites: { fill: 'blue' } });
+    this.octasplit = new BasicSplitter({ game: this, x: -500, splitterShape: "octagon", splitterSpikeSize: 70, sprites: { fill: 'purple' } });
 
     // save timestamp on when the thing starts
     // main.js setup will open the menu rather than jumping straight into the game

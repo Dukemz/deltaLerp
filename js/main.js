@@ -15,7 +15,8 @@ let scriptList = [
   'js/menu.js',
   'js/enemy.js',
   'js/simpleenemy.js',
-  'js/basicsplitter.js'
+  'js/basicsplitter.js',
+  'js/homingtriangle.js'
 ];
 
 
@@ -24,7 +25,6 @@ let menu, game;
 
 async function loadScripts(scriptUrls) { // load scripts and add them to the page
   // may be able to reuse this function for level loading and/or modding
-  // maybe modded scripts can be packaged and loaded on the main menu?
 
   // create an array to store Promise objects
   const promises = [];
@@ -103,7 +103,7 @@ async function setup() {
     // setup error crash
     if(window.manager) {
       manager.crash({ type: "setupError", error });
-    } else {
+    } else { // note to self: if this happens, hide the canvas
       document.getElementById("loadtext").innerHTML = "oops... an error occurred but the crash handler failed to run. check the console for more information!";
     }
   }

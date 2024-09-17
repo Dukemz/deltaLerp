@@ -10,6 +10,10 @@ class Enemy {
     Object.assign(this, data);
     this.game ||= game;
 
+    // NOTE TO SELF: move most things out of this constructor into create?
+    // since inherited properties should ideally take priority
+    // priority level should be data -> subclass -> base class, not sure best way to do this
+
     // this.x ||= camera.x + 500;
     this.x ||= 0;
     this.y ||= 0;
@@ -17,8 +21,9 @@ class Enemy {
     this.health = 20;
 
     // array of arguments passed to base sprite constructor
-    this.baseConstructor ||= [this.x, this.y];
-    this.sprites = new this.game.enemyObjects.Group();
+    
+    this.parentGroup ||= this.game.enemyObjects;
+    this.sprites = new this.parentGroup.Group();
     // copy sprites info passed from instance construction
     if(data?.sprites) Object.assign(this.sprites, data.sprites);
     
@@ -29,6 +34,7 @@ class Enemy {
   create() {
     this.projectiles = new this.game.enemyProjectiles.Group();
 
+    this.baseConstructor ||= [this.x, this.y];
     // store baseSprite info passed from instance construction
     let storedInfo = {};
     if(this.baseSprite) storedInfo = this.baseSprite;
@@ -38,5 +44,6 @@ class Enemy {
     this.baseSprite.enemyInstance = this;
     this.game.enemies.push(this);
     // this.baseSprite.pos = { x: this.x, y: this.y };
+    if(typeof this.postCreate === "function") this.postCreate();
   }
 }

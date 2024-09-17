@@ -19,7 +19,7 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
     this.baseSprite.rotationDrag = 1;
 
     // vector used to calculate outermost vertex of each triangle
-    // offsetting the vector results in funny sawblade
+    // offsetting the vector results in a weird sawblade shape
     const spikeVector = createVector(0, this.splitterSpikeSize);
     const sides = this.baseSprite.vertices.length-1;
     const rotateAngle = 360/sides;
@@ -37,9 +37,24 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
 
       const tipX = this.baseSprite.x + spikeVector.x;
       const tipY = this.baseSprite.y + spikeVector.y;
+
+      // determines the offset for the homing spikes to follow the player's direction
+      const vectorHeading = -spikeVector.heading();
      
-      const newSpike = new this.sprites.Sprite([[tipX, tipY], [v1.x, v1.y], [v2.x, v2.y], [tipX, tipY]]);
-      const spikeJoint = new GlueJoint(this.baseSprite, newSpike);
+      // const newSpike = new this.sprites.Sprite([[tipX, tipY], [v1.x, v1.y], [v2.x, v2.y], [tipX, tipY]]);
+      const newSpike = new HomingTriangle({
+        game: this.game,
+        baseConstructor: [[[tipX, tipY], [v1.x, v1.y], [v2.x, v2.y], [tipX, tipY]]],
+        parentGroup: this.sprites,
+        // this will be used as offset for rotateTowards
+        vectorHeading,
+        activeHoming: false
+      });
+      // initialise
+      newSpike.create();
+
+      // join spike to the base shape
+      const spikeJoint = new GlueJoint(this.baseSprite, newSpike.baseSprite);
       this.spikeJoints.push(spikeJoint);
 
       spikeVector.rotate(rotateAngle);
@@ -49,7 +64,10 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
     const separateCallback = () => {
       if(!this.separated) {
         this.separated = true;
-        this.spikeJoints.forEach(j => j.remove());
+        this.spikeJoints.forEach(j => { // activate homing on the spikies
+          j.spriteB.enemyInstance.activeHoming = true;
+          j.remove();
+        });
         this.spikeJoints = [];
         
         // applying force in a single frame rather than over time seems to break - use set velocity instead

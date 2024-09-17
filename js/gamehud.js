@@ -18,7 +18,7 @@ class GameHUD {
     // top right HUD
     textAlign(RIGHT, TOP);
     text(`player: ${Math.round(player.x)}, ${Math.round(player.y)} || mouse: ${Math.round(mouse.x)}, ${Math.round(mouse.y)}`, width-10, 10);
-    text(`bullets fired: ${player.weapons[player.activeWeapon].shotsFired}, total ${player.projectiles.amount}`, width-10, 40);
+    text(`bullets fired: ${player.weapons[player.activeWeapon].shotsFired}, total active ${player.projectiles.amount}`, width-10, 40);
     // bottom left HUD
     const q5fps = window.Q5 ? `(q5: ${getFPS()})` : "";
     textAlign(LEFT, BOTTOM);
@@ -28,7 +28,7 @@ class GameHUD {
     textAlign(RIGHT, BOTTOM);
     // text(`seek: ${game.funnysound.seek().toFixed(3)}`, width-10, height-70);
     text(`speed: ${player.speed.toFixed(3)}`, width-10, height-40);
-    text(`direction: ${player.direction.toFixed(3)}`, width-10, height-10);
+    text(`total sprites: ${allSprites.length}`, width-10, height-10);
 
     if(game.paused) {
       textAlign(CENTER, CENTER);
