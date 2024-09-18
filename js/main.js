@@ -103,6 +103,7 @@ async function setup() {
     if(window.manager) {
       manager.crash({ type: "setupError", error });
     } else { // note to self: if this happens, hide the canvas
+      document.getElementsByTagName("canvas").forEach(c => c.style.display = "none");
       document.getElementById("loadtext").innerHTML = "oops... an error occurred but the crash handler failed to run. check the console for more information!";
     }
   }
