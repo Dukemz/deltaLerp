@@ -24,13 +24,16 @@ class kbInput {
     this.c.autoFire ||= "e";
     this.c.cycleWeapon ||= "q";
 
+    // misc controls
+    this.c.pause ||= "p";
+
     this.autoFireEnabled = false;
     this.preciseMode = true;
   }
 
   // input checks //
 
-  pause() { return kb.presses("p") }
+  pause() { return kb.presses(this.c.pause) }
 
   firing() {
     // toggle autofire enabled
@@ -57,6 +60,7 @@ class kbInput {
     this.c.fire = "enter";
     this.c.autoFire = "/";
     this.c.cycleWeapon = "";
+    this.c.pause = "";
   }
 
   // other methods //

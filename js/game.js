@@ -179,6 +179,7 @@ class Game { // game class
       // calculation for camera movement
       // this is about as accurate as i can make it lol
       this.camPos.x += this.cameraSpeed * deltaTime * world.timeScale;
+      // note to self: make some kinda lerpy class to do things that require this
       if(this.cameraSpeed !== this.targetCameraSpeed) {
         this.cameraSpeed = deltaLerp(this.cameraSpeed, this.targetCameraSpeed, this.cameraLerpAmount);
       }
@@ -242,6 +243,12 @@ class Game { // game class
         this.targetCameraSpeed = 0;
       }
     }
+  }
+
+  kb2P() { // temporary function to add 2nd player with keyboard preset
+    player.input.presetWASD();
+    const newp = new Player();
+    newp.input.presetArrows();
   }
 
   windowResized(oldWidth, oldHeight, oldZoom) {
