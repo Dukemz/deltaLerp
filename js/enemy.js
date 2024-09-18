@@ -19,6 +19,7 @@ class Enemy {
     this.y ||= 0;
 
     this.health = 20;
+    this.enemyType = "none";
 
     // array of arguments passed to base sprite constructor
     

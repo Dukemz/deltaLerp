@@ -21,7 +21,7 @@ class Game { // game class
     this.cameraLerpAmount = 0.5;
     this.camPos = { x: 0, y: 0 };
     // width of the visible area
-    this.playareaWidth = 1400;
+    this.visibleWidth = 1400;
     // last time the window was resized
     this.lastWindowResize = world.realTime;
 
@@ -97,7 +97,7 @@ class Game { // game class
     this.projectiles.autoDraw = false;
     this.enemyObjects.autoDraw = false;
 
-    const setZoom = canvas.w / this.playareaWidth;
+    const setZoom = canvas.w / this.visibleWidth;
     // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
     camera.zoom = setZoom;
     // calculate bounds
@@ -124,8 +124,8 @@ class Game { // game class
     }
 
     // create boundaries
-    this.lowerboundary = new this.boundaries.Sprite(0, 305, this.playareaWidth, 2000);
-    this.upperboundary = new this.boundaries.Sprite(0, -305, this.playareaWidth, 2000);
+    this.lowerboundary = new this.boundaries.Sprite(0, 305, this.visibleWidth, 2000);
+    this.upperboundary = new this.boundaries.Sprite(0, -305, this.visibleWidth, 2000);
 
     // draw opaque bg
     background(this.bgcol);
@@ -246,7 +246,7 @@ class Game { // game class
 
   windowResized(oldWidth, oldHeight, oldZoom) {
     // change zoom
-    const setZoom = canvas.w / this.playareaWidth;
+    const setZoom = canvas.w / this.visibleWidth;
     // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
     camera.zoom = setZoom;
     console.log(`Changed zoom: [${oldZoom.toFixed(3)}] => [${setZoom.toFixed(3)}]`);
@@ -255,7 +255,7 @@ class Game { // game class
     background(this.bgcol);
   }
 
-  // function to calculate visible area
+  // function to calculate visible area (may remove, useless atm)
   calculateBounds() {
     const visibleWidth = canvas.w / camera.zoom;
     const visibleHeight = canvas.h / camera.zoom;

@@ -8,6 +8,7 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
     this.sprites.fill ||= "orange";
     this.splitterShape ||= "hexagon";
     this.splitterSpikeSize ||= 60;
+    this.enemyType = "BasicSplitter";
 
     this.spikeJoints = [] // change this when sprite.joints.removeAll() gets fixed
     this.separated = false;
@@ -17,6 +18,13 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
     this.baseSprite.mass = 10;
     this.baseSprite.drag = 1;
     this.baseSprite.rotationDrag = 1;
+
+    this.generate();
+  }
+
+  generate() { // generate spikes
+    // currently can only be used once on creation, until i figure out a way to get the EXACT verticies location
+    // or maybe, set the rotation of the sprite to 0, then create all spikes, then set rotation back to what it was
 
     // vector used to calculate outermost vertex of each triangle
     // offsetting the vector results in a weird sawblade shape
@@ -50,7 +58,7 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
         vectorHeading,
         activeHoming: false
       });
-      // initialise
+      // initialise spiky dude
       newSpike.create();
 
       // join spike to the base shape
@@ -58,24 +66,30 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
       this.spikeJoints.push(spikeJoint);
 
       spikeVector.rotate(rotateAngle);
-    }
 
-    // triggered on a collision that should cause the splitter to separate
-    const separateCallback = () => {
-      if(!this.separated) {
-        this.separated = true;
-        this.spikeJoints.forEach(j => { // activate homing on the spikies
-          j.spriteB.enemyInstance.activeHoming = true;
-          j.remove();
-        });
-        this.spikeJoints = [];
-        
-        // applying force in a single frame rather than over time seems to break - use set velocity instead
-        // this.sprites.attractTo(this.baseSprite, -500);
+      // triggered on a collision that should cause the splitter to separate
+      const separateCallback = () => {
+        if(!this.separated) {
+          this.separated = true;
+          this.spikeJoints.forEach(j => { // activate homing on the spikies
+            j.spriteB.enemyInstance.activeHoming = true;
+            j.remove();
+          });
+          this.spikeJoints = [];
+          
+          // applying force in a single frame rather than over time seems to break - use set velocity instead
+          // this.sprites.attractTo(this.baseSprite, -500);
+        }
       }
+
+      const enemyCollideCallback = (_a, b) => { // other active homing triangles can set separators off
+        if(b?.enemyInstance.enemyType === "HomingTriangle" && b.enemyInstance.activeHoming) separateCallback();
+      }
+
+      // separate when a player bullet hits
+      this.sprites.collides(this.game.playerProjectiles, separateCallback);
+      this.sprites.collides(this.game.enemyObjects, enemyCollideCallback);
     }
-    // separate when a player bullet hits
-    this.sprites.collides(this.game.playerProjectiles, separateCallback);
   }
 
   update() {

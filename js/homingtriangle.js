@@ -5,7 +5,8 @@ class HomingTriangle extends Enemy {
     super(data);
 
     this.activeHoming ??= true;
-    this.baseConstructor ??= [this.x, this.y]
+    this.baseConstructor ??= [this.x, this.y];
+    this.enemyType = "HomingTriangle";
   }
 
   postCreate() { // function called after create is run

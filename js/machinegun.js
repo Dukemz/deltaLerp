@@ -57,6 +57,7 @@ class machineGun {
       // set bullet's update function since for some reason you can't define it before
       bullet.update = () => {
         if(bullet.speed < 10) bullet.remove();
+        // bullet.speed = 20;
       }
       this.bulletsFired++;
       this.lastFired = world.physicsTime*1000;
