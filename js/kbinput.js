@@ -40,6 +40,24 @@ class kbInput {
 
   cycleWeapon() { return kb.presses(this.c.cycleWeapon) }
 
+  // TEST //
+
+  presetWASD() {
+    this.c.up = "w";
+    this.c.down = "s";
+    this.c.left = "a";
+    this.c.right = "d";
+  }
+
+  presetArrows() {
+    this.c.up = "arrowUp";
+    this.c.down = "arrowDown";
+    this.c.left = "arrowLeft";
+    this.c.right = "arrowRight";
+    this.c.fire = "enter";
+    this.c.autoFire = "/";
+    this.c.cycleWeapon = "";
+  }
 
   // other methods //
 
