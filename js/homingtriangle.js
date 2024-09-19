@@ -5,13 +5,14 @@ class HomingTriangle extends Enemy {
     super(data);
 
     this.activeHoming ??= true;
-    this.baseConstructor ??= [this.x, this.y];
+    this.baseConstructor ??= [this.x, this.y, 10, "triangle"];
     this.enemyType = "HomingTriangle";
   }
 
   postCreate() { // function called after create is run
-    // todo: colour lerping
+    // todo: colour lerping (maybe make that a class too)
     this.inactiveColour = this.baseSprite.fill;
+    this.baseSprite.drag = 1;
   }
 
   update() {
@@ -27,11 +28,11 @@ class HomingTriangle extends Enemy {
         return a.distanceTo(this.baseSprite) - b.distanceTo(this.baseSprite);
       });
 
-
-      this.baseSprite.drag = 1;
-      this.baseSprite.rotateTowards(playerList[0], 0.01, this.vectorHeading);
-      this.baseSprite.bearing = this.baseSprite.rotation - this.vectorHeading;
-      this.baseSprite.applyForce(3);
+      if(playerList[0]) {
+        this.baseSprite.rotateTowards(playerList[0], 0.01, this.vectorHeading);
+        this.baseSprite.bearing = this.baseSprite.rotation - this.vectorHeading;
+        this.baseSprite.applyForce(3);
+      }
     }
   }
 }
