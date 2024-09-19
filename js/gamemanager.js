@@ -10,6 +10,11 @@ class GameManager {
     this.avgFPS = 0;
     this.avgDeltaTime = 0;
 
+    if(window.Q5) {
+      this.q5fpsList = [];
+      this.q5avgFPS = 0;
+    }
+
     // get the current fps 10 times a second
     // used to get average FPS over the last 2 seconds
     this.fpsPush = setInterval(() => {
@@ -17,6 +22,11 @@ class GameManager {
         this.fpsList.push(frameRate());
         // remove first item in list if it goes above 30
         if(this.fpsList.length > 20) this.fpsList.shift();
+
+        if(window.Q5) {
+          this.q5fpsList.push(getFPS());
+          if(this.q5fpsList.length > 20) this.q5fpsList.shift();
+        }
       }
     }, 100);
 

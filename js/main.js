@@ -125,6 +125,10 @@ function draw() {
     manager.avgFPS = manager.fpsList.reduce((a, b) => a + b, 0)/manager.fpsList.length || frameRate();
     manager.avgDeltaTime = 1/manager.avgFPS;
     if(manager.avgFPS < 2) console.warn(`Warning: Average FPS is ${manager.avgFPS.toFixed(3)}!`);
+
+    if(window.Q5) {
+      manager.q5avgFPS = manager.q5fpsList.reduce((a, b) => a + b, 0)/manager.q5fpsList.length || getFPS();
+    }
   }
 
   if(!manager.ingame) {
