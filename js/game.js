@@ -62,7 +62,7 @@ class Game { // game class
       layer: 1,
       input: new kbInput(),
       weapons: [
-        new machineGun()
+        new MachineGun()
       ]
     });
 
@@ -262,7 +262,8 @@ class Game { // game class
     background(this.bgcol);
   }
 
-  // function to calculate visible area (may remove, useless atm)
+  // function to calculate visible area
+  // DEPRECATED: likely won't use
   calculateBounds() {
     const visibleWidth = canvas.w / camera.zoom;
     const visibleHeight = canvas.h / camera.zoom;

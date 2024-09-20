@@ -1,6 +1,7 @@
 "use strict";
 
-class machineGun {
+class MachineGun {
+  // should probably make this extend weapon huh?
   // machine gun weapon - fires multiple small bullets in quick succession
   // this group represents all the bullets
   constructor() {

@@ -9,15 +9,6 @@ class Player extends Sprite {
       [0, 0] // repeat 1st to connect
     ]);
 
-    /*
-      [0, 0], // bottom notch
-      [50, 50], // bottom right
-      [0, -70], // top
-      [0, 0] // repeat 1st to connect
-
-      [0, 0], [50, 50], [0, -70], [0, 0]
-    */
-
     Object.assign(this, data);
 
     this.game ||= game;
@@ -68,7 +59,7 @@ class Player extends Sprite {
     // group of all projectiles
     // allow for use with enemies as well?
     // if this.weapons is not already an array, create it
-    this.weapons ||= [new machineGun()];
+    this.weapons ||= [new MachineGun()];
     // this.activeWeapon will be the currently active weapon
     // at the end of update, call the fire function
     // the weapon class should handle everything from there
@@ -109,7 +100,7 @@ class Player extends Sprite {
       this.applyForceScaled(world.gravity.x);
     }
 
-    // cull projectiles
+    // cull projectiles - currently disabled due to p5play bug
     // this.projectiles.cull(10,10,10,10);
 
     // set new movement speed based on input
