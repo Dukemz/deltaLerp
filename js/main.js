@@ -5,6 +5,7 @@ const version = "pre-alpha";
 
 let scriptList = [
   'js/gamemanager.js',
+  'js/lerpcontroller.js',
   'js/gamehud.js',
   'js/arcindicator.js',
   'js/machinegun.js',
@@ -24,6 +25,7 @@ let menu, game;
 
 async function loadScripts(scriptUrls) { // load scripts and add them to the page
   // may be able to reuse this function for level loading and/or modding
+  const scriptContainer = document.getElementById("loadedScripts");
 
   // create an array to store Promise objects
   const promises = [];
@@ -36,7 +38,7 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
       script.async = false; // ensure synchronous loading
       script.onload = resolve; // resolve the Promise when the script is loaded
       script.onerror = reject; // reject the Promise if the script fails to load
-      document.body.appendChild(script);
+      scriptContainer.appendChild(script);
     }));
   });
 
