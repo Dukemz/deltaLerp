@@ -11,9 +11,7 @@ class Game { // game class
 
     // background colour
     this.bgcol = color("#242838");
-    this.targetbgopacity = 128;
-    this.bgopacity = 128;
-    this.bgopacitylerp = 0.999;
+    this.bgOpacityLerp = new LerpController(128, 128, 0.999);
 
     // camera config
     this.cameraSpeed = 0;
@@ -151,10 +149,12 @@ class Game { // game class
 
     // copy bg colour
     const backgroundCol = color(this.bgcol.levels);
+    const bgopacity = this.bgOpacityLerp.currentValue;
+
     if(window.Q5) { // q5.js workaround
-      backgroundCol.a = this.bgopacity;
+      backgroundCol.a = bgopacity;
     } else {
-      backgroundCol.setAlpha(this.bgopacity);
+      backgroundCol.setAlpha(bgopacity);
     }
     background(backgroundCol);
 
@@ -184,9 +184,7 @@ class Game { // game class
         this.cameraSpeed = deltaLerp(this.cameraSpeed, this.targetCameraSpeed, this.cameraLerpAmount);
       }
 
-      if(this.bgopacity !== this.targetbgopacity) { // using regular lerp for this for now
-        this.bgopacity = deltaLerp(this.bgopacity, this.targetbgopacity, this.bgopacitylerp, true);
-      }
+      this.bgOpacityLerp.update();
     }
 
     if(!this.players.length) this.targetCameraSpeed = 0;
@@ -221,10 +219,12 @@ class Game { // game class
     if(kb.presses("j") || contro.presses("l")) {
       if(game.timeScale === 1) {
         game.timeScale = 0.3;
-        this.targetbgopacity = 30;
+        // this.targetbgopacity = 30;
+        this.bgOpacityLerp.targetValue = 30;
       } else {
         game.timeScale = 1;
-        this.targetbgopacity = 128;
+        // this.targetbgopacity = 128;
+        this.bgOpacityLerp.targetValue = 128;
       }
     }
 
