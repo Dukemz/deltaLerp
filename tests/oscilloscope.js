@@ -95,6 +95,9 @@ function draw() {
     }
     pop();
 
+    // blur effect?
+    filter(BLUR, 1);
+
     noStroke()
     fill(255, 255, 255);
 
