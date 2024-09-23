@@ -2,6 +2,7 @@ let audio, audioContext, analyserL, analyserR, sourceNode, splitter;
 let dataArrayL, dataArrayR;
 let size;
 let followMouse = false;
+let oscColour = color(0, 50, 255);
 
 const bufferLength = 512;
 let lastfps = 0;
@@ -51,7 +52,7 @@ function draw() {
   analyserL.getFloatTimeDomainData(dataArrayL);
   analyserR.getFloatTimeDomainData(dataArrayR);
 
-  stroke(0, 50, 255);
+  stroke(oscColour);
   strokeWeight(2);
   noFill();
 
