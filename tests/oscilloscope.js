@@ -79,23 +79,24 @@ function draw() {
     const mouseAngle = atan2(my, mx);
 
     push();
-    translate(width/2, height/2);
     // rotate by mouse angle
     if(followMouse) rotate(mouseAngle);
 
     // draw initial shape to be blurred
     beginShape();
     for (let i = 0; i < bufferLength; i++) {
-      // let x = map(dataArrayL[i], -1, 1, (width / 2) - (size / 2), (width / 2) + (size / 2));
-      // let y = map(dataArrayR[i], -1, 1, (height / 2) + (size / 2), (height / 2) - (size / 2));
-      let x = map(dataArrayL[i], -1, 1, -(size / 2), (size / 2));
-      let y = map(dataArrayR[i], -1, 1, (size / 2), -(size / 2));
+      let x = map(dataArrayL[i], -1, 1, (width / 2) - (size / 2), (width / 2) + (size / 2));
+      let y = map(dataArrayR[i], -1, 1, (height / 2) + (size / 2), (height / 2) - (size / 2));
+      // let x = map(dataArrayL[i], -1, 1, -(size / 2), (size / 2));
+      // let y = map(dataArrayR[i], -1, 1, (size / 2), -(size / 2));
       // draw actual line
       vertex(x, y);
     }
     endShape();
-    filter(BLUR, 3);
+    filter(BLUR, 5);
 
+    // secondary shape
+    translate(width/2, height/2);
     // second shape, will not be blurred
     for (let i = 0; i < bufferLength; i++) {
       // let x = map(dataArrayL[i], -1, 1, (width / 2) - (size / 2), (width / 2) + (size / 2));
