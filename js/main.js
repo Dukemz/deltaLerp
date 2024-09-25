@@ -142,9 +142,8 @@ function draw() {
   }
 
   // step world
-  // world.calcTimeStep = (manager.avgDeltaTime || 1 / (frameRate() || 60)) * world.timeScale;
   world.calcTimeStep = (1/(frameRate() || 60)) * world.timeScale;
-  world.step(
+  if(world.timeScale) world.step(
     world.calcTimeStep,
     world.velocityIterations,
     world.positionIterations

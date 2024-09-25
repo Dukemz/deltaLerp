@@ -72,19 +72,10 @@ class Game { // game class
       })
     });
 
+    // this.levelwalls = new this.walls.Group();
     // wall test - vertex mode
-    this.wall = new this.walls.Sprite([[100, 100], [200, -100]], 's');
-    this.wall2 = new this.walls.Sprite([[-100, -100], [-100, 100]], 's');
-
-    // // goober test
-    // this.thingy = new this.objects.Sprite(-canvas.hw+50,-150, 30, 30);
-    // this.thingy.vel.x = 1
-
-    // this.funnysound = new Howl({
-    //   src: ['./assets/quackmp3.mp3'],
-    //   html5: true,
-    //   autoplay: false
-    // });
+    // this.wall = new this.walls.Sprite([[100, 100], [200, -100]], 's');
+    // this.wall2 = new this.walls.Sprite([[-100, -100], [-100, 100]], 's');
 
     // just move the camera to center, why not?
     camera.pos = { x: 0, y: 0 };
