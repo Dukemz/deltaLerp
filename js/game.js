@@ -14,9 +14,7 @@ class Game { // game class
     this.bgOpacityLerp = new LerpController(128, 128, 0.999);
 
     // camera config
-    this.cameraSpeed = 0;
-    this.targetCameraSpeed = 0;
-    this.cameraLerpAmount = 0.5;
+    this.cameraLerp = new LerpController(0, 0, 0.5);
     this.camPos = { x: 0, y: 0 };
     // width of the visible area
     this.visibleWidth = 1400;
@@ -169,16 +167,17 @@ class Game { // game class
 
       // calculation for camera movement
       // this is about as accurate as i can make it lol
-      this.camPos.x += this.cameraSpeed * deltaTime * world.timeScale;
+      this.camPos.x += this.cameraLerp.currentValue * deltaTime * world.timeScale;
       // note to self: make some kinda lerpy class to do things that require this
-      if(this.cameraSpeed !== this.targetCameraSpeed) {
-        this.cameraSpeed = deltaLerp(this.cameraSpeed, this.targetCameraSpeed, this.cameraLerpAmount);
-      }
+      // if(this.cameraSpeed !== this.cameraLerp.targetValue) {
+      //   this.cameraSpeed = deltaLerp(this.cameraSpeed, this.cameraLerp.targetValue, this.cameraLerpAmount);
+      // }
 
+      this.cameraLerp.update();
       this.bgOpacityLerp.update();
     }
 
-    if(!this.players.length) this.targetCameraSpeed = 0;
+    if(!this.players.length) this.cameraLerp.targetValue = 0;
 
     // draw sprites
     camera.on();
@@ -210,28 +209,26 @@ class Game { // game class
     if(kb.presses("j") || contro.presses("l")) {
       if(game.timeScale === 1) {
         game.timeScale = 0.3;
-        // this.targetbgopacity = 30;
         this.bgOpacityLerp.targetValue = 30;
       } else {
         game.timeScale = 1;
-        // this.targetbgopacity = 128;
         this.bgOpacityLerp.targetValue = 128;
       }
     }
 
     // cam scroll test
     if(kb.presses("m") || contro.presses("rt")) {
-      if(this.targetCameraSpeed === 0) {
-        this.targetCameraSpeed = 0.1
+      if(this.cameraLerp.targetValue === 0) {
+        this.cameraLerp.targetValue = 0.1
       } else {
-        this.targetCameraSpeed = 0;
+        this.cameraLerp.targetValue = 0;
       }
     }
     if(kb.presses("b") || contro.presses("lt")) {
-      if(this.targetCameraSpeed === 0) {
-        this.targetCameraSpeed = -0.1
+      if(this.cameraLerp.targetValue === 0) {
+        this.cameraLerp.targetValue = -0.1
       } else {
-        this.targetCameraSpeed = 0;
+        this.cameraLerp.targetValue = 0;
       }
     }
   }
@@ -283,6 +280,7 @@ class Game { // game class
     this.players.removeAll();
     this.objects.removeAll();
     this.projectiles.removeAll();
+    this.enemyObjects.removeAll();
     // this.draw = () => {};
     this.active = false;
     manager.ingame = false;

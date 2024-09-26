@@ -34,6 +34,7 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
     promises.push(new Promise((resolve, reject) => {
       // create script element and set its source
       const script = document.createElement('script');
+      script.type = "text/javascript";
       script.src = scriptUrl;
       script.async = false; // ensure synchronous loading
       script.onload = resolve; // resolve the Promise when the script is loaded
@@ -95,8 +96,8 @@ async function setup() {
     textFont("Trebuchet MS");
 
     // initial setup complete - create menu
-    // menu = new Menu();
-    game = new Game();
+    menu = new Menu();
+    // game = new Game();
 
     manager.setupDone = true;
     loop();

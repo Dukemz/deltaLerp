@@ -73,29 +73,6 @@ function draw() {
   // smooth zoom
   camera.zoom = lerp(camera.zoom, targetZoom, zoomSpeed);
 
-  // code to move each square in a circular motion
-  // connectedToActive.forEach(sub => {
-  //   const distToActive = sub.distanceTo(activeSpr);
-  //   // rotation speed is based on distance to active sprite
-  //   const baseForce = 500;
-  //   const adjustedForce = baseForce / (distToActive + 1);
-
-  //   // set angle
-  //   sub.bearing = sub.angleTo(activeSpr) + 90;
-  //   // apply force based on total branch mass
-  //   sub.applyForce(sub.totalBranchMass * adjustedForce);
-  //   sub.text = `${sub.totalBranchMass.toFixed(1)}/${sub.speed.toFixed(2)}`;
-
-  //   // visualisation
-  //   const visvec = createVector(0, sub.totalBranchMass * adjustedForce);
-  //   visvec.setHeading(sub.bearing);
-  //   push();
-  //   strokeWeight(3);
-  //   stroke(255, 0, 255);
-  //   line(sub.canvasPos.x, sub.canvasPos.y, sub.canvasPos.x+visvec.x*5, sub.canvasPos.y+visvec.y*5);
-  //   pop();
-  // });
-
   // loop runs for every square
   things.forEach(thing => { // thing is the current square
     if(thing.mouse.hovers() && window.activeSpr !== thing) {
@@ -307,3 +284,27 @@ function windowResized() {
   background(color("#242838"));
   camera.pos = { x: 0, y: 0 };
 }
+
+
+  // code to move each square in a circular motion
+  // connectedToActive.forEach(sub => {
+  //   const distToActive = sub.distanceTo(activeSpr);
+  //   // rotation speed is based on distance to active sprite
+  //   const baseForce = 500;
+  //   const adjustedForce = baseForce / (distToActive + 1);
+
+  //   // set angle
+  //   sub.bearing = sub.angleTo(activeSpr) + 90;
+  //   // apply force based on total branch mass
+  //   sub.applyForce(sub.totalBranchMass * adjustedForce);
+  //   sub.text = `${sub.totalBranchMass.toFixed(1)}/${sub.speed.toFixed(2)}`;
+
+  //   // visualisation
+  //   const visvec = createVector(0, sub.totalBranchMass * adjustedForce);
+  //   visvec.setHeading(sub.bearing);
+  //   push();
+  //   strokeWeight(3);
+  //   stroke(255, 0, 255);
+  //   line(sub.canvasPos.x, sub.canvasPos.y, sub.canvasPos.x+visvec.x*5, sub.canvasPos.y+visvec.y*5);
+  //   pop();
+  // });
