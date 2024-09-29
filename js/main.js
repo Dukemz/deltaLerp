@@ -97,8 +97,6 @@ async function setup() {
 
     // initial setup complete - create menu
     menu = new Menu();
-    // HOVER TEST
-    window.sprite = new Sprite();
     // game = new Game();
 
     manager.setupDone = true;
@@ -141,38 +139,18 @@ function draw() {
   if(!manager.ingame) {
     if(menu) {
       menu.draw();
-
-      // HOVER TEST
-      // test code to figure out what this bug is (hi quinton)
-      window.sprite.color = 'yellow';
-
-      if (mouse.pressing()) window.sprite.color = 'red';
-
-      if (window.sprite.mouse.hovering()) mouse.cursor = 'grab';
-      else mouse.cursor = 'default';
-
-      if (window.sprite.mouse.pressing()) window.sprite.color = 'green';
-
-      if (window.sprite.mouse.dragging()) {
-          window.sprite.moveTowards(
-              mouse.x + window.sprite.mouse.x,
-              mouse.y + window.sprite.mouse.y,
-              1 // full tracking
-          );
-      }
+    } else {
+      game.draw();
     }
-    
-  } else {
-    game.draw();
-  }
 
-  // step world
-  world.calcTimeStep = (1/(frameRate() || 60)) * world.timeScale;
-  if(world.timeScale) world.step(
-    world.calcTimeStep,
-    world.velocityIterations,
-    world.positionIterations
-  );
+    // step world
+    world.calcTimeStep = (1/(frameRate() || 60)) * world.timeScale;
+    if(world.timeScale) world.step(
+      world.calcTimeStep,
+      world.velocityIterations,
+      world.positionIterations
+    );
+  }
 }
 // after this the draw functions of sprites are called
 // by default sprites are drawn in the order they were created in
