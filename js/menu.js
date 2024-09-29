@@ -6,6 +6,8 @@ class Menu {
   constructor() {
     console.log("[MENU]");
 
+    this.active = true;
+
     this.bgcol = new ColLerpController(color("#000000"), color("#242838"), 0, 0, 0.9);
 
     this.menuSprites = new Group();
@@ -58,6 +60,7 @@ class Menu {
   }
 
   exit() {
+    this.active = false;
     this.menuSprites.remove();
   }
 }

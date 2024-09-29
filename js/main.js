@@ -136,21 +136,19 @@ function draw() {
     }
   }
 
-  if(!manager.ingame) {
-    if(menu) {
-      menu.draw();
-    } else {
-      game.draw();
-    }
-
-    // step world
-    world.calcTimeStep = (1/(frameRate() || 60)) * world.timeScale;
-    if(world.timeScale) world.step(
-      world.calcTimeStep,
-      world.velocityIterations,
-      world.positionIterations
-    );
+  if(manager.ingame) {
+    game.draw();
+  } else if(menu?.active) {
+    menu.draw();
   }
+
+  // step world
+  world.calcTimeStep = (1/(frameRate() || 60)) * world.timeScale;
+  if(world.timeScale) world.step(
+    world.calcTimeStep,
+    world.velocityIterations,
+    world.positionIterations
+  );
 }
 // after this the draw functions of sprites are called
 // by default sprites are drawn in the order they were created in
