@@ -97,6 +97,8 @@ async function setup() {
 
     // initial setup complete - create menu
     menu = new Menu();
+    // HOVER TEST
+    window.sprite = new Sprite();
     // game = new Game();
 
     manager.setupDone = true;
@@ -110,6 +112,8 @@ async function setup() {
       document.getElementById("loadtext").innerHTML = "oops... an error occurred but the crash handler failed to run. check the console for more information!";
     }
   }
+
+  // end setup code
 }
 
 function draw() {
@@ -137,7 +141,27 @@ function draw() {
   if(!manager.ingame) {
     if(menu) {
       menu.draw();
+
+      // HOVER TEST
+      // test code to figure out what this bug is (hi quinton)
+      window.sprite.color = 'yellow';
+
+      if (mouse.pressing()) window.sprite.color = 'red';
+
+      if (window.sprite.mouse.hovering()) mouse.cursor = 'grab';
+      else mouse.cursor = 'default';
+
+      if (window.sprite.mouse.pressing()) window.sprite.color = 'green';
+
+      if (window.sprite.mouse.dragging()) {
+          window.sprite.moveTowards(
+              mouse.x + window.sprite.mouse.x,
+              mouse.y + window.sprite.mouse.y,
+              1 // full tracking
+          );
+      }
     }
+    
   } else {
     game.draw();
   }
