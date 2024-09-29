@@ -273,12 +273,6 @@ branchStructure = {
   ]
 }
 
-function deltaLerp(a, b, f) { // lerp with deltatime
-  // f is the factor between 0 and 1 deciding how quickly it catches up
-  // e.g. if f = 0.25, it will cover 75% the remaining distance every second
-  return lerp(a, b, 1 - pow(f, avgDeltaTime));
-}
-
 function windowResized() {
   canvas.resize(windowWidth - 100, windowHeight - 100);
   background(color("#242838"));

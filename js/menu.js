@@ -4,10 +4,11 @@ class Menu {
   constructor() {
     console.log("[MENU]");
 
+    this.bgcol = color("#242838");
   }
 
   draw() {
-    background(0)
+    background(this.bgcol);
     
     push();
     noStroke();

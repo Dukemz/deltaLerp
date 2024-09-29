@@ -1,7 +1,8 @@
 "use strict";
 
 class GameHUD {
-  constructor() {
+  constructor(data) {
+    Object.assign(this, data);
     this.tophudoffset = 0;
   }
 
@@ -26,14 +27,14 @@ class GameHUD {
     text(`deltaTime = ${deltaTime.toFixed(0)}, avg ${Math.round(manager.avgDeltaTime*1000)}`, 10, height-10);
     // bottom right HUD
     textAlign(RIGHT, BOTTOM);
-    // text(`seek: ${game.funnysound.seek().toFixed(3)}`, width-10, height-70);
+    // text(`seek: ${this.game.funnysound.seek().toFixed(3)}`, width-10, height-70);
     text(`speed: ${player.speed.toFixed(3)}`, width-10, height-40);
     text(`total sprites: ${allSprites.length}`, width-10, height-10);
 
-    if(game.paused) {
+    if(this.game.paused) {
       textAlign(CENTER, CENTER);
       text("[Paused - press P to unpause]", canvas.hw, canvas.hh);
-    } else if(!game.players[0]) {
+    } else if(!this.game.players[0]) {
       textAlign(CENTER, CENTER);
       text("lol you died", canvas.hw, canvas.hh);
     }

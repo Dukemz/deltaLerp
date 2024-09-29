@@ -27,7 +27,7 @@ class Game { // game class
     this.timeScale = 1;
 
     // heads-up display, info like framerate and things
-    this.hud = new GameHUD();
+    this.hud = new GameHUD({ game: this });
 
     // GROUP STRUCTURE //
     // - players
