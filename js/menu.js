@@ -7,11 +7,12 @@ class Menu {
     console.log("[MENU]");
 
     this.active = true;
+    this.mainMenuOpen = false;
 
     this.bgcol = new ColLerpController(color("#000000"), color("#242838"), 0, 0, 0.9);
 
     this.menuSprites = new Group();
-    this.menuSprites.autoDraw = false;
+    // this.menuSprites.autoDraw = false;
     
     // START BUTTON
     this.startButton = new this.menuSprites.Sprite(0, 0, 100, 100, 's');
@@ -20,7 +21,7 @@ class Menu {
 
     this.sbStroke = new ColLerpController(color("#242838"), color("#4265fc"), 0, 0, 0.999);
     this.sbRotate = new LerpController(0, 0, 0.999);
-    this.sbScale = new LerpController(1, 1, 0.999);
+    this.sbScale = new LerpController(0, 1, 0.999);
   }
 
   draw() {
@@ -28,35 +29,73 @@ class Menu {
     camera.on();
     background(this.bgcol.updateCol());
 
-    // DRAW MENU OBJECTS
-    this.startButton.draw();
+    if(this.mainMenuOpen) {
+      // MAIN MENU DRAW CODE //
 
-    // START BUTTON UPDATE
-    
-    if(this.startButton.mouse.hovering()) { // on hover tilt and scale up the button
-      this.sbScale.targetValue = 1.5;
-      this.sbStroke.targetValue = 1;
-    } else {
-      this.sbScale.targetValue = 1;
-      this.sbStroke.targetValue = 0;
+      if(this.startButton) {
+        const buttoninac = (this.sbScale.targetValue-this.sbScale.currentValue).toFixed(3);
+        if(buttoninac == "0.000") {
+          this.startButton.remove();
+          this.startButton = null;
+
+          // temporary code to start the game
+          this.exit();
+          game = new Game();
+        }
+      }
+
+    } else { // START BUTTON INPUT READING
+      if(this.startButton.mouse.hovering()) {
+        // if hovering
+        this.sbStroke.targetValue = 1;
+        if(this.startButton.mouse.pressing()) {
+          // if pressing make it smaller to give a button effect sorta
+          this.sbScale.targetValue = 1.3;
+        } else {
+          this.sbScale.targetValue = 1.5;
+        }
+      } else { // not hovering
+        this.sbScale.targetValue = 1;
+        this.sbStroke.targetValue = 0;
+      }
+  
+      // tilt on hovering/unhovering
+      if(this.startButton.mouse.hovers() || this.startButton.mouse.hovered()) {
+        this.sbRotate.targetValue += 45;
+      }
+
+      // open menu
+      if(this.startButton.mouse.pressed()) {
+        this.sbRotate.targetValue = 0;
+        // set scale to larger out of width or height
+        this.sbScale.targetValue = (Math.max(canvas.h+10, canvas.w+10) / 100);
+        this.sbStroke.targetValue = 1;
+
+        this.openMainMenu();
+      }
     }
 
-    if(this.startButton.mouse.hovers() || this.startButton.mouse.hovered()) {
-      this.sbRotate.targetValue += 45;
+    // update startbutton properties if it still exists 
+    if(this.startButton && !this.startButton.removed) {
+      this.startButton.rotation = this.sbRotate.update();
+      const scale = this.sbScale.update(); // update scale
+      this.startButton.scale = { x: scale, y: scale };
+      this.startButton.stroke = this.sbStroke.updateCol();
     }
 
-    this.startButton.rotation = this.sbRotate.update();
-    const sbsc = this.sbScale.update(); // update scale
-    this.startButton.scale = { x: sbsc, y: sbsc };
-    this.startButton.stroke = this.sbStroke.updateCol();
-
+    // camera.off();
     // push();
     // noStroke();
     // fill(255);
     // textSize(20);
     // textAlign(CENTER, CENTER);
-    // text("Title", canvas.hw, canvas.hh);
+    // text(`${(this.sbScale.targetValue-this.sbScale.currentValue).toFixed(3)}`, canvas.hw, canvas.hh);
     // pop();
+  }
+
+  openMainMenu() {
+    this.mainMenuOpen = true;
+    this.bgcol.targetValue = 1;
   }
 
   exit() {
