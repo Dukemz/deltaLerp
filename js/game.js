@@ -14,7 +14,7 @@ class Game { // game class
     this.bgOpacityLerp = new LerpController(128, 128, 0.999);
 
     // camera config
-    this.cameraLerp = new LerpController(0, 0, 0.5);
+    this.cameraSpeedLerp = new LerpController(0, 0, 0.5);
     this.camPos = { x: 0, y: 0 };
     // width of the visible area
     this.visibleWidth = 1400;
@@ -167,17 +167,17 @@ class Game { // game class
 
       // calculation for camera movement
       // this is about as accurate as i can make it lol
-      this.camPos.x += this.cameraLerp.currentValue * deltaTime * world.timeScale;
+      this.camPos.x += this.cameraSpeedLerp.currentValue * deltaTime * world.timeScale;
       // note to self: make some kinda lerpy class to do things that require this
-      // if(this.cameraSpeed !== this.cameraLerp.targetValue) {
-      //   this.cameraSpeed = deltaLerp(this.cameraSpeed, this.cameraLerp.targetValue, this.cameraLerpAmount);
+      // if(this.cameraSpeed !== this.cameraSpeedLerp.targetValue) {
+      //   this.cameraSpeed = deltaLerp(this.cameraSpeed, this.cameraSpeedLerp.targetValue, this.cameraSpeedLerpAmount);
       // }
 
-      this.cameraLerp.update();
+      this.cameraSpeedLerp.update();
       this.bgOpacityLerp.update();
     }
 
-    if(!this.players.length) this.cameraLerp.targetValue = 0;
+    if(!this.players.length) this.cameraSpeedLerp.targetValue = 0;
 
     // draw sprites
     camera.on();
@@ -218,17 +218,17 @@ class Game { // game class
 
     // cam scroll test
     if(kb.presses("m") || contro.presses("rt")) {
-      if(this.cameraLerp.targetValue === 0) {
-        this.cameraLerp.targetValue = 0.1
+      if(this.cameraSpeedLerp.targetValue === 0) {
+        this.cameraSpeedLerp.targetValue = 0.1
       } else {
-        this.cameraLerp.targetValue = 0;
+        this.cameraSpeedLerp.targetValue = 0;
       }
     }
     if(kb.presses("b") || contro.presses("lt")) {
-      if(this.cameraLerp.targetValue === 0) {
-        this.cameraLerp.targetValue = -0.1
+      if(this.cameraSpeedLerp.targetValue === 0) {
+        this.cameraSpeedLerp.targetValue = -0.1
       } else {
-        this.cameraLerp.targetValue = 0;
+        this.cameraSpeedLerp.targetValue = 0;
       }
     }
   }

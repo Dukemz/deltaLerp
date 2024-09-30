@@ -107,17 +107,17 @@ class Player extends Sprite {
     this.vel = this.input.getMoveVel(this.maxSpeed, this.vel);
 
     // push player if they go offscreen
-    if(this.x < camera.x - (game.visibleWidth/2)) {
-      // this.vel.x += this.maxSpeed + game.cameraSpeed * 50;
-      this.x += this.maxSpeed * 2 + game.cameraSpeed * 2;
+    if(this.x < camera.x - (this.game.visibleWidth/2)) {
+      // this.vel.x += this.maxSpeed + this.game.cameraSpeedLerp.currentValue * 50;
+      this.x += this.maxSpeed * 2 + this.game.cameraSpeedLerp.currentValue * 2;
     }
-    if(this.x > camera.x + (game.visibleWidth/2)) {
-      // this.vel.x -= this.maxSpeed - game.cameraSpeed * 50;
-      this.x -= this.maxSpeed * 2 - game.cameraSpeed * 2;
+    if(this.x > camera.x + (this.game.visibleWidth/2)) {
+      // this.vel.x -= this.maxSpeed - this.game.cameraSpeedLerp.currentValue * 50;
+      this.x -= this.maxSpeed * 2 - this.game.cameraSpeedLerp.currentValue * 2;
     }
 
     // kill player if they go too far lmao
-    if(this.x < camera.x - (game.visibleWidth/2) - 200 || this.x > camera.x + (game.visibleWidth/2) + 10) this.remove();
+    if(this.x < camera.x - (this.game.visibleWidth/2) - 200 || this.x > camera.x + (this.game.visibleWidth/2) + 10) this.remove();
 
     // cycle weapon
     if(this.input.cycleWeapon()) this.activeWeapon = (this.activeWeapon + 1) % this.weapons.length;
