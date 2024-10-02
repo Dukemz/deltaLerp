@@ -15,7 +15,9 @@ class Menu {
     // this.menuSprites.autoDraw = false;
     
     // START BUTTON
-    this.startButton = new this.menuSprites.Sprite(0, 0, 100, 100, 's');
+    this.startButton = new this.menuSprites.Sprite(0, 0, 100, 100, 'n');
+    // since the start button has no colliders, adding default sensor is required for mouse detection
+    this.startButton.addDefaultSensors();
     this.startButton.strokeWeight = 5;
     this.startButton.fill = color(0,0,0,0);
 
@@ -32,7 +34,7 @@ class Menu {
     if(this.mainMenuOpen) {
       // MAIN MENU DRAW CODE //
 
-      if(this.startButton) {
+      if(this.startButton) { // remove the initial start button
         const buttoninac = (this.sbScale.targetValue-this.sbScale.currentValue).toFixed(3);
         if(buttoninac == "0.000") {
           this.startButton.remove();

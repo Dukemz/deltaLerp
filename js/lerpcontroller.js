@@ -14,6 +14,10 @@ class LerpController { // class for values that need deltalerping
     }
     return this.currentValue;
   }
+
+  instantSet(value) {
+    this.targetValue = this.currentValue = value;
+  }
 }
 
 

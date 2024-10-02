@@ -5,16 +5,18 @@ const version = "pre-alpha";
 
 let scriptList = [
   'js/gamemanager.js',
+  'js/audiomgr.js',
   'js/lerpcontroller.js',
   'js/gamehud.js',
   'js/arcindicator.js',
-  'js/machinegun.js',
   'js/kbinput.js',
   'js/controllerinput.js',
   'js/player.js',
   'js/game.js',
   'js/menu.js',
   'js/enemy.js',
+
+  'js/machinegun.js',
   'js/basicsplitter.js',
   'js/homingtriangle.js'
 ];
@@ -63,52 +65,59 @@ async function setup() {
   try {
     await loadScripts(scriptList);
     console.log("All scripts loaded!");
-    
-    console.log("Creating manager instance...");
+
     window.manager = new GameManager();
-  } catch {
-    document.getElementById("loadtext").innerHTML = "oops... something went wrong loading one of the scripts. please check the console for more info!";
-  }
 
-  try {
-    // setup canvas
-    console.log(`Creating canvas - w: ${windowWidth - 50}px, h: ${windowHeight - 50}px`);
-    new Canvas(windowWidth - 50, windowHeight - 50);
-    document.getElementById("canvasContainer").appendChild(canvas);
-    document.getElementById("loadtext").innerHTML = "";
+    try {
+      // setup canvas
+      console.log(`Creating canvas - w: ${windowWidth - 50}px, h: ${windowHeight - 50}px`);
+      new Canvas(windowWidth - 50, windowHeight - 50);
+      document.getElementById("canvasContainer").appendChild(canvas);
+      document.getElementById("loadtext").innerHTML = "";
 
-    // window resize listener for q5 workaround
-    if(window.Q5) addEventListener("resize", () => {
-      if(window.manager.crashed) windowResized();
-    });
-
-    // disable world auto step
-    world.autoStep = false;
-
-    // annoying thing to make all sprites in a group run my update func
-    Group.prototype.runUpdate = function() {
-      this.forEach(s => {
-        if(s.runUpdate) s.runUpdate();
+      // window resize listener for q5 workaround
+      if(window.Q5) addEventListener("resize", () => {
+        if(window.manager.crashed) windowResized();
       });
+
+      // disable world auto step
+      world.autoStep = false;
+
+      // annoying thing to make all sprites in a group run my update func
+      Group.prototype.runUpdate = function () {
+        this.forEach(s => {
+          if(s.runUpdate) s.runUpdate();
+        });
+      }
+
+      // just a funny thing to set the font
+      textFont("Trebuchet MS");
+
+      // initial setup complete - create menu
+      menu = new Menu();
+      // game = new Game();
+
+      manager.setupDone = true;
+      loop();
+    } catch(error) {
+      // setup error crash
+      if(window.manager) {
+        manager.crash({ type: "setupError", error });
+      } else { // note to self: if this happens, hide the canvas
+        // document.getElementsByTagName("canvas").forEach(c => c.style.display = "none");
+        for (let c of document.getElementsByTagName("canvas")) {
+          c.style.display = "none";
+        }
+        document.getElementById("loadtext").innerHTML = "oops... an error occurred but the crash handler failed to run. check the console for more information!";
+        console.error(error);
+      }
     }
 
-    // just a funny thing to set the font
-    textFont("Trebuchet MS");
 
-    // initial setup complete - create menu
-    menu = new Menu();
-    // game = new Game();
-
-    manager.setupDone = true;
-    loop();
   } catch(error) {
-    // setup error crash
-    if(window.manager) {
-      manager.crash({ type: "setupError", error });
-    } else { // note to self: if this happens, hide the canvas
-      document.getElementsByTagName("canvas").forEach(c => c.style.display = "none");
-      document.getElementById("loadtext").innerHTML = "oops... an error occurred but the crash handler failed to run. check the console for more information!";
-    }
+    console.warn("Error loading scripts! Displayed below:");
+    console.error(error);
+    document.getElementById("loadtext").innerHTML = "oops... something went wrong loading one of the scripts. please check the console for more info!";
   }
 
   // end setup code
@@ -127,12 +136,12 @@ function draw() {
     manager.lastHidden = performance.now();
   } else {
     // average deltatime, fps calcs
-    manager.avgFPS = manager.fpsList.reduce((a, b) => a + b, 0)/manager.fpsList.length || frameRate();
-    manager.avgDeltaTime = 1/manager.avgFPS;
+    manager.avgFPS = manager.fpsList.reduce((a, b) => a + b, 0) / manager.fpsList.length || frameRate();
+    manager.avgDeltaTime = 1 / manager.avgFPS;
     if(manager.avgFPS < 2) console.warn(`Warning: Average FPS is ${manager.avgFPS.toFixed(3)}!`);
 
     if(window.Q5) {
-      manager.q5avgFPS = manager.q5fpsList.reduce((a, b) => a + b, 0)/manager.q5fpsList.length || getFPS();
+      manager.q5avgFPS = manager.q5fpsList.reduce((a, b) => a + b, 0) / manager.q5fpsList.length || getFPS();
     }
   }
 
@@ -143,7 +152,7 @@ function draw() {
   }
 
   // step world
-  world.calcTimeStep = (1/(frameRate() || 60)) * world.timeScale;
+  world.calcTimeStep = (1 / (frameRate() || 60)) * world.timeScale;
   if(world.timeScale) world.step(
     world.calcTimeStep,
     world.velocityIterations,
@@ -174,7 +183,7 @@ function deltaLerp(a, b, f, ignoreTimeScale) { // hey look, it's the game's name
   if(ignoreTimeScale) tsc = 1;
   // f is the factor between 0 and 1 deciding how quickly it catches up
   // e.g. if f = 0.25, it will cover 25% the remaining distance every second
-  return lerp(a, b, (1 - pow(1-f, deltaTime/1000)) * tsc);
+  return lerp(a, b, (1 - pow(1 - f, deltaTime / 1000)) * tsc);
 }
 
 const titlestyle = "font-size: 27px; color: lightblue; text-shadow: 2px 2px dodgerblue";

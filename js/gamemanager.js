@@ -2,6 +2,7 @@
 
 class GameManager {
   constructor() {
+    console.log("[MANAGER]")
     this.ingame = false;
     this.crashed = false;
     this.errdata = {};
@@ -9,6 +10,9 @@ class GameManager {
     this.fpsList = [];
     this.avgFPS = 0;
     this.avgDeltaTime = 0;
+
+    // audio manager
+    this.audio = new AudioManager();
 
     if(window.Q5) {
       this.q5fpsList = [];
@@ -54,7 +58,7 @@ class GameManager {
     addEventListener("unhandledrejection", (event) => {
       this.crash({ type: "promiseReject", event });
     });
-    console.log("Manager loaded!");
+    console.log("Game manager loaded!");
   }
 
   crash(data) { // data is an object, should contain error

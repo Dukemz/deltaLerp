@@ -37,7 +37,7 @@ class Player extends Sprite {
     // set attributes
     this.rotationLock = true;
     this.scale = {x: 0.5, y: 0.5};
-    this.pos = {x:0, y:0}
+    // this.pos = {x:0, y:0}
     // this keeps being inconsistent for some reason
     this.offset.y = -3.666;
     this.rotation = 90;

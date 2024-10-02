@@ -51,8 +51,8 @@ class Game { // game class
     this.enemies = [];
     this.enemyObjects = new Group();
 
-    // set main player if it doesn't exist
-    window.player ||= new Player({
+    // set main player - this is temporary for now
+    window.player = new Player({
       game: this,
       projectiles: new this.playerProjectiles.Group(),
       layer: 1,
