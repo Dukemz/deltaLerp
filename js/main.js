@@ -31,6 +31,7 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
 
   // create an array to store Promise objects
   const promises = [];
+
   // dynamically load each script
   scriptUrls.forEach(scriptUrl => {
     promises.push(new Promise((resolve, reject) => {
@@ -39,8 +40,18 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
       script.type = "text/javascript";
       script.src = scriptUrl;
       script.async = false; // ensure synchronous loading
-      script.onload = resolve; // resolve the Promise when the script is loaded
-      script.onerror = reject; // reject the Promise if the script fails to load
+
+      // on script load, resolve the promise and remove the script from the DOM
+      // this can be done since scripts stay in memory once loaded
+      script.onload = () => {
+        resolve();
+        scriptContainer.removeChild(script); // remove the script tag
+      };
+
+      // on error, reject the promise
+      script.onerror = reject;
+
+      // append the script to the container
       scriptContainer.appendChild(script);
     }));
   });
@@ -48,6 +59,7 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
   // wait for all Promises to resolve
   await Promise.all(promises);
 }
+
 
 function preload() {
   // this function doesn't do much, but it's called before setup
