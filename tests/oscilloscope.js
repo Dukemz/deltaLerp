@@ -27,18 +27,19 @@ function setup() {
 
   analyserL = audioContext.createAnalyser();
   analyserR = audioContext.createAnalyser();
-
   analyserL.fftSize = bufferLength;
   analyserR.fftSize = bufferLength;
 
-  dataArrayL = new Float32Array(bufferLength);
-  dataArrayR = new Float32Array(bufferLength);
-
-  sourceNode.connect(splitter);
   splitter.connect(analyserL, 0, 0);
   splitter.connect(analyserR, 1, 0);
 
+  // connect to play audio
   sourceNode.connect(audioContext.destination);
+  // connect to analyser
+  sourceNode.connect(splitter);
+
+  dataArrayL = new Float32Array(bufferLength);
+  dataArrayR = new Float32Array(bufferLength);
 
   document.getElementById("loadtext").innerHTML = "";
 
