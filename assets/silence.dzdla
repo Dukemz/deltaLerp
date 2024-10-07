@@ -1,0 +1,12 @@
+// deltaLerp Audio Asset
+// this is an audio file of just silence, for test purposes
+
+new AudioAsset({
+  id: "silence",
+  name: "the sound of silence",
+  ver: "0.0",
+  description: "it's literally just silence",
+  format: "wav",
+  
+  data: "UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"
+});

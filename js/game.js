@@ -117,13 +117,13 @@ class Game { // game class
     // draw opaque bg
     background(this.bgcol);
 
-    // log user activation status for debug
-    console.log(navigator.userActivation);
-
     // TESTING STUFFS //
     this.hexsplit = new BasicSplitter({ game: this, x: 500, y: 200 });
     this.pentasplit = new BasicSplitter({ game: this, x: 500, y: -200, splitterShape: "pentagon", sprites: { fill: 'blue' } });
     this.octasplit = new BasicSplitter({ game: this, x: -500, splitterShape: "octagon", splitterSpikeSize: 70, sprites: { fill: 'purple' } });
+    // play teh music
+    manager.assets.audio["dl.stargazer"].audio.play();
+    manager.assets.audio["dl.stargazer"].audio.loop = true;
 
     // save timestamp on when the thing starts
     // main.js setup will open the menu rather than jumping straight into the game
@@ -277,10 +277,12 @@ class Game { // game class
 
   exit() { // close game, remove all sprites.
     // game cannot be reused after this
-    this.players.removeAll();
-    this.objects.removeAll();
-    this.projectiles.removeAll();
-    this.enemyObjects.removeAll();
+
+    // todo: make sure ALL groups are removed. write func in player/enemy classes to remove all their groups?
+    this.players.remove();
+    this.objects.remove();
+    this.projectiles.remove();
+    this.enemyObjects.remove();
     // this.draw = () => {};
     this.active = false;
     manager.ingame = false;

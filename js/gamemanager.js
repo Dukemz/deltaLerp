@@ -11,7 +11,14 @@ class GameManager {
     this.avgFPS = 0;
     this.avgDeltaTime = 0;
 
-    // audio manager
+    // ASSETS
+    this.assets = {
+      levels: {},
+      audio: {},
+      mods: {} // mods/packs are the same thing
+    }
+
+    // audio manager - replaceable module?
     this.audio = new AudioManager();
 
     if(window.Q5) {
@@ -35,14 +42,6 @@ class GameManager {
     }, 100);
 
     // set error handling
-    // window.onerror = (event, source, lineno, colno, error) => {
-    //   console.log(event)
-    //   this.crash({
-    //     type: "error",
-    //     eventmsg: event,
-    //     source, lineno, colno, error
-    //   });
-    // };
     addEventListener("error", (ev) => {
       const { message, filename, lineno, colno, error } = ev;
       console.log(ev)
@@ -81,9 +80,11 @@ class GameManager {
     let msg = ``;
     // error type
     if(this.errdata.type === "promiseReject") {
-      msg += `Unhandled promise rejection: ${this.errdata.event.reason}`;
+      msg += `An unhandled promise rejection occurred.\n${this.errdata.event.reason}\n`;
     } else if(this.errdata.type === "setupError") {
       msg += `Game setup failed to complete.\n${this.errdata.error.name}: ${this.errdata.error.message}\n`;
+    } else if(this.errdata.type === "drawError") {
+      msg += `Draw/update error on frame ${this.errdata.crashFrame}.\n${this.errdata.error.name}: ${this.errdata.error.message}\n`;
     } else if(this.errdata.type === "error") {
       msg += `An uncaught exception occurred.\n`;
       if(this.errdata.error) {
@@ -144,3 +145,13 @@ class GameManager {
     pop();
   }
 }
+
+// old error handler
+// window.onerror = (event, source, lineno, colno, error) => {
+//   console.log(event)
+//   this.crash({
+//     type: "error",
+//     eventmsg: event,
+//     source, lineno, colno, error
+//   });
+// };

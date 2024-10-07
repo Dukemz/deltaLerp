@@ -105,6 +105,10 @@ async function setup() {
       // just a funny thing to set the font
       textFont("Trebuchet MS");
 
+      // load menu audio
+      // note: to avoid lag, audio assets should be loaded outside of game or menu in an async func with await
+      await loadScripts(["assets/stargazer.dzdla"]);
+
       // initial setup complete - create menu
       menu = new Menu();
       // game = new Game();
@@ -144,32 +148,36 @@ function draw() {
     return console.warn(`Skipping frame ${frameCount} due to game crash.`);
   }
 
-  if(document.hidden) {
-    manager.lastHidden = performance.now();
-  } else {
-    // average deltatime, fps calcs
-    manager.avgFPS = manager.fpsList.reduce((a, b) => a + b, 0) / manager.fpsList.length || frameRate();
-    manager.avgDeltaTime = 1 / manager.avgFPS;
-    if(manager.avgFPS < 2) console.warn(`Warning: Average FPS is ${manager.avgFPS.toFixed(3)}!`);
+  try {
+    if (document.hidden) {
+      manager.lastHidden = performance.now();
+    } else {
+      // average deltatime, fps calcs
+      manager.avgFPS = manager.fpsList.reduce((a, b) => a + b, 0) / manager.fpsList.length || frameRate();
+      manager.avgDeltaTime = 1 / manager.avgFPS;
+      if (manager.avgFPS < 2) console.warn(`Warning: Average FPS is ${manager.avgFPS.toFixed(3)}!`);
 
-    if(window.Q5) {
-      manager.q5avgFPS = manager.q5fpsList.reduce((a, b) => a + b, 0) / manager.q5fpsList.length || getFPS();
+      if (window.Q5) {
+        manager.q5avgFPS = manager.q5fpsList.reduce((a, b) => a + b, 0) / manager.q5fpsList.length || getFPS();
+      }
     }
-  }
 
-  if(manager.ingame) {
-    game.draw();
-  } else if(menu?.active) {
-    menu.draw();
-  }
+    if (manager.ingame) {
+      game.draw();
+    } else if (menu?.active) {
+      menu.draw();
+    }
 
-  // step world
-  world.calcTimeStep = (1 / (frameRate() || 60)) * world.timeScale;
-  if(world.timeScale) world.step(
-    world.calcTimeStep,
-    world.velocityIterations,
-    world.positionIterations
-  );
+    // step world
+    world.calcTimeStep = (1 / (frameRate() || 60)) * world.timeScale;
+    if (world.timeScale) world.step(
+      world.calcTimeStep,
+      world.velocityIterations,
+      world.positionIterations
+    );
+  } catch(error) {
+    manager.crash({ type: "drawError", error });
+  }
 }
 // after this the draw functions of sprites are called
 // by default sprites are drawn in the order they were created in

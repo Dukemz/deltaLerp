@@ -29,7 +29,8 @@ class HomingTriangle extends Enemy {
       });
 
       if(playerList[0]) {
-        this.baseSprite.rotateTowards(playerList[0], 0.01, this.vectorHeading);
+        // note: changing the rotation value slightly produces largely different effects
+        this.baseSprite.rotateTowards(playerList[0], 0.02, this.vectorHeading);
         this.baseSprite.bearing = this.baseSprite.rotation - this.vectorHeading;
         this.baseSprite.applyForce(3);
       }
