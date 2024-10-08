@@ -2,7 +2,7 @@
 
 class GameManager {
   constructor() {
-    console.log("[MANAGER]")
+    console.log("[MANAGER] Initialising...")
     this.ingame = false;
     this.crashed = false;
     this.errdata = {};
@@ -57,7 +57,7 @@ class GameManager {
     addEventListener("unhandledrejection", (event) => {
       this.crash({ type: "promiseReject", event });
     });
-    console.log("Game manager loaded!");
+    console.log("[MANAGER] Loaded successfully!");
   }
 
   crash(data) { // data is an object, should contain error

@@ -37,15 +37,15 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
     promises.push(new Promise((resolve, reject) => {
       // create script element and set its source
       const script = document.createElement('script');
-      script.type = "text/javascript";
       script.src = scriptUrl;
+      script.type = "text/javascript";
       script.async = false; // ensure synchronous loading
 
       // on script load, resolve the promise and remove the script from the DOM
       // this can be done since scripts stay in memory once loaded
       script.onload = () => {
         resolve();
-        scriptContainer.removeChild(script); // remove the script tag
+        // scriptContainer.removeChild(script); // remove the script tag
       };
 
       // on error, reject the promise
@@ -64,25 +64,26 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
 function preload() {
   // this function doesn't do much, but it's called before setup
   // console log helps with debugging 
-  console.log("[PRELOAD]");
   noLoop();
 
   const testimg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAdCAIAAABE/PnQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAG1SURBVEhLzZY/UoNAFMZZx8bO1rEylXcQKi8BHkHkBHEmOGNS2UU8gnAJKziApZUewxK/t99mk3GAhQQcf0M2uw/yvvdnl4kKw9CbjKIoRCCOY2MYlSzLtgL3yxNjHo+z0ycIHJvVvjzOvzEGQVCW5a8Ji3+Ez6QcKoBIQeOETN5k0wMsOBmLbdDIAG3BWI8KfcL/P2tytMGsezBAAH5zDeqrlDJWF+6Dpm4eMIb1B8aqqux2gF6hLmGHJC2NODKA9/p1sV4urlbixfd9uz3gHbdg787GVaI8hcbdhYeL2Azg/fnLS+aSXwetAvArxYlSLm1jbQa0lLfXGDuS6MoAMXJEpBabAUqEtN7Pfez69WfdptHeZBRHf7MN3ipPZgpHX9sExC4lmqlkk2UjPbZpLr9HsIwUFyeI3dkAoe1VwYMO6FRmiDRK5XXPkKMUj/HtD/gri/tVgd2N5+gLdTBO9U5FTpRE9YKXN0zkyRZ6lMiiayVbi5J66cQhgE6KLz2RMBH7Um8tjWjkUij9bDMOARSEvqQyGuoR3jKLFoaUaKeTZt2DYQJ78Cd/vIxhAnZP/jR43g8mcFyLHdrIDAAAAABJRU5ErkJggg==";
   window.oogle = loadImage(testimg);
+
+  console.log("[SETUP] Preload complete.");
 }
 
 async function setup() {
-  console.log("[SETUP]");
+  console.log("[SETUP] Initialising...");
   document.getElementById("loadtext").innerHTML = "loading scripts...";
   try {
     await loadScripts(scriptList);
-    console.log("All scripts loaded!");
+    console.log("[SETUP] All game scripts loaded!");
 
     window.manager = new GameManager();
 
     try {
       // setup canvas
-      console.log(`Creating canvas - w: ${windowWidth - 50}px, h: ${windowHeight - 50}px`);
+      console.log(`[SETUP] Creating canvas - w: ${windowWidth - 50}px, h: ${windowHeight - 50}px`);
       new Canvas(windowWidth - 50, windowHeight - 50);
       document.getElementById("canvasContainer").appendChild(canvas);
       document.getElementById("loadtext").innerHTML = "";

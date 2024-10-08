@@ -4,7 +4,7 @@ let sprite;
 
 class Menu {
   constructor() {
-    console.log("[MENU]");
+    console.log("[MENU] Initialising...");
 
     this.active = true;
     this.mainMenuOpen = false;

@@ -5,7 +5,7 @@ class AudioManager {
   // if i change audio libraries i should be able to replace this whole file
   // without having to change anything else in the code
   constructor(data) {
-    console.log("[AUDIO MANAGER]");
+    console.log("[AUDIO] Creating manager (HTML5/Web Audio API)");
     Object.assign(this, data);
 
     // note: audiocontexts can't start unless the user has interacted with the document
@@ -74,7 +74,7 @@ class AudioAsset { // adapt to audio asset
     this.audioSourceNode.connect(ctx.destination);
     
     // add asset to the asset thing
-    console.log(`Audio asset [${this.id}] loaded!`);
+    console.log(`[AUDIO] Asset [${this.id}] loaded!`);
     manager.assets.audio[this.id] = this;
     return this;
   }

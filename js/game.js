@@ -4,7 +4,7 @@ class Game { // game class
   // in future, create instance for every new stage
   // maybe stage scripts will extend the game class?
   constructor(data) {
-    console.log("[NEW GAME]");
+    console.log("[GAME] Creating new game...");
     Object.assign(this, data);
     this.active = true;
     manager.ingame = true;
@@ -129,7 +129,7 @@ class Game { // game class
     // main.js setup will open the menu rather than jumping straight into the game
     // new Game() will be called when entering a level
     this.startTimestamp = Date.now();
-    console.log("Game initialisation complete!");
+    console.log("[GAME] Game creation complete!");
   }
 
   draw() { // runs at the end of the main draw function
