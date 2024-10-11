@@ -37,15 +37,17 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
     promises.push(new Promise((resolve, reject) => {
       // create script element and set its source
       const script = document.createElement('script');
-      script.src = scriptUrl;
+      // note: github pages probably serves non *.js files as application/octet-stream
+      // this logs a warning in the console but hopefully doesn't do anything else
       script.type = "text/javascript";
+      script.src = scriptUrl;
       script.async = false; // ensure synchronous loading
 
       // on script load, resolve the promise and remove the script from the DOM
       // this can be done since scripts stay in memory once loaded
       script.onload = () => {
         resolve();
-        // scriptContainer.removeChild(script); // remove the script tag
+        scriptContainer.removeChild(script); // remove the script tag
       };
 
       // on error, reject the promise
@@ -98,9 +100,12 @@ async function setup() {
 
       // annoying thing to make all sprites in a group run my update func
       Group.prototype.runUpdate = function () {
-        this.forEach(s => {
+        // this.forEach(s => {
+        //   if(s.runUpdate) s.runUpdate();
+        // });
+        for(let s of this) {
           if(s.runUpdate) s.runUpdate();
-        });
+        }
       }
 
       // just a funny thing to set the font

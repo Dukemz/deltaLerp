@@ -1,7 +1,5 @@
 "use strict";
 
-let sprite;
-
 class Menu {
   constructor() {
     console.log("[MENU] Initialising...");
@@ -9,7 +7,7 @@ class Menu {
     this.active = true;
     this.mainMenuOpen = false;
 
-    this.bgcol = new ColLerpController(color("#000000"), color("#242838"), 0, 0, 0.9);
+    this.bgcol = new ColLerpController(color("#000000"), color("#242838"), 0, 0, 0.99);
 
     this.menuSprites = new Group();
     // this.menuSprites.autoDraw = false;
@@ -26,6 +24,13 @@ class Menu {
     this.sbScale = new LerpController(0, 1, 0.999);
   }
 
+  openMainMenu() { // runs as soon as the start button is clicked
+    this.mainMenuOpen = true;
+    this.bgcol.targetValue = 0.8;
+
+    // asdfgj
+  }
+
   draw() {
     camera.pos = {x:0, y:0};
     camera.on();
@@ -33,6 +38,7 @@ class Menu {
 
     if(this.mainMenuOpen) {
       // MAIN MENU DRAW CODE //
+
 
       if(this.startButton) { // remove the initial start button
         const buttoninac = (this.sbScale.targetValue-this.sbScale.currentValue).toFixed(3);
@@ -85,23 +91,19 @@ class Menu {
       this.startButton.stroke = this.sbStroke.updateCol();
     }
 
-    // camera.off();
+    camera.off();
     // push();
     // noStroke();
     // fill(255);
     // textSize(20);
     // textAlign(CENTER, CENTER);
-    // text(`${(this.sbScale.targetValue-this.sbScale.currentValue).toFixed(3)}`, canvas.hw, canvas.hh);
+    // text(`${(this.bgcol.targetValue-this.bgcol.currentValue).toFixed(3)}`, canvas.hw, canvas.hh);
     // pop();
-  }
-
-  openMainMenu() {
-    this.mainMenuOpen = true;
-    this.bgcol.targetValue = 1;
   }
 
   exit() {
     this.active = false;
     this.menuSprites.remove();
+    console.log(`[MENU] Closed.`);
   }
 }

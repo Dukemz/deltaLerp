@@ -7,7 +7,7 @@ class Version {
 
   // this method should return as a string
   toString() {
-    // OFLV will be appended if game version is offline
+    
   }
   // update the below to work as getter/setter funcs
 

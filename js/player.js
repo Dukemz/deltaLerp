@@ -148,6 +148,7 @@ class Player extends Sprite {
   }
 
   drawSubDetails() {
-    this.arcindics.forEach(a => a.draw());
+    // this.arcindics.forEach(a => a.draw());
+    for(let a of this.arcindics) a.draw();
   }
 }

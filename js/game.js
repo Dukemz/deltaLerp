@@ -186,7 +186,8 @@ class Game { // game class
     this.projectiles.draw();
     this.objects.draw();
     this.players.draw();
-    this.players.forEach(p => p.drawSubDetails());
+    // this.players.forEach(p => p.drawSubDetails());
+    for(let p of this.players) p.drawSubDetails();
 
     // hud is drawn last and with the camera disabled
     camera.off();
@@ -199,7 +200,8 @@ class Game { // game class
 
     if(!this.paused) {
       // update sprites
-      this.enemies.forEach(en => en.update());
+      // this.enemies.forEach(en => en.update());
+      for(let en of this.enemies) en.update();
       this.players.runUpdate();
     }
 
