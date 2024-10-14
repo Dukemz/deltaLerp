@@ -72,8 +72,8 @@ class Game { // game class
 
     // this.levelwalls = new this.walls.Group();
     // wall test - vertex mode
-    // this.wall = new this.walls.Sprite([[100, 100], [200, -100]], 's');
-    // this.wall2 = new this.walls.Sprite([[-100, -100], [-100, 100]], 's');
+    // this.wall = new this.levelwalls.Sprite([[100, 100], [200, -100]], 's');
+    // this.wall2 = new this.levelwalls.Sprite([[-100, -100], [-100, 100]], 's');
 
     // just move the camera to center, why not?
     camera.pos = { x: 0, y: 0 };
@@ -168,10 +168,6 @@ class Game { // game class
       // calculation for camera movement
       // this is about as accurate as i can make it lol
       this.camPos.x += this.cameraSpeedLerp.currentValue * deltaTime * world.timeScale;
-      // note to self: make some kinda lerpy class to do things that require this
-      // if(this.cameraSpeed !== this.cameraSpeedLerp.targetValue) {
-      //   this.cameraSpeed = deltaLerp(this.cameraSpeed, this.cameraSpeedLerp.targetValue, this.cameraSpeedLerpAmount);
-      // }
 
       this.cameraSpeedLerp.update();
       this.bgOpacityLerp.update();

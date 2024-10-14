@@ -1,11 +1,14 @@
 "use strict";
 
 class GameManager {
+  // NOTE - eventually improve this
+  // needs to be able to handle multiple crashes, in the event crash is called more than once
   constructor() {
     console.log("[MANAGER] Initialising...")
     this.ingame = false;
     this.crashed = false;
     this.errdata = {};
+    this.errmsg = "";
 
     this.fpsList = [];
     this.avgFPS = 0;
@@ -69,11 +72,12 @@ class GameManager {
     }
     this.errdata = data || {};
     this.errdata.crashFrame = frameCount;
-    noLoop();
     
     this.setMessage();
     this.crashlog();
     this.crashdraw();
+
+    noLoop();
   }
 
   setMessage() { // set this.errmsg based on data in this instance

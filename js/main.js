@@ -4,8 +4,6 @@ console.log("[HELLO WORLD]");
 const version = "pre-alpha";
 
 let scriptList = [
-  'js/gamemanager.js',
-  'js/audiomgr.js',
   'js/lerpcontroller.js',
   'js/gamehud.js',
   'js/arcindicator.js',
@@ -33,7 +31,7 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
   const promises = [];
 
   // dynamically load each script
-  scriptUrls.forEach(scriptUrl => {
+  for(let scriptUrl of scriptUrls) {
     promises.push(new Promise((resolve, reject) => {
       // create script element and set its source
       const script = document.createElement('script');
@@ -56,7 +54,7 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
       // append the script to the container
       scriptContainer.appendChild(script);
     }));
-  });
+  }
 
   // wait for all Promises to resolve
   await Promise.all(promises);
@@ -77,14 +75,13 @@ function preload() {
 async function setup() {
   console.log("[SETUP] Initialising...");
   document.getElementById("loadtext").innerHTML = "loading scripts...";
-  try {
-    await loadScripts(scriptList);
-    console.log("[SETUP] All game scripts loaded!");
 
+  // there's gonna be a lot of nested try/catches here unfortunately
+  try { // load manager first
+    await loadScripts(['js/gamemanager.js', 'js/audiomgr.js']);
     window.manager = new GameManager();
 
-    try {
-      // setup canvas
+    try { // setup canvas
       console.log(`[SETUP] Creating canvas - w: ${windowWidth - 50}px, h: ${windowHeight - 50}px`);
       new Canvas(windowWidth - 50, windowHeight - 50);
       document.getElementById("canvasContainer").appendChild(canvas);
@@ -97,86 +94,84 @@ async function setup() {
 
       // disable world auto step
       world.autoStep = false;
-
-      // annoying thing to make all sprites in a group run my update func
-      Group.prototype.runUpdate = function () {
-        // this.forEach(s => {
-        //   if(s.runUpdate) s.runUpdate();
-        // });
-        for(let s of this) {
-          if(s.runUpdate) s.runUpdate();
-        }
-      }
-
-      // just a funny thing to set the font
+      // set font (note: this gets messed up if p5play.renderStats is set to true)
       textFont("Trebuchet MS");
 
-      // load menu audio
-      // note: to avoid lag, audio assets should be loaded outside of game or menu in an async func with await
-      await loadScripts(["assets/stargazer.dzdla"]);
+      try { // load game scripts
+        await loadScripts(scriptList);
+        console.log("[SETUP] All game scripts loaded!");
 
-      // initial setup complete - create menu
-      menu = new Menu();
-      // game = new Game();
-
-      manager.setupDone = true;
-      loop();
-    } catch(error) {
-      // setup error crash
-      if(window.manager) {
-        manager.crash({ type: "setupError", error });
-      } else { // note to self: if this happens, hide the canvas
-        // document.getElementsByTagName("canvas").forEach(c => c.style.display = "none");
-        for (let c of document.getElementsByTagName("canvas")) {
-          c.style.display = "none";
+        // annoying thing to make all sprites in a group run my update func
+        Group.prototype.runUpdate = function () {
+          for(let s of this) {
+            if(s.runUpdate) s.runUpdate();
+          }
         }
-        document.getElementById("loadtext").innerHTML = "oops... an error occurred but the crash handler failed to run. check the console for more information!";
-        console.error(error);
+        // load menu audio
+        // note: to avoid lag, audio assets should be loaded outside of game or menu in an async func with await
+        await loadScripts(["assets/stargazer.dzdla"]);
+
+        // initial setup complete - create menu
+        menu = new Menu();
+        // game = new Game();
+
+        console.log("[SETUP] Setup complete!");
+        manager.setupDone = true;
+        loop();
+      } catch(error) {
+        manager.crash({ type: "setupError", error });
+      }
+
+    } catch(error) { // failed to create canvas?
+      document.getElementById("loadtext").innerHTML = "oops... something went wrong during the setup process.<br>check the console for more info!";
+      console.warn("[SETUP] Error during setup! (Canvas-related?) Displayed below:");
+      console.error(error);
+
+      // hide canvases (if there are any)
+      for(let c of document.getElementsByTagName("canvas")) {
+        c.style.display = "none";
       }
     }
 
-
-  } catch(error) {
-    console.warn("Error loading scripts! Displayed below:");
+  } catch(error) { // failed to load manager
+    document.getElementById("loadtext").innerHTML = "oops... something went wrong loading the game manager.<br>check the console for more info!";
+    console.warn("[SETUP] Error creating game manager instance! Displayed below:");
     console.error(error);
-    document.getElementById("loadtext").innerHTML = "oops... something went wrong loading one of the scripts. please check the console for more info!";
   }
-
-  // end setup code
 }
 
 function draw() {
   if(!window.manager) {
-    return console.log(`Waiting for manager to load...`);
+    return console.log(`[DRAW] Skipping frame ${frameCount}, manager is not loaded yet.`);
   } else if(!manager.setupDone) {
-    return console.warn(`Skipping frame ${frameCount} as setup is incomplete.`);
+    return console.warn(`[DRAW] Skipping frame ${frameCount} as setup is incomplete.`);
   } else if(manager.crashed) {
-    return console.warn(`Skipping frame ${frameCount} due to game crash.`);
+    return console.warn(`[DRAW] Skipping frame ${frameCount} due to game crash.`);
   }
 
   try {
-    if (document.hidden) {
+    if(document.hidden) {
       manager.lastHidden = performance.now();
     } else {
       // average deltatime, fps calcs
       manager.avgFPS = manager.fpsList.reduce((a, b) => a + b, 0) / manager.fpsList.length || frameRate();
       manager.avgDeltaTime = 1 / manager.avgFPS;
-      if (manager.avgFPS < 2) console.warn(`Warning: Average FPS is ${manager.avgFPS.toFixed(3)}!`);
+      if(manager.avgFPS < 2) console.warn(`Warning: Average FPS is ${manager.avgFPS.toFixed(3)}!`);
 
-      if (window.Q5) {
+      if(window.Q5) {
         manager.q5avgFPS = manager.q5fpsList.reduce((a, b) => a + b, 0) / manager.q5fpsList.length || getFPS();
       }
     }
 
-    if (manager.ingame) {
+    if(manager.ingame) {
       game.draw();
-    } else if (menu?.active) {
+    } else if(menu?.active) {
       menu.draw();
     }
 
     // step world
     world.calcTimeStep = (1 / (frameRate() || 60)) * world.timeScale;
-    if (world.timeScale) world.step(
+    if(world.timeScale) world.step(
       world.calcTimeStep,
       world.velocityIterations,
       world.positionIterations
@@ -196,7 +191,7 @@ function windowResized() {
   canvas.resize(windowWidth - 50, windowHeight - 50);
 
   if(manager.crashed) {
-    console.log("Redrawing crash handler data.");
+    console.log("Window resized - redrawing crash handler data.");
     manager.crashdraw();
   } else if(game) { // run game window resize func
     console.log(`Canvas resized: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]`);

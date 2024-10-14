@@ -2,6 +2,9 @@
 
 class Menu {
   constructor() {
+    // NOTE - move basically all the time-based stuff out of here into an async init function
+    // and also put the loading of the menu music in there before everything else
+    // this way lag is avoided since the menu can wait until the music is loaded
     console.log("[MENU] Initialising...");
 
     this.active = true;
