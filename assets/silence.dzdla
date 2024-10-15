@@ -1,11 +1,20 @@
 // deltaLerp Audio Asset
-// this is an audio file of just silence, for test purposes
+// this is an audio file of just silence
+// you can use this as a template for making your own asset files
 
 new AudioAsset({
-  id: "silence",
+  // .dzdla version
+  formatver: "0.0.1",
+  // asset ID, used in code. must be unique and shouldn't change
+  // best format is [author.name] or similar
+  id: "dl.silence",
+  // display name - the user will see this
   name: "the sound of silence",
-  ver: "0.0",
-  description: "it's literally just silence",
+  // description, unsurprisingly
+  description: "it's literally just silence. not to be confused with the popular song",
+  // asset version - use for revisions of the asset if you're updating it
+  ver: "1.0",
+  // audio data format - only ogg, wav and mp3 are widely supported
   format: "wav",
   
   data: "UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"
