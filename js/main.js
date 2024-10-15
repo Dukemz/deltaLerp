@@ -109,15 +109,16 @@ async function setup() {
         }
         // load menu audio
         // note: to avoid lag, audio assets should be loaded outside of game or menu in an async func with await
-        await loadScripts(["assets/stargazer.dzdla"]);
+        // await loadScripts(["assets/stargazer.dzdla"]);
 
         // initial setup complete - create menu
         menu = new Menu();
-        // game = new Game();
+        await menu.init();
 
         console.log("[SETUP] Setup complete!");
         manager.setupDone = true;
         loop();
+        
       } catch(error) {
         manager.crash({ type: "setupError", error });
       }
@@ -191,10 +192,10 @@ function windowResized() {
   canvas.resize(windowWidth - 50, windowHeight - 50);
 
   if(manager.crashed) {
-    console.log("Window resized - redrawing crash handler data.");
+    console.log("[WINDOW] Resized - redrawing crash handler data.");
     manager.crashdraw();
   } else if(game) { // run game window resize func
-    console.log(`Canvas resized: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]`);
+    console.log(`[WINDOW] Resized: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]`);
     game.windowResized(oldWidth, oldHeight, oldZoom);
   }
 }

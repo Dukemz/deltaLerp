@@ -84,12 +84,6 @@ class Game { // game class
     this.projectiles.autoDraw = false;
     this.enemyObjects.autoDraw = false;
 
-    const setZoom = canvas.w / this.visibleWidth;
-    // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
-    camera.zoom = setZoom;
-    // calculate bounds
-    // const camBounds = this.calculateBounds(canvas.w, canvas.h, setZoom);
-
     // top and bottom boundary walls
     this.boundaries = new this.walls.Group();
     this.boundaries.autoDraw = false;
@@ -121,9 +115,12 @@ class Game { // game class
     this.hexsplit = new BasicSplitter({ game: this, x: 500, y: 200 });
     this.pentasplit = new BasicSplitter({ game: this, x: 500, y: -200, splitterShape: "pentagon", sprites: { fill: 'blue' } });
     this.octasplit = new BasicSplitter({ game: this, x: -500, splitterShape: "octagon", splitterSpikeSize: 70, sprites: { fill: 'purple' } });
-    // play teh music
-    manager.assets.audio["dl.stargazer"].audio.play();
-    manager.assets.audio["dl.stargazer"].audio.loop = true;
+
+    const setZoom = canvas.w / this.visibleWidth;
+    // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
+    camera.zoom = setZoom;
+    // calculate bounds
+    // const camBounds = this.calculateBounds(canvas.w, canvas.h, setZoom);
 
     // save timestamp on when the thing starts
     // main.js setup will open the menu rather than jumping straight into the game
@@ -242,7 +239,7 @@ class Game { // game class
     const setZoom = canvas.w / this.visibleWidth;
     // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);
     camera.zoom = setZoom;
-    console.log(`Changed zoom: [${oldZoom.toFixed(3)}] => [${setZoom.toFixed(3)}]`);
+    console.log(`[GAME] Changed zoom: [${oldZoom.toFixed(3)}] => [${setZoom.toFixed(3)}]`);
     
     // set the bg colour again to avoid that weird messy effect
     background(this.bgcol);

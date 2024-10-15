@@ -89,6 +89,6 @@ class AudioAsset { // adapt to audio asset
     this.audio.remove();
     this.audio.src = null;
     delete manager.assets.audio[this.id];
-    console.log(`Audio asset [${this.id}] deleted!`);
+    console.log(`[AUDIO] Asset [${this.id}] deleted.`);
   }
 }
