@@ -16,6 +16,8 @@ Be aware that the latest build is considered bleeding-edge and will likely be un
 
 A live server shouldn't be necessary to run the game - just opening the downloaded html file in your browser should work.
 
+View the controls [here](https://github.com/Dukemz/deltaLerp/blob/main/CONTROLS.md). The game supports most standard gamepads/controllers through use of the Gamepad API.
+
 ### Recommendations
 
 Chromium-based browsers (this includes Edge and Opera) generally have the best canvas performance. However, due to CORS limitations with local files, error messages may be vague. The best way to solve this is to use Firefox, which usually provides more comprehensive error information.
