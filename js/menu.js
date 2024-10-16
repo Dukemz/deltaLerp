@@ -56,6 +56,7 @@ class Menu {
 
     if(camera.x !== 0 || camera.y !== 0) camera.pos = {x:0, y:0};
     camera.on();
+    // change bg colour
     background(this.bgcol.updateCol());
 
     if(this.mainMenuOpen) {
