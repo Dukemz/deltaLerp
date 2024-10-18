@@ -16,7 +16,7 @@ Be aware that the latest build is considered bleeding-edge and will likely be un
 
 A live server shouldn't be necessary to run the game - just opening the downloaded html file in your browser should work.
 
-View the controls [here](https://github.com/Dukemz/deltaLerp/blob/main/CONTROLS.md). The game supports most standard gamepads/controllers through use of the Gamepad API.
+View the controls [here](https://github.com/Dukemz/deltaLerp/blob/main/CONTROLS.md). The game supports most standard gamepads/controllers through use of the Gamepad API, but I've only properly tested DualShock 4 and DualSense controllers.
 
 ### Recommendations
 

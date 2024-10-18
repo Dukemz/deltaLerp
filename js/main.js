@@ -145,9 +145,11 @@ function draw() {
   if(!window.manager) {
     return console.log(`[DRAW] Skipping frame ${frameCount}, manager is not loaded yet.`);
   } else if(!manager.setupDone) {
-    return console.warn(`[DRAW] Skipping frame ${frameCount} as setup is incomplete.`);
+    noLoop();
+    return console.warn(`[DRAW] Skipping frame ${frameCount} and stopping draw loop as setup is incomplete.`);
   } else if(manager.crashed) {
-    return console.warn(`[DRAW] Skipping frame ${frameCount} due to game crash.`);
+    noLoop();
+    return console.warn(`[DRAW] Skipping frame ${frameCount} and stopping draw loop due to game crash.`);
   }
 
   try {
