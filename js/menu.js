@@ -16,6 +16,36 @@ class Menu {
 
     // menu buttons, not including the start button
     this.menuButtons = new this.menuSprites.Group();
+
+    // this is admittedly a bit confusing, but it's the best way to do it. i think
+    this.MenuNode = class extends this.menuSprites.Sprite {
+      constructor(spriteConstructArgs, data) {
+        super(...spriteConstructArgs);
+
+        Object.assign(this, data);
+
+        this.addDefaultSensors();
+
+        // controls scale
+        this.scaleLerp ||= new LerpController(1, 1, 0.9999);
+      }
+
+      draw() {
+        // default draw func
+        this._display();
+
+        if(this.mouse.hovering()) {
+          this.scaleLerp.targetValue = 1.3;
+        } else {
+          this.scaleLerp.targetValue = 1;
+        }
+
+        const sc = this.scaleLerp.update();
+        this.scale = { x: sc, y: sc }; 
+        
+        // draw shape that goes on top
+      }
+    }
   }
 
   async init() {
@@ -36,6 +66,19 @@ class Menu {
     this.sbStroke = new ColLerpController(color("#242838"), color("#4265fc"), 0, 0, 0.999);
     this.sbRotate = new LerpController(0, 0, 0.9999);
     this.sbScale = new LerpController(0, 1, 0.9999);
+
+    // this.menuLogoCentre = new this.menuSprites.Sprite(0, 0, 100, 100, 'n');
+    // this.menuLogoCentre.rotation = 45;
+    // this.menuLogoCentre.fill = color("#1b1c56");
+    // this.menuLogoCentre.stroke = color("#3f48cc");
+    // this.menuLogoCentre.visible = false;
+
+    this.menuLogoCentre = new this.MenuNode([0, 0, 100, 100, 'n'], {
+      rotation: 45,
+      fill: color("#1b1c56"),
+      stroke: color("#3f48cc"),
+      visible: false
+    });
 
     this.active = true;
     console.log(`[MENU] Initialisation complete!`);
@@ -63,7 +106,7 @@ class Menu {
       // MAIN MENU DRAW CODE //
 
 
-      if(this.startButton) { // remove the initial start button
+      if(this.startButton) { // remove the initial start button if it exists
         const buttoninac = (this.sbScale.targetValue-this.sbScale.currentValue).toFixed(2);
         if(buttoninac == "0.00") {
           this.startButton.remove();
@@ -72,17 +115,18 @@ class Menu {
           this.sbScale = null;
           this.sbStroke = null;
 
-          // open the menu
+          // open the menu - this.mainMenuOpen returns true even if menu buttons and such don't exist yet
           this.openMainMenu();
         }
       }
+
       // temp code to start game if s key is pressed
       if(kb.presses("s")) {
         this.exit();
         game = new Game();
       }
 
-    } else { // START BUTTON INPUT
+    } else { // main menu NOT open - start button draw code
       if(this.startButton.mouse.hovering()) {
         // if hovering
         this.sbStroke.targetValue = 1;
@@ -102,7 +146,7 @@ class Menu {
         this.sbRotate.targetValue += 45;
       }
 
-      // as soon as the start button is clicked
+      // after the start button is clicked
       if(this.startButton.mouse.pressed()) {
         this.sbRotate.targetValue = 0;
         // set scale to larger out of width or height
@@ -113,12 +157,6 @@ class Menu {
         this.mainMenuOpen = true;
         this.bgcol.targetValue = 0.8;
 
-        // create the menu buttons and allat
-        this.menuLogoCentre = new this.menuSprites.Sprite(0, 0, 100, 100, 'n');
-        this.menuLogoCentre.rotation = 45;
-        this.menuLogoCentre.fill = color("#1b1c56");
-        this.menuLogoCentre.stroke = color("#3f48cc");
-        this.menuLogoCentre.visible = false;
       }
     }
 
