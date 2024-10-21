@@ -12,7 +12,7 @@ class HomingTriangle extends Enemy {
   postCreate() { // function called after create is run
     // todo: colour lerping (maybe make that a class too)
     this.inactiveColour = this.baseSprite.fill;
-    this.baseSprite.drag = 1;
+    this.baseSprite.drag = 0.6;
   }
 
   update() {
@@ -24,9 +24,20 @@ class HomingTriangle extends Enemy {
       // list of players ordered by distance
       // in future for optimisation, don't create and sort this list every frame, it's not very performant
       // instead pick the closest player on creation and just follow them constantly, or pick the closest player every x frames
-      const playerList = game.players.toSorted((a, b) => {
+      const playerList = this.game.players.toSorted((a, b) => {
         return a.distanceTo(this.baseSprite) - b.distanceTo(this.baseSprite);
       });
+
+      // repel from every other homing triangle
+      for(let e of this.game.enemies) {
+        if(e.enemyType === "HomingTriangle" && e.activeHoming && this.baseSprite.distanceTo(e.baseSprite) < 100) {
+          // let repelForce = 1/(this.baseSprite.distanceTo(e.baseSprite))**2;
+          // if(!isFinite(repelForce)) repelForce = 10;
+          // this.baseSprite.text = repelForce.toFixed(3);
+          // this.baseSprite.textFill = "white"
+          this.baseSprite.repelFrom(e.baseSprite, 2);
+        }
+      }
 
       if(playerList[0]) {
         // note: changing the rotation value slightly produces largely different effects
