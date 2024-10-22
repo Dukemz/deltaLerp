@@ -12,7 +12,8 @@ class HomingTriangle extends Enemy {
   postCreate() { // function called after create is run
     // todo: colour lerping (maybe make that a class too)
     this.inactiveColour = this.baseSprite.fill;
-    this.baseSprite.drag = 0.6;
+    this.baseSprite.drag = 0.5;
+    this.baseSprite.rotationDrag = 0.1;
   }
 
   update() {
@@ -30,20 +31,29 @@ class HomingTriangle extends Enemy {
 
       // repel from every other homing triangle
       for(let e of this.game.enemies) {
-        if(e.enemyType === "HomingTriangle" && e.activeHoming && this.baseSprite.distanceTo(e.baseSprite) < 100) {
+        const distanceToEnemy = this.baseSprite.distanceTo(e.baseSprite);
+        if(e.enemyType === "HomingTriangle" && e.activeHoming && distanceToEnemy < 150) {
           // let repelForce = 1/(this.baseSprite.distanceTo(e.baseSprite))**2;
           // if(!isFinite(repelForce)) repelForce = 10;
           // this.baseSprite.text = repelForce.toFixed(3);
           // this.baseSprite.textFill = "white"
-          this.baseSprite.repelFrom(e.baseSprite, 2);
+          this.baseSprite.repelFrom(e.baseSprite, 1);
+          if(distanceToEnemy < 50) this.baseSprite.repelFrom(e.baseSprite, 2);
         }
       }
 
       if(playerList[0]) {
         // note: changing the rotation value slightly produces largely different effects
-        this.baseSprite.rotateTowards(playerList[0], 0.02, this.vectorHeading);
+        this.baseSprite.rotateTowards(playerList[0], 0.05, this.vectorHeading);
         this.baseSprite.bearing = this.baseSprite.rotation - this.vectorHeading;
-        this.baseSprite.applyForce(3);
+        this.baseSprite.applyForce(2.5);
+      }
+
+      if(this.baseSprite.debug) {
+        this.baseSprite.textFill = "white";
+        this.baseSprite.text = Math.round(this.baseSprite.speed);
+      } else {
+        this.baseSprite.text = "";
       }
     }
   }

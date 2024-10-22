@@ -6,6 +6,11 @@ class Enemy {
   // and the projectile's constructor will auto assign it to the projectiles group in game
   // maybe w a projectile manager or something...?
 
+  // also, some enemies could have their own projectile groups
+  // which means when they die all the projectiles they fired disappear
+  // but most enemies should probably not have their own groups
+  // though this means their projectiles remain after their death
+
   constructor(data) {
     Object.assign(this, data);
     this.game ||= game;
@@ -25,6 +30,7 @@ class Enemy {
     
     this.parentGroup ||= this.game.enemyObjects;
     this.sprites = new this.parentGroup.Group();
+    this.subenemies = [];
     // copy sprites info passed from instance construction
     if(data?.sprites) Object.assign(this.sprites, data.sprites);
     
@@ -33,7 +39,7 @@ class Enemy {
   }
 
   create() {
-    this.projectiles = new this.game.enemyProjectiles.Group();
+    // this.projectiles = new this.game.enemyProjectiles.Group();
 
     this.baseConstructor ||= [this.x, this.y];
     // store baseSprite info passed from instance construction
@@ -47,4 +53,54 @@ class Enemy {
     // this.baseSprite.pos = { x: this.x, y: this.y };
     if(typeof this.postCreate === "function") this.postCreate();
   }
+
+  delete() {
+    console.log(`[GAME] deleting enemy type ${this.enemyType} with ${this.subenemies.length} subenemies and ${this.sprites.length} subsprites`);
+
+    // delete all subenemies first in reverse order
+    for(let i = this.subenemies.length - 1; i >= 0; i--) {
+      this.subenemies[i].delete(); // recursive call
+    }
+
+    // remove sprites
+    this.sprites.remove();
+
+    // remove this enemy from the game's enemies list
+    const enemindex = this.game.enemies.indexOf(this);
+    if(enemindex > -1) {
+      this.game.enemies.splice(enemindex, 1);
+    }
+  }
+
+  // OLD DELETE FUNCTION(S). study this in detail to see why it didn't work later
+
+  // delete() {
+  //   console.log(`[GAME] deleting enemy type ${this.enemyType} with ${this.subenemies.length} subenemies and ${this.sprites.length} subsprites`);
+    
+  //   // NOTE: the below commented code recursed and froze the page, somehow. unsure exactly why
+  //   // remove the base sprite from the group to avoid recursion
+  //   // this.sprites.remove(this.baseSprite);
+    
+  //   // for(let subspr of this.sprites) {
+  //   //   if(subspr.enemyInstance) { // delete subsprites with an enemy instance
+  //   //     // subspr.enemyInstance.update = () => {};
+  //   //     // recurse
+  //   //     // console.log(subspr.enemyInstance)
+  //   //     // subspr.enemyInstance.delete();
+  //   //   }
+  //   // }
+  //   // // remove base sprite entirely
+  //   // // this.baseSprite.remove();
+  //   // this.sprites.remove();
+
+  //   for(let subenemy of this.subenemies) {
+  //     // recurse. hoo boy this better not go badly
+  //     subenemy.delete();
+  //   }
+  //   this.sprites.remove();
+    
+  //   const enemindex = this.game.enemies.indexOf(this);
+  //   this.game.enemies.splice(enemindex, 1);
+  //   // this.game.enemies[enemindex].markedForDeletion = true;
+  // }
 }

@@ -60,6 +60,7 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
       });
       // initialise spiky dude
       newSpike.create();
+      this.subenemies.push(newSpike);
 
       // join spike to the base shape
       const spikeJoint = new GlueJoint(this.baseSprite, newSpike.baseSprite);
