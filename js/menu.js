@@ -114,10 +114,10 @@ class Menu {
       rotation: 45,
       icondraw: function(spr) {
         beginShape();
-        vertex(-50, 35); // bottom left
+        vertex(-45, 40); // bottom left
         vertex(0, -70); // top
-        vertex(50, 35); // bottom right
-        vertex(0, -5); // bottom notch
+        vertex(45, 40); // bottom right
+        vertex(0, 5); // bottom notch
         endShape(CLOSE);
       }
     });

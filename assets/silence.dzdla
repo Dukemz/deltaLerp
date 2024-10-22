@@ -5,7 +5,7 @@
 new AudioAsset({
   // .dzdla version
   formatver: "0.0.1",
-  // asset ID, used in code. must be unique and shouldn't change
+  // asset ID, used in code. must be unique and shouldn't change across revisions
   // best format is [author.name] or similar
   id: "dl.silence",
   // display name - the user will see this
@@ -14,7 +14,8 @@ new AudioAsset({
   description: "it's literally just silence. not to be confused with the popular song",
   // asset version - use for revisions of the asset if you're updating it
   ver: "1.0",
-  // audio data format - only ogg, wav and mp3 are widely supported
+  // audio data format - while .wav and .mp3 work, .ogg is usually the best in terms of performance and size
+  // this asset file uses .wav only because it's just silence lol
   format: "wav",
   
   data: "UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"

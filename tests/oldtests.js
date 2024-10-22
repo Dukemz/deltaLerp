@@ -1,3 +1,14 @@
+enemy.delete = () => {
+  for(let subenemy of this.subenemies) {
+    // recursive
+    subenemy.delete();
+  }
+  this.sprites.remove();
+
+  const enemindex = this.game.enemies.indexOf(this);
+  this.game.enemies.splice(enemindex, 1);
+}
+
 function getBranchedSpritesO(spr, ignore) { // recursively gets ALL sprites connected, not including active
   // spr is the sprite you want to get the branched sprites of
   // ignore is the sprite to ignore along the branch line
