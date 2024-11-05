@@ -1,6 +1,17 @@
 "use strict";
 
+/**
+ * deltaLerp player class.
+ * @class Player
+ * @typedef {Player}
+ * @extends {Sprite}
+ */
 class Player extends Sprite {
+  /**
+   * Creates a new Player instance.
+   * @constructor
+   * @param {Object} data - Data passed to the player.
+   */
   constructor(data) {
     super([
       [0, 0], // bottom notch
@@ -87,8 +98,8 @@ class Player extends Sprite {
 
   // ~~ UPDATE FUNCTION ~~ //
   runUpdate() {
-    // blegghhhhh
-    this.framesAlive++;
+    // re-enable this if it's needed
+    // this.framesAlive++;
 
     // counteract gravity if there is any
     if(world.gravity.y) {
