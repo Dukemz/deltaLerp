@@ -2,16 +2,28 @@
 
 class Menu {
   constructor() {
+    this.mainMenuStartedOpening = false;
     this.mainMenuOpen = false;
 
     this.menuSprites = new Group();
     // this.menuSprites.autoDraw = false;
     this.menuSprites.strokeWeight = 5;
+    this.menuSprites.drag = 5;
+    this.menuSprites.rotationLock = true;
 
     // menu buttons, not including the start button
-    this.menuButtons = new this.menuSprites.Group();
+    // this.menuButtons = new this.menuSprites.Group();
 
+    // point to repel from - by default is (0,300), and (-0,-300)
+    this.nodeRepelPointX = 0;
+    this.nodeRepelPointY = 300;
+
+    // menu joints
+    this.menuJoints = [];
+
+    const menuInst = this;
     // this is admittedly a bit confusing, but it's the best way to do it. i think
+    /** Menu node - automatically created as a Sprite from menu.menuSprites. */
     this.MenuNode = class extends this.menuSprites.Sprite {
       constructor(spriteConstructArgs, data) {
         super(...spriteConstructArgs);
@@ -22,9 +34,20 @@ class Menu {
         // sensors must be added manually for mouse hover detection
         this.addDefaultSensors();
 
-        // set fill, stroke and rotation if not specified in data
-        this.fill = data.fill ? data.fill : color("#1b1c56");
-        this.stroke = data.stroke ? data.stroke : color("#3f48cc");
+        // set default values for properties if not specified in data
+        // this needs to be used instead of ??= or ||=
+        // since the sprite may have these already defined 
+        this.visible = data.visible ? data.visible : false;
+        // this.rotation = data.rotation ? data.rotation : 45;
+        if(typeof data.rotation !== 'undefined') {
+          this.rotation = data.rotation;
+        } else {
+          this.rotation = 45;
+        }
+
+        // set fill, stroke and rotation
+        this.fill = data.fill ? data.fill : color("#193095");
+        this.stroke = data.stroke ? data.stroke : color("#4265fc");
 
         // controls scale
         this.scaleLerp ??= new LerpController(1, 1, 0.9999);
@@ -39,6 +62,27 @@ class Menu {
         this.hoverScale ||= 1.1;
         this.pressedScale ||= 0.9;
         this.defaultScale ||= 1;
+
+        // set overlap with group
+        this.overlaps(menuInst.menuSprites);
+
+        this.childrenNodes = [];
+
+        // JOINT CONSTRUCTION
+        if(this.parentNode) { // parent node already specified
+          this.parentNode.childrenNodes.push(this);
+
+          // connect!
+          const joint = new DistanceJoint(this, this.parentNode);
+          // access as a sprite property
+          this.parentJoint = joint;
+          joint.visible = false;
+          // menuInst is the current menu instance
+          menuInst.menuJoints.push(joint);
+        }
+
+        // once joints are connected, set a sliiight random x velocity
+        this.vel.x = random(-0.01, 0.01);
       }
 
       draw() {
@@ -100,8 +144,11 @@ class Menu {
     // menu zoom controller
     this.zoomController = new LerpController(1, 1, 0.9);
     
+
     // START BUTTON
     this.startButton = new this.MenuNode([0, 0, 100, 100, 'n'], {
+      visible: true,
+      rotation: 0,
       fill: color(0,0,0,0),
       rotation: 0,
       hoverScale: 1.5,
@@ -109,10 +156,12 @@ class Menu {
       strokeLerp: new ColLerpController(color("#242838"), color("#4265fc"), 0, 0, 0.999),
     });
     
-    this.menuLogoCentre = new this.MenuNode([0, 0, 180, 180, 'n'], {
-      visible: false,
-      rotation: 45,
-      icondraw: function(spr) {
+    // MENU BUTTONS
+    this.menuLogoCentre = new this.MenuNode([0, 0, 180, 180, 's'], {
+      fill: color("#1b1c56"),
+      stroke: color("#3f48cc"),
+      pressedScale: 0.95,
+      icondraw: (_spr) => {
         beginShape();
         vertex(-45, 40); // bottom left
         vertex(0, -70); // top
@@ -122,18 +171,49 @@ class Menu {
       }
     });
 
+    // main buttons
+    this.playButton = new this.MenuNode([0, 230, 100, 100], {
+      parentNode: this.menuLogoCentre,
+      icondraw: this.temporaryIconFunc,
+      onPressed: () => {
+
+      }
+    });
+    this.settingsButton = new this.MenuNode([0, 230, 100, 100], {
+      parentNode: this.menuLogoCentre,
+      icondraw: this.temporaryIconFunc
+    });
+    this.helpButton = new this.MenuNode([0, 230, 100, 100], {
+      parentNode: this.menuLogoCentre,
+      icondraw: this.temporaryIconFunc
+    });
+    this.creditsButton = new this.MenuNode([0, 230, 100, 100], {
+      parentNode: this.menuLogoCentre,
+      icondraw: this.temporaryIconFunc
+    });
+    this.statisticsButton = new this.MenuNode([0, 230, 100, 100], {
+      parentNode: this.menuLogoCentre,
+      icondraw: this.temporaryIconFunc
+    });
+    this.currentlyUselessButton = new this.MenuNode([0, 230, 100, 100], {
+      parentNode: this.menuLogoCentre,
+      icondraw: this.temporaryIconFunc
+    });
+
     this.active = true;
     console.log(`[MENU] Initialisation complete!`);
   }
 
-  openMainMenu() { // runs after the initial start button goes offscreen
+  openMainMenu() { // runs after the initial start button anim is done
+    this.mainMenuOpen = true;
     // play teh music
     manager.assets.audio["dl.stargazer"].audio.play();
     manager.assets.audio["dl.stargazer"].audio.loop = true;
     // asdfgj
     this.zoomController.currentValue = 0.1;
 
-    this.menuLogoCentre.visible = true;
+    // this.menuLogoCentre.visible = true;
+    this.menuSprites.visible = true;
   }
 
   draw() {
@@ -144,9 +224,59 @@ class Menu {
     // change bg colour
     background(this.bgcol.updateCol());
 
-    if(this.mainMenuOpen) {
-      // MAIN MENU DRAW CODE //
+    if(this.mainMenuOpen) { // MAIN MENU DRAW CODE HERE
+      // draw bg menu effects
 
+      // TEMPORARY - fps checker
+      camera.off();
+      push();
+      noStroke();
+      fill(255);
+      textSize(20);
+      const q5fps = window.Q5 ? `(q5: avg ${manager.q5avgFPS.toFixed(0)}, c ${getFPS()})` : "";
+      textAlign(LEFT, BOTTOM);
+      text(`${frameRate().toFixed(0)}fps, avg ${manager.avgFPS.toFixed(0)} ${q5fps}`, 10, height - 40);
+      text(`deltaTime = ${deltaTime.toFixed(0)}, avg ${Math.round(manager.avgDeltaTime * 1000)}`, 10, height - 10);
+      pop();
+      camera.on();
+
+      // draw all joints
+      for(let j of this.menuJoints) {
+        push();
+        stroke("#4265fc");
+        strokeWeight(5);
+        line(j.spriteA.x, j.spriteA.y, j.spriteB.x, j.spriteB.y);
+        pop();
+      }
+
+      // repel chained menu sprites from each other
+      for(let nodeA of this.menuLogoCentre.childrenNodes) {
+        for(let nodeB of this.menuLogoCentre.childrenNodes) {
+          if(nodeA === nodeB) continue;
+          
+          // gravitational force - disabled cause it's kinda useless
+          // const gravconst = 300;
+          // const distance = nodeA.distanceTo(nodeB);
+          // let force = ((gravconst * nodeA.mass * nodeB.mass) / distance);
+          // // increase repulsion force if nodes are too close
+          // // if(distance < 50) force *= 5;
+          // nodeA.repelFrom(nodeB, force);
+
+          nodeA.repelFrom(nodeB, 100);
+        }
+        // repel from node repel points to equalise nodes a bit
+        nodeA.repelFrom(this.nodeRepelPointX, this.nodeRepelPointY, 100);
+        nodeA.repelFrom(-this.nodeRepelPointX, -this.nodeRepelPointY, 100);
+
+        // absolute y value of the sprite
+        const absYValue = Math.abs(nodeA.y);
+        // set parent joint springiness
+        const mappedValue = map(absYValue, 0, 160, 0.5, 0, true);
+        nodeA.parentJoint.springiness = mappedValue;
+      }
+    }
+
+    if(this.mainMenuStartedOpening) { // main menu has STARTED opening but isn't open yet
 
       if(this.startButton) { // remove the initial start button if it exists
         const buttoninac = (this.startButton.scaleLerp.targetValue-this.startButton.scaleLerp.currentValue).toFixed(2);
@@ -154,12 +284,12 @@ class Menu {
           this.startButton.remove();
           this.startButton = null;
 
-          // open the menu - this.mainMenuOpen returns true even if menu buttons and such don't exist yet
+          // animation is finished, actually open menu
           this.openMainMenu();
         }
       }
 
-      // temp code to start game if s key is pressed
+      // TEMPORARY CODE - start game if s key is pressed
       if(kb.presses("s")) {
         this.exit();
         game = new Game();
@@ -180,14 +310,14 @@ class Menu {
         this.startButton.strokeLerp.targetValue = 1;
         this.startButton.scaleWithDefaultRules = false;
 
-        // this.openMainMenu();
-        this.mainMenuOpen = true;
+        this.mainMenuStartedOpening = true;
         this.bgcol.targetValue = 0.8;
 
       }
     }
 
     camera.off();
+    // debug code - display value
     // push();
     // noStroke();
     // fill(255);
@@ -200,6 +330,18 @@ class Menu {
     if(this.active) camera.zoom = this.zoomController.update();
   }
 
+  // getConnectedNodes(node) {
+  //   if(!(node instanceof this.MenuNode)) throw new Error("Invalid MenuNode provided!");
+  // }
+
+  removeJoint(jindex) {
+    if(this.menuJoints.indexOf(jindex) > -1) {
+      
+    } else {
+      throw Error("Invalid joint index provided!");
+    }
+  }
+
   exit() {
     this.active = false;
     camera.zoom = 1;
@@ -207,4 +349,38 @@ class Menu {
     manager.assets.audio["dl.stargazer"].delete();
     console.log(`[MENU] Closed.`);
   }
+
+  temporaryIconFunc() {
+    beginShape();
+    vertex(0, 20);
+    vertex(20, 0);
+    vertex(0, -20);
+    vertex(-20, 0);
+    endShape(CLOSE);
+  }
 }
+
+// note - this class doesn't work fsr. use standard distancejoints for now
+// class MenuJoint extends DistanceJoint {
+//   constructor(spriteA, spriteB, data = {}) { // new MenuJoint(spriteA, spriteB, {strokeWeight:?, stroke:?});
+//     super(spriteA, spriteB);
+//     this.isMenuJoint = true;
+
+//     Object.assign(this, data);
+    
+//     this.stroke ??= color(255);
+//     this.strokeWeight ??= 2;
+
+//     this.draw = (xA, yA, xB, yB) => { // for some reason this doesn't work. look into why...?
+//       push();
+//       stroke(this.stroke);
+//       strokeWeight(this.strokeWeight);
+//       if(yB) {
+//         line(xA, yA, xB, yB);
+//       } else {
+//         point(xA, yA);
+//       }
+//       pop();
+//     }
+//   }
+// }
