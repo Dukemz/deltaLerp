@@ -25,6 +25,9 @@ let menu, game;
 
 async function loadScripts(scriptUrls) { // load scripts and add them to the page
   // may be able to reuse this function for level loading and/or modding
+
+  if(!Array.isArray(scriptUrls)) throw TypeError("loadScripts must be provided an array of URL strings.");
+
   const scriptContainer = document.getElementById("loadedScripts");
 
   // create an array to store Promise objects
@@ -41,15 +44,23 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
       script.src = scriptUrl;
       script.async = false; // ensure synchronous loading
 
+      // on error, reject the promise
+      // script.onerror = reject;
+      script.onerror = () => {
+        reject(Error(`Failed to load [${scriptUrl}] - URL is likely invalid.`));
+      }
+
       // on script load, resolve the promise and remove the script from the DOM
       // this can be done since scripts stay in memory once loaded
       script.onload = () => {
-        resolve();
-        scriptContainer.removeChild(script); // remove the script tag
+        // crash detection
+        if(window.manager && window.manager.crashed) {
+          reject(Error(`An error occurred loading [${scriptUrl}] - script loading halted.`));
+        } else {
+          resolve();
+          scriptContainer.removeChild(script); // remove the script tag
+        }
       };
-
-      // on error, reject the promise
-      script.onerror = reject;
 
       // append the script to the container
       scriptContainer.appendChild(script);
@@ -208,6 +219,16 @@ function deltaLerp(a, b, f, ignoreTimeScale) { // hey look, it's the game's name
   // f is the factor between 0 and 1 deciding how quickly it catches up
   // e.g. if f = 0.25, it will cover 25% the remaining distance every second
   return lerp(a, b, (1 - pow(1 - f, deltaTime / 1000)) * tsc);
+}
+
+
+/**
+ * Simple async sleep function.
+ * @param {Number} ms - Milliseconds to wait for
+ * @returns {*}
+ */
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 const titlestyle = "font-size: 27px; color: lightblue; text-shadow: 2px 2px dodgerblue";
