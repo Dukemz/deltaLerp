@@ -82,7 +82,7 @@ class Menu {
         }
 
         // once joints are connected, set a sliiight random x velocity
-        this.vel.x = random(-0.01, 0.01);
+        // this.vel.x = random(-0.01, 0.01);
       }
 
       draw() {
@@ -112,6 +112,12 @@ class Menu {
           }
         }
 
+        // detect press
+        if(this.mouse.pressed() && typeof this.onPressed === "function") {
+          this.onPressed();
+        }
+
+        // update scale
         const sc = this.scaleLerp.update();
         this.scale = { x: sc, y: sc };
         
@@ -138,6 +144,9 @@ class Menu {
     console.log(`[MENU] Initialising...`);
     // load menu music
     await loadScripts(["assets/stargazer.dzdla"]);
+
+    // wait for a little extra time since it still lags a bit
+    await sleep(200);
 
     // menu background colour
     this.bgcol = new ColLerpController(color("#000000"), color("#242838"), 0, 0, 0.99);
@@ -174,9 +183,19 @@ class Menu {
     // main buttons
     this.playButton = new this.MenuNode([0, 230, 100, 100], {
       parentNode: this.menuLogoCentre,
-      icondraw: this.temporaryIconFunc,
-      onPressed: () => {
-
+      icondraw: (spr) => {
+        push();
+        fill(spr.stroke);
+        triangle(
+          -15, -20,
+          -15, 20,
+          25, 0
+        );
+        pop();
+      },
+      onPressed: () => { // close menu and start game
+        this.exit();
+        game = new Game();
       }
     });
     this.settingsButton = new this.MenuNode([0, 230, 100, 100], {
@@ -214,6 +233,30 @@ class Menu {
 
     // this.menuLogoCentre.visible = true;
     this.menuSprites.visible = true;
+
+    // CODE TO SET ORDER OF MENU NODES
+    // may replace this eventually, since a lot of it isn't necessary
+    // i was originally going to have an order be specified in each node constructor
+    // however it would make sense for the order to just be the order each one was made in
+    // since that is what it's set to
+    
+    const movingNodes = this.menuSprites.filter(node => node.parentNode);
+    // calculate initial node velocity
+    let nextOrder = 1;
+    for(let enode of movingNodes) {
+
+      if(!enode.order) {
+        enode.order = nextOrder;
+        nextOrder++;
+      }
+    }
+    // determine the maximum specified order
+    const maxOrder = Math.max(...movingNodes.map(node => Math.abs(node.order)));
+
+    for(let mnode of movingNodes) {
+      const vx = (mnode.order / maxOrder) * 0.01;
+      mnode.vel.x = vx;
+    }
   }
 
   draw() {
@@ -287,12 +330,6 @@ class Menu {
           // animation is finished, actually open menu
           this.openMainMenu();
         }
-      }
-
-      // TEMPORARY CODE - start game if s key is pressed
-      if(kb.presses("s")) {
-        this.exit();
-        game = new Game();
       }
 
     } else { // main menu NOT open - start button draw code
