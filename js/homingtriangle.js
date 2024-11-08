@@ -16,7 +16,7 @@ class HomingTriangle extends Enemy {
     this.baseSprite.rotationDrag = 0.1;
   }
 
-  update() {
+  extUpdate() {
     if(this.activeHoming) { // note to self: this is all very temporary
       // need to figure out how to make this all customisable in constructors and such
       // also maybe rather than activehoming being a variable it could be a function to enable/disable

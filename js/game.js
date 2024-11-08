@@ -113,8 +113,8 @@ class Game { // game class
 
     // TESTING STUFFS //
     this.hexsplit = new BasicSplitter({ game: this, x: 500, y: 200 });
-    this.pentasplit = new BasicSplitter({ game: this, x: 500, y: -200, splitterShape: "pentagon", sprites: { fill: 'blue' } });
-    this.octasplit = new BasicSplitter({ game: this, x: -500, splitterShape: "octagon", splitterSpikeSize: 70, sprites: { fill: 'purple' } });
+    this.pentasplit = new BasicSplitter({ game: this, x: 500, y: -200, splitterShape: "pentagon", splitterColour: 'blue' });
+    this.octasplit = new BasicSplitter({ game: this, x: -500, splitterShape: "octagon", splitterSpikeSize: 70, splitterColour: 'purple' });
 
     const setZoom = canvas.w / this.visibleWidth;
     // const setZoom = calculateZoom(canvas.w, canvas.h, 1500);

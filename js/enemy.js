@@ -34,8 +34,8 @@ class Enemy {
     // copy sprites info passed from instance construction
     if(data?.sprites) Object.assign(this.sprites, data.sprites);
     
-    this.sprites.stroke ||= "white";
-    this.sprites.strokeWeight ||= 2;
+    // this.sprites.stroke ??= "white";
+    // this.sprites.strokeWeight ??= 0;
   }
 
   create() {
@@ -62,6 +62,7 @@ class Enemy {
       this.subenemies[i].delete(); // recursive call
     }
 
+    this.baseSprite.joints.removeAll();
     // remove sprites
     this.sprites.remove();
 
@@ -70,6 +71,16 @@ class Enemy {
     if(enemindex > -1) {
       this.game.enemies.splice(enemindex, 1);
     }
+  }
+
+  update() {
+    if(this.sprites.length < 1) {
+      this.delete();
+    }
+
+    // if individual sprite extension needs an update function this calls it
+    // maybe have some kind of get/set thing that chains functionality on instead of replacing it..?
+    if(this.extUpdate) this.extUpdate();
   }
 
   // OLD DELETE FUNCTION(S). study this in detail to see why it didn't work later

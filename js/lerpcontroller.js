@@ -2,7 +2,6 @@
 
 /** Controller for numerical values that should be smoothly transitioned to a target value. */
 class LerpController {
-  
   /**
    * Creates an instance of LerpController.
    * @constructor
@@ -17,7 +16,6 @@ class LerpController {
     this.lerpAmount = lerpAmount || 0.5;
     this.ignoreTimeScale = ignoreTimeScale || false;
   }
-
   
   /**
    * Update the current lerp controller value and return it.
@@ -29,7 +27,6 @@ class LerpController {
     }
     return this.currentValue;
   }
-
   
   /**
    * Set both the target and current value.
@@ -64,7 +61,6 @@ class ColLerpController extends LerpController { // uses lerpColor to calculate
     this.colourB = colourB;
     this.currentColour = this.colourA;
   }
-
   
   /**
    * Update and return the current colour.

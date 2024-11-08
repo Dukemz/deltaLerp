@@ -5,7 +5,7 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
     super(data);
 
     this.sideLength ||= 30;
-    this.sprites.fill ||= "orange";
+    this.splitterColour ||= "orange";
     this.splitterShape ||= "hexagon";
     this.splitterSpikeSize ||= 60;
     this.enemyType = "BasicSplitter";
@@ -15,6 +15,12 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
     this.baseConstructor = [this.x, this.y, this.sideLength, this.splitterShape];
     this.create();
 
+    // fill and such
+    this.sprites.fill = this.splitterColour;
+    this.baseSprite.fill = color(0,0,0,0);
+    this.sprites.stroke ??= this.splitterColour; // change this in the future if armoured enemies are introduced!
+    this.sprites.strokeWeight ??= 5;
+    // physical properties
     this.baseSprite.mass = 10;
     this.baseSprite.drag = 1;
     this.baseSprite.rotationDrag = 1;
@@ -64,6 +70,7 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
 
       // join spike to the base shape
       const spikeJoint = new GlueJoint(this.baseSprite, newSpike.baseSprite);
+      spikeJoint.visible = false;
       this.spikeJoints.push(spikeJoint);
 
       spikeVector.rotate(rotateAngle);
@@ -77,6 +84,7 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
             j.remove();
           });
           this.spikeJoints = [];
+          this.baseSprite.remove();
           
           // applying force in a single frame rather than over time seems to break - use set velocity instead
           // this.sprites.attractTo(this.baseSprite, -500);
@@ -93,8 +101,8 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
     }
   }
 
-  update() {
-    // uhhhh
-    // if(frameCount < 3) console.log("hi");
-  }
+  // update() {
+  //   // uhhhh
+  //   // if(frameCount < 3) console.log("hi");
+  // }
 }
