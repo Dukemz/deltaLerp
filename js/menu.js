@@ -219,6 +219,8 @@ class Menu {
       icondraw: this.temporaryIconFunc
     });
 
+    this.background = new ParticleBG(100, "#4265fc");
+
     this.active = true;
     console.log(`[MENU] Initialisation complete!`);
   }
@@ -268,10 +270,11 @@ class Menu {
     background(this.bgcol.updateCol());
 
     if(this.mainMenuOpen) { // MAIN MENU DRAW CODE HERE
+      camera.off();
       // draw bg menu effects
+      this.background.draw();
 
       // TEMPORARY - fps checker
-      camera.off();
       push();
       noStroke();
       fill(255);
@@ -394,6 +397,70 @@ class Menu {
     vertex(0, -20);
     vertex(-20, 0);
     endShape(CLOSE);
+  }
+}
+
+class ParticleBG {
+  constructor(count, lineCol, maxDistance) {
+    if(typeof count !== 'number' || isNaN(count) || count > 1000) throw TypeError("Invalid particle count provided");
+
+    this.lineColour = lineCol ? color(lineCol) : color(255);
+
+    this.maxDistance = maxDistance ? maxDistance : 100;
+    this.maxOpacity = 128;
+
+    this.particleList = [];
+    for(let i = 0; i < count; i++) {
+      this.particleList.push(new ParticleBG.Particle(random(canvas.w), random(canvas.h)));
+    }
+  }
+
+  draw() {
+    for(let i = 0; i < this.particleList.length; i++) {
+      const p1 = this.particleList[i];
+      p1.update();
+
+      push();
+      strokeWeight(2);
+      // check distance between this particle and others
+      for(let j = 0; j < this.particleList.length; j++) {
+        const p2 = this.particleList[j];
+        const d = dist(p1.x, p1.y, p2.x, p2.y);
+        if(d < this.maxDistance) {
+
+          // map opacity based on distance
+          const opac = map(d, 0, this.maxDistance, this.maxOpacity, 0);
+
+          const clonedColour = color(this.lineColour.levels);
+          if(window.Q5) { // q5.js workaround
+            clonedColour.a = opac;
+          } else {
+            clonedColour.setAlpha(opac);
+          }
+
+          stroke(clonedColour);
+          line(p1.x, p1.y, p2.x, p2.y);
+        }
+      }
+      pop();
+    }
+  }
+
+  static Particle = class {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.vx = random(-2, 2); // X velocity
+      this.vy = random(-2, 2); // Y velocity
+    }
+
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      // bounce
+      if(this.x < 0 || this.x > width) this.vx *= -1;
+      if(this.y < 0 || this.y > height) this.vy *= -1;
+    }
   }
 }
 
