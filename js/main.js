@@ -207,8 +207,11 @@ function windowResized() {
   if(manager.crashed) {
     console.log("[WINDOW] Resized - redrawing crash handler data.");
     manager.crashdraw();
+  } else if(menu) {
+    // console.log(`[WINDOW/MENU] Resized: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]`);
+    menu.windowResized(oldWidth, oldHeight, oldZoom);
   } else if(game) { // run game window resize func
-    console.log(`[WINDOW] Resized: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]`);
+    console.log(`[WINDOW/GAME] Resized: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]`);
     game.windowResized(oldWidth, oldHeight, oldZoom);
   }
 }

@@ -219,7 +219,7 @@ class Menu {
       icondraw: this.temporaryIconFunc
     });
 
-    this.background = new ParticleBG(100, "#4265fc");
+    this.background = new ParticleBG("#4265fc");
 
     this.active = true;
     console.log(`[MENU] Initialisation complete!`);
@@ -283,6 +283,9 @@ class Menu {
       textAlign(LEFT, BOTTOM);
       text(`${frameRate().toFixed(0)}fps, avg ${manager.avgFPS.toFixed(0)} ${q5fps}`, 10, height - 40);
       text(`deltaTime = ${deltaTime.toFixed(0)}, avg ${Math.round(manager.avgDeltaTime * 1000)}`, 10, height - 10);
+      textAlign(RIGHT, BOTTOM);
+      text(`particles: ${this.background.particleList.length}, density: ${this.background.particlesPerUnitArea}`, width-10, height-40);
+      text(`max dist factor: ${this.background.maxDistanceFactor}, opacity: ${this.background.opacityLerp.currentValue.toFixed(3)}`, width-10, height-10);
       pop();
       camera.on();
 
@@ -398,41 +401,70 @@ class Menu {
     vertex(-20, 0);
     endShape(CLOSE);
   }
+
+  windowResized(oldWidth, oldHeight, oldZoom) {
+    this.background.adjust(canvas.w, canvas.h);
+  }
 }
 
 class ParticleBG {
-  constructor(count, lineCol, maxDistance) {
-    if(typeof count !== 'number' || isNaN(count) || count > 1000) throw TypeError("Invalid particle count provided");
+  constructor(lineCol) {
+    this.opacityLerp = new LerpController(0, 128, 0.7);
 
     this.lineColour = lineCol ? color(lineCol) : color(255);
-
-    this.maxDistance = maxDistance ? maxDistance : 100;
-    this.maxOpacity = 128;
+    // this.maxOpacity = 128;
 
     this.particleList = [];
-    for(let i = 0; i < count; i++) {
-      this.particleList.push(new ParticleBG.Particle(random(canvas.w), random(canvas.h)));
+    this.particlesPerUnitArea = 0.0001; // density: particles per square pixel
+    this.maxDistanceFactor = 0.2; // distance factor as percentage of canvas size
+    this.maxParticleCount = 250; // maximum particle count
+    this.adjust(canvas.w, canvas.h);
+  }
+
+  adjust(width, height) { // run on canvas resize
+    // calculate new particle count based on area and set maxDistance
+    const newCount = Math.min(this.maxParticleCount, Math.floor(width * height * this.particlesPerUnitArea));
+    this.maxDistance = Math.min(width, height) * this.maxDistanceFactor;
+
+    // adjust particle count
+    if(newCount > this.particleList.length) {
+      // add new particles in empty areas for larger canvas
+      for(let i = this.particleList.length; i < newCount; i++) {
+        this.particleList.push(new ParticleBG.Particle(random(width), random(height)));
+      }
+    } else if(newCount < this.particleList.length) {
+      // remove excess particles for smaller canvas
+      this.particleList.splice(newCount);
     }
+
+    // update all particles to stay within new bounds
+    // this.particleList.forEach(p => {
+    //   p.x = constrain(p.x, 0, width);
+    //   p.y = constrain(p.y, 0, height);
+    // });
   }
 
   draw() {
+    const clonedColour = color(this.lineColour.levels);
+    const isQ5 = !!window.Q5;
+
+    const maxOpacity = this.opacityLerp.update();
+
     for(let i = 0; i < this.particleList.length; i++) {
       const p1 = this.particleList[i];
       p1.update();
 
       push();
-      strokeWeight(2);
-      // check distance between this particle and others
-      for(let j = 0; j < this.particleList.length; j++) {
+      strokeWeight(4);
+
+      // only check each pair once
+      for(let j = i + 1; j < this.particleList.length; j++) {
         const p2 = this.particleList[j];
         const d = dist(p1.x, p1.y, p2.x, p2.y);
+
         if(d < this.maxDistance) {
-
-          // map opacity based on distance
-          const opac = map(d, 0, this.maxDistance, this.maxOpacity, 0);
-
-          const clonedColour = color(this.lineColour.levels);
-          if(window.Q5) { // q5.js workaround
+          const opac = map(d, 0, this.maxDistance, maxOpacity, 0);
+          if(isQ5) {
             clonedColour.a = opac;
           } else {
             clonedColour.setAlpha(opac);
@@ -450,19 +482,20 @@ class ParticleBG {
     constructor(x, y) {
       this.x = x;
       this.y = y;
-      this.vx = random(-2, 2); // X velocity
-      this.vy = random(-2, 2); // Y velocity
+      this.vx = random(-2, 2);
+      this.vy = random(-2, 2);
     }
 
     update() {
-      this.x += this.vx;
-      this.y += this.vy;
-      // bounce
-      if(this.x < 0 || this.x > width) this.vx *= -1;
-      if(this.y < 0 || this.y > height) this.vy *= -1;
+      this.x = constrain(this.x + this.vx, 0, width);
+      this.y = constrain(this.y + this.vy, 0, height);
+      if(this.x === 0 || this.x === width) this.vx *= -1;
+      if(this.y === 0 || this.y === height) this.vy *= -1;
     }
   }
 }
+
+
 
 // note - this class doesn't work fsr. use standard distancejoints for now
 // class MenuJoint extends DistanceJoint {
