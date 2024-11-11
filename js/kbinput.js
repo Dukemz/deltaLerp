@@ -22,7 +22,7 @@ class kbInput {
     // fire controls
     this.c.fire ||= "space";
     this.c.autoFire ||= "e";
-    this.c.cycleWeapon ||= "q";
+    this.c.cycleWeapon ||= "c";
 
     // misc controls
     this.c.pause ||= "p";

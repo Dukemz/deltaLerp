@@ -25,7 +25,7 @@ class MachineGun {
     this.group.vel.x = 20; // bullet velocity
     this.group.mass = 0;
     // bouncy for ricochets!
-    this.bounciness = 1;
+    this.group.bounciness = 0.8;
 
     // visual properties
     // this will set the fill every frame - disabled since that's pointless
@@ -68,7 +68,7 @@ class MachineGun {
       }
       this.shotsFired++;
       this.lastFired = world.physicsTime*1000;
-      if(this.group.amount > 20) {
+      if(this.group.amount > 25) {
         this.group[0].remove();
       }
     }

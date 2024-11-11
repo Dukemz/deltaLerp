@@ -58,6 +58,7 @@ class Player extends Sprite {
     // custom attribs
     this.maxSpeed ||= 6;
     this.framesAlive = 0;
+    this._health = 100;
 
     // indicators like health and such - rings around the player
     this.arcindics = [];
@@ -86,6 +87,15 @@ class Player extends Sprite {
     this.overlaps(this.game.playerProjectiles);
     this.overlaps(this.game.players);
     this.projectiles.overlaps(this.game.playerProjectiles);
+  }
+
+  get health() {
+    return this._health;
+  }
+
+  set health(value) {
+    this._health = value;
+    if(value <= 0) this.remove();
   }
 
   directionalVelocity(angle) { // calculate velocity respective of an angle
@@ -138,7 +148,7 @@ class Player extends Sprite {
     if(this.input.firing()) this.weapons[this.activeWeapon].fire();
 
     // crash lol
-    if(kb.presses("c")) throw Error("Congrats, you found the crash button!");
+    if(kb.presses("q")) throw Error("Congrats, you found the crash button!");
   }
 
   tdebug() { // toggle debug

@@ -8,7 +8,7 @@
 
 - **E** - Auto-Fire
 
-- **Q** - Cycle Weapon (not that there's any weapons to change yet)
+- **C** - Cycle Weapon (not that there's any weapons to change yet)
 
 - **P** - Pause
 
@@ -28,7 +28,7 @@ Note: DualSense (PS5) controllers may behave strangely in Firefox for some reaso
 
 - **S** - Start game (only works in main menu)
 
-- **C** - Crash game
+- **Q** - Crash game
 
 - **J/Left Bumper** - Slow time
 

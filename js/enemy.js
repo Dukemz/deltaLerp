@@ -92,7 +92,7 @@ class Enemy {
   set health(value) {
     if(typeof value !== "number" || isNaN(value)) throw TypeError("Enemy health must be a valid number");
     this._health = value;
-    if(this._health === 0) this.delete();
+    if(this._health <= 0) this.delete();
   }
 
   // OLD DELETE FUNCTION(S). study this in detail to see why it didn't work later
