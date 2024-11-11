@@ -58,7 +58,8 @@ class Game { // game class
       layer: 1,
       input: new kbInput(),
       weapons: [
-        new MachineGun()
+        new MachineGun(),
+        new Shotgun()
       ]
     });
 

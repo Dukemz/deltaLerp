@@ -8,7 +8,7 @@ class HomingTriangle extends Enemy {
     this.baseConstructor ??= [this.x, this.y, 10, "triangle"];
     this.enemyType = "HomingTriangle";
 
-    this.health = 5;
+    this.health = 3;
   }
 
   postCreate() { // function called after create() in Enemy is run

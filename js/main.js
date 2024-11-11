@@ -15,6 +15,7 @@ let scriptList = [
   'js/enemy.js',
 
   'js/machinegun.js',
+  'js/shotgun.js',
   'js/basicsplitter.js',
   'js/homingtriangle.js'
 ];

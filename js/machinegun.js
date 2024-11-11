@@ -5,12 +5,13 @@ class MachineGun {
   // machine gun weapon - fires multiple small bullets in quick succession
   // this group represents all the bullets
   constructor() {
+    this.fireRate = 80; // time between firing in ms
+
     // ~~ TRACKING ~~ //
     // stores timestamp of last time a bullet was fired
     this.lastFired = 0;
     // total bullets fired
     this.shotsFired = 0;
-    this.fireRate = 80; // time between firing in ms
   }
 
   initialise(player) {
@@ -25,6 +26,7 @@ class MachineGun {
     this.group.mass = 0;
     // bouncy for ricochets!
     this.bounciness = 1;
+
     // visual properties
     // this will set the fill every frame - disabled since that's pointless
     // this.group.fill = () => player.fill;
@@ -36,13 +38,14 @@ class MachineGun {
     // TODO: figure out how to make bullets always shoot from the tip of the player
     // and travel in the right direction accordingly
     
-    // remove when touching game objects
+    // remove bullet on collision with game objects
     player.game.objects.collides(this.group, (_o, p) => {
       p.remove();
     });
 
     // remove when touching enemies
     player.game.enemyObjects.collides(this.group, (e, p) => {
+      p.remove();
       e.enemyInstance.health -= 1;
     });
   } 
@@ -63,7 +66,7 @@ class MachineGun {
         // disabled since it just makes the bullet richochet forever
         // bullet.speed = 20;
       }
-      this.bulletsFired++;
+      this.shotsFired++;
       this.lastFired = world.physicsTime*1000;
       if(this.group.amount > 20) {
         this.group[0].remove();
