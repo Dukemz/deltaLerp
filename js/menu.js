@@ -186,11 +186,7 @@ class Menu {
       icondraw: (spr) => {
         push();
         fill(spr.stroke);
-        triangle(
-          -15, -20,
-          -15, 20,
-          25, 0
-        );
+        triangle(-15, -20, /*  */ -15, 20, /* */ 25, 0);
         pop();
       },
       onPressed: () => { // close menu and start game
@@ -323,6 +319,12 @@ class Menu {
         const mappedValue = map(absYValue, 0, 160, 0.5, 0, true);
         nodeA.parentJoint.springiness = mappedValue;
       }
+
+      // DEBUG: quickstart
+      if(kb.pressing("s")) {
+        this.exit();
+        game = new Game();
+      }
     }
 
     if(this.mainMenuStartedOpening) { // main menu has STARTED opening but isn't open yet
@@ -387,6 +389,7 @@ class Menu {
 
   exit() {
     this.active = false;
+    this.background = null;
     camera.zoom = 1;
     this.menuSprites.remove();
     manager.assets.audio["dl.stargazer"].delete();

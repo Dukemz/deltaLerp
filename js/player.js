@@ -61,7 +61,8 @@ class Player extends Sprite {
 
     // indicators like health and such - rings around the player
     this.arcindics = [];
-    this.arcindics.push(new ArcIndicator(this));
+    this.healthIndicator = new ArcIndicator(this);
+    this.arcindics.push(this.healthIndicator);
 
     // weapons, bullets, etc
     // in future figure out how to make this into classes
@@ -159,7 +160,6 @@ class Player extends Sprite {
   }
 
   drawSubDetails() {
-    // this.arcindics.forEach(a => a.draw());
     for(let a of this.arcindics) a.draw();
   }
 }

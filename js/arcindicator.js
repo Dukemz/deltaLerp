@@ -11,8 +11,9 @@ class ArcIndicator { // arc indicator thing
     this.strokeWeight = 2;
     this.diameter = 85;
 
-    this.startArc = new LerpController(0, 0, 0.8);
-    this.endArc = new LerpController(0, 180, 0.8);
+    // leftmost point is 180, rightmost point is 0
+    this.startArc = new LerpController(0, 0, 0.9);
+    this.endArc = new LerpController(0, 180, 0.9);
   }
 
   draw() {

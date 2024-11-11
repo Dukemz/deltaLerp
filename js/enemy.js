@@ -23,7 +23,7 @@ class Enemy {
     this.x ||= 0;
     this.y ||= 0;
 
-    this.health = 20;
+    this._health = 10;
     this.enemyType = "none";
 
     // array of arguments passed to base sprite constructor
@@ -78,9 +78,21 @@ class Enemy {
       this.delete();
     }
 
+    this.baseSprite.text = this.health;
+
     // if individual sprite extension needs an update function this calls it
     // maybe have some kind of get/set thing that chains functionality on instead of replacing it..?
-    if(this.extUpdate) this.extUpdate();
+    if(typeof this.postUpdate === "function") this.postUpdate();
+  }
+
+  get health() {
+    return this._health;
+  }
+
+  set health(value) {
+    if(typeof value !== "number" || isNaN(value)) throw TypeError("Enemy health must be a valid number");
+    this._health = value;
+    if(this._health === 0) this.delete();
   }
 
   // OLD DELETE FUNCTION(S). study this in detail to see why it didn't work later

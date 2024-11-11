@@ -7,16 +7,22 @@ class HomingTriangle extends Enemy {
     this.activeHoming ??= true;
     this.baseConstructor ??= [this.x, this.y, 10, "triangle"];
     this.enemyType = "HomingTriangle";
+
+    this.health = 5;
   }
 
-  postCreate() { // function called after create is run
+  postCreate() { // function called after create() in Enemy is run
     // todo: colour lerping (maybe make that a class too)
     this.inactiveColour = this.baseSprite.fill;
     this.baseSprite.drag = 0.5;
     this.baseSprite.rotationDrag = 0.1;
+
+    this.baseSprite.collides(this.game.players, () => {
+      if(this.activeHoming) this.delete();
+    });
   }
 
-  extUpdate() {
+  postUpdate() { // called after update() in Enemy class
     if(this.activeHoming) { // note to self: this is all very temporary
       // need to figure out how to make this all customisable in constructors and such
       // also maybe rather than activehoming being a variable it could be a function to enable/disable
@@ -49,12 +55,12 @@ class HomingTriangle extends Enemy {
         this.baseSprite.applyForce(2.5);
       }
 
-      if(this.baseSprite.debug) {
-        this.baseSprite.textFill = "white";
-        this.baseSprite.text = Math.round(this.baseSprite.speed);
-      } else {
-        this.baseSprite.text = "";
-      }
+      // if(this.baseSprite.debug) {
+      //   this.baseSprite.textFill = "white";
+      //   this.baseSprite.text = Math.round(this.baseSprite.speed);
+      // } else {
+      //   this.baseSprite.text = "";
+      // }
     }
   }
 }

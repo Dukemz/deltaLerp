@@ -201,13 +201,18 @@ function windowResized() {
   const oldWidth = canvas.w;
   const oldHeight = canvas.h;
   const oldZoom = camera.zoom;
+
+  const newWidth = windowWidth - 50;
+  const newHeight = windowHeight - 50;
+  if(newWidth === oldWidth && newHeight === oldHeight) return;
+
   // resize canvas to fit the new window size
-  canvas.resize(windowWidth - 50, windowHeight - 50);
+  canvas.resize(newWidth, newHeight);
 
   if(manager.crashed) {
     console.log("[WINDOW] Resized - redrawing crash handler data.");
     manager.crashdraw();
-  } else if(menu) {
+  } else if(menu.active) {
     // console.log(`[WINDOW/MENU] Resized: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]`);
     menu.windowResized(oldWidth, oldHeight, oldZoom);
   } else if(game) { // run game window resize func

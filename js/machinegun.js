@@ -23,28 +23,28 @@ class MachineGun {
     this.group.y = () => player.y;
     this.group.vel.x = 20; // bullet velocity
     this.group.mass = 0;
-    // bouncy
+    // bouncy for ricochets!
     this.bounciness = 1;
     // visual properties
+    // this will set the fill every frame - disabled since that's pointless
     // this.group.fill = () => player.fill;
     this.group.fill = player.fill;
     this.group.stroke = 255;
     this.group.strokeWeight = 2;
     this.group.overlaps(this.group);
 
-    // todo: figure out how to make bullets always shoot from the tip of the player
+    // TODO: figure out how to make bullets always shoot from the tip of the player
     // and travel in the right direction accordingly
     
     // remove when touching game objects
-    // player.game.objects.collides(this.group, (_o, p) => p.remove());
+    player.game.objects.collides(this.group, (_o, p) => {
+      p.remove();
+    });
 
-    // bullets overlap with the player
-    // this.group.overlaps(player);
-    // // thing to remove bullets if they touch player, but it's unnecessary
-    // {
-    //   const life = 2147483647 - b.life;
-    //   if(life > 10) b.remove();
-    // }
+    // remove when touching enemies
+    player.game.enemyObjects.collides(this.group, (e, p) => {
+      e.enemyInstance.health -= 1;
+    });
   } 
 
   fire() { // FIRE IN THE HOLE
@@ -59,6 +59,8 @@ class MachineGun {
       bullet.update = () => {
         if(bullet.speed < 10) bullet.remove();
         if(bullet.x > camera.x + 2000 || bullet.x < camera.x - 2000) bullet.remove();
+        // this would constantly set the bullet's speed every frame
+        // disabled since it just makes the bullet richochet forever
         // bullet.speed = 20;
       }
       this.bulletsFired++;
@@ -69,9 +71,18 @@ class MachineGun {
     }
     // culling - remove bullets if they go more than 10 units offscreen
     // note - if screen size is changed then cull boundary changes too
+    // this is currently disabled due to bugs
     // this.group.cull(50, 50, 50, 50);
   }
 }
+
+// bullets overlap with the player
+// this.group.overlaps(player);
+// thing to remove bullets if they touch player, but it's unnecessary
+// {
+//   const life = 2147483647 - b.life;
+//   if(life > 10) b.remove();
+// }
 
 // old method of parent checking
 // this = new Group();
