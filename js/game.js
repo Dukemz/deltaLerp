@@ -199,7 +199,7 @@ class Game { // game class
       this.players.runUpdate();
     }
 
-    // TEMPORARY TESTING THINGS //
+    // TEMPORARY DEBUG THINGS //
 
     // game speed test
     if(kb.presses("j") || contro.presses("l")) {
@@ -227,6 +227,8 @@ class Game { // game class
         this.cameraSpeedLerp.targetValue = 0;
       }
     }
+    // crash lol
+    if(kb.presses("q")) throw Error("Congrats, you found the crash button!");
   }
 
   kb2P() { // temporary function to add 2nd player with keyboard preset

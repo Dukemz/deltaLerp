@@ -1,8 +1,8 @@
 class Shotgun {
   constructor() {
     this.fireRate = 600;
-    this.bulletSpread = 6; // number of bullets in each spread shot
-    this.spreadAngle = 25; // total spread angle range in degrees
+    this.bulletSpread = 7; // number of bullets in each spread shot
+    this.spreadAngle = 45; // total spread angle range in degrees
     this.bulletSpeed = 12; // consistent bullet speed
     this.damage = 1.5;
 
@@ -19,7 +19,7 @@ class Shotgun {
     this.group.y = () => player.y;
     this.group.mass = 0.2;
     this.group.bounciness = 1;
-    this.group.drag = 0.5;
+    this.group.drag = 1;
 
     this.group.fill = player.fill;
     this.group.stroke = 255;

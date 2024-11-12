@@ -58,6 +58,7 @@ class Player extends Sprite {
     // custom attribs
     this.maxSpeed ||= 6;
     this.framesAlive = 0;
+    this.lastWeaponCycle = 0;
     this._health = 100;
 
     // indicators like health and such - rings around the player
@@ -95,7 +96,8 @@ class Player extends Sprite {
 
   set health(value) {
     this._health = value;
-    if(value <= 0) this.remove();
+    if(value <= 0) return this.remove();
+    
   }
 
   directionalVelocity(angle) { // calculate velocity respective of an angle
@@ -142,13 +144,13 @@ class Player extends Sprite {
     if(this.x < camera.x - (this.game.visibleWidth/2) - 200 || this.x > camera.x + (this.game.visibleWidth/2) + 10) this.remove();
 
     // cycle weapon
-    if(this.input.cycleWeapon()) this.activeWeapon = (this.activeWeapon + 1) % this.weapons.length;
+    if(world.physicsTime - this.lastWeaponCycle > 0.7 && this.input.cycleWeapon()) {
+      this.lastWeaponCycle = world.physicsTime;
+      this.activeWeapon = (this.activeWeapon + 1) % this.weapons.length;
+    }
 
     // shoot controls
     if(this.input.firing()) this.weapons[this.activeWeapon].fire();
-
-    // crash lol
-    if(kb.presses("q")) throw Error("Congrats, you found the crash button!");
   }
 
   tdebug() { // toggle debug

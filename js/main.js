@@ -191,6 +191,12 @@ function draw() {
       world.velocityIterations,
       world.positionIterations
     );
+
+    // debug - restart game
+    if(manager.ingame && kb.presses("l")) {
+      game.exit();
+      game = new Game();
+    }
   } catch(error) {
     manager.crash({ type: "drawError", error });
   }
@@ -216,7 +222,7 @@ function windowResized() {
   } else if(menu.active) {
     // console.log(`[WINDOW/MENU] Resized: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]`);
     menu.windowResized(oldWidth, oldHeight, oldZoom);
-  } else if(game) { // run game window resize func
+  } else if(game.active) { // run game window resize func
     console.log(`[WINDOW/GAME] Resized: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]`);
     game.windowResized(oldWidth, oldHeight, oldZoom);
   }
