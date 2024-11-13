@@ -3,7 +3,8 @@ class Shotgun {
     this.fireRate = 600;
     this.bulletSpread = 7; // number of bullets in each spread shot
     this.spreadAngle = 45; // total spread angle range in degrees
-    this.bulletSpeed = 12; // consistent bullet speed
+    this.bulletSpeed = 14;
+    this.killSpeed = 5; // speed at which the bullet is removed
     this.damage = 1.5;
 
     this.lastFired = 0;
@@ -17,9 +18,9 @@ class Shotgun {
     this.group.diameter = 10;
     this.group.x = () => player.x + 5;
     this.group.y = () => player.y;
-    this.group.mass = 0.2;
+    this.group.mass = 5;
     this.group.bounciness = 1;
-    this.group.drag = 1;
+    this.group.drag = 2;
 
     this.group.fill = player.fill;
     this.group.stroke = 255;
@@ -55,8 +56,8 @@ class Shotgun {
         bullet.vel.y = Math.sin(radians) * this.bulletSpeed;
 
         bullet.update = () => {
-          if(bullet.speed < 5) bullet.remove();
-          if(bullet.x > camera.x + 2000 || bullet.x < camera.x - 2000) bullet.remove();
+          if(bullet.speed < this.killSpeed) bullet.remove();
+          // if(bullet.x > camera.x + 2000 || bullet.x < camera.x - 2000) bullet.remove();
         };
       }
 

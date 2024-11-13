@@ -61,7 +61,8 @@ class MachineGun {
       // set bullet's update function since for some reason you can't define it before
       bullet.update = () => {
         if(bullet.speed < 10) bullet.remove();
-        if(bullet.x > camera.x + 2000 || bullet.x < camera.x - 2000) bullet.remove();
+        // custom cull in favour of new one in player
+        // if(bullet.x > camera.x + 2000 || bullet.x < camera.x - 2000) bullet.remove();
         // this would constantly set the bullet's speed every frame
         // disabled since it just makes the bullet richochet forever
         // bullet.speed = 20;

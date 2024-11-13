@@ -59,7 +59,7 @@ class kbInput {
     this.c.right = "arrowRight";
     this.c.fire = "enter";
     this.c.autoFire = "/";
-    this.c.cycleWeapon = "";
+    this.c.cycleWeapon = "]";
     this.c.pause = "";
   }
 

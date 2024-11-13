@@ -97,7 +97,8 @@ class Player extends Sprite {
   set health(value) {
     this._health = value;
     if(value <= 0) return this.remove();
-    
+    // health is 0-100, map endarc from 180 to 0
+    this.healthIndicator.endArc.targetValue = map(value, 0, 100, 180, 0, true);
   }
 
   directionalVelocity(angle) { // calculate velocity respective of an angle
@@ -126,6 +127,10 @@ class Player extends Sprite {
 
     // cull projectiles - currently disabled due to p5play bug
     // this.projectiles.cull(10,10,10,10);
+    // custom cull
+    for(let bullet of this.projectiles) {
+      if(bullet.x > camera.x + this.game.cullZoneRight || bullet.x < camera.x - this.game.cullZoneLeft) bullet.remove();
+    }
 
     // set new movement speed based on input
     this.vel = this.input.getMoveVel(this.maxSpeed, this.vel);

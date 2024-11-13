@@ -8,7 +8,7 @@
 
 - **E** - Auto-Fire
 
-- **C** - Cycle Weapon (not that there's any weapons to change yet)
+- **C** - Cycle Weapon
 
 - **P** - Pause
 

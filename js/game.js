@@ -18,6 +18,8 @@ class Game { // game class
     this.camPos = { x: 0, y: 0 };
     // width of the visible area
     this.visibleWidth = 1400;
+    this.cullZoneLeft = (this.visibleWidth/2)-10;
+    this.cullZoneRight = (this.visibleWidth/2)+10;
     // last time the window was resized
     this.lastWindowResize = world.realTime;
 
