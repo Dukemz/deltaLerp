@@ -59,10 +59,10 @@ class Game { // game class
       projectiles: new this.playerProjectiles.Group(),
       layer: 1,
       input: new kbInput(),
-      weapons: [
-        new MachineGun(),
-        new Shotgun()
-      ]
+      // weapons: [
+      //   new MachineGun(),
+      //   new Shotgun()
+      // ]
     });
 
     // add extra players for additional controllers connected
@@ -124,6 +124,9 @@ class Game { // game class
     camera.zoom = setZoom;
     // calculate bounds
     // const camBounds = this.calculateBounds(canvas.w, canvas.h, setZoom);
+
+    // funny death sfx
+    if(!manager.assets.audio["dl.deathsfx"]) loadScripts(["assets/deathsfx.dzdla"]);
 
     // save timestamp on when the thing starts
     // main.js setup will open the menu rather than jumping straight into the game

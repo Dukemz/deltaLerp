@@ -5,10 +5,12 @@ class HomingTriangle extends Enemy {
     super(data);
 
     this.activeHoming ??= true;
-    this.baseConstructor ??= [this.x, this.y, 10, "triangle"];
+    this.baseConstructor ??= [this.x, this.y, 50, "triangle"];
     this.enemyType = "HomingTriangle";
 
+    this.canSplit ??= true;
     this.health = 3;
+    this.vectorHeading ??= 0;
   }
 
   postCreate() { // function called after create() in Enemy is run
@@ -17,8 +19,11 @@ class HomingTriangle extends Enemy {
     this.baseSprite.drag = 0.5;
     this.baseSprite.rotationDrag = 0.1;
 
-    this.baseSprite.collides(this.game.players, () => {
-      if(this.activeHoming) this.delete();
+    this.baseSprite.collides(this.game.players, (_a, p) => {
+      if(this.activeHoming) {
+        this.delete();
+        p.health -= this.damage;
+      }
     });
   }
 

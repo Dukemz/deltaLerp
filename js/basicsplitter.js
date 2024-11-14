@@ -29,7 +29,7 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
   }
 
   generate() { // generate spikes
-    // currently can only be used once on creation, until i figure out a way to get the EXACT verticies location
+    // currently can only be used once on creation, until i figure out a way to get the EXACT vertices location
     // or maybe, set the rotation of the sprite to 0, then create all spikes, then set rotation back to what it was
 
     // vector used to calculate outermost vertex of each triangle
@@ -55,6 +55,7 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
       // determines the offset for the homing spikes to follow the player's direction
       const vectorHeading = -spikeVector.heading();
      
+      // this effectively does the following:
       // const newSpike = new this.sprites.Sprite([[tipX, tipY], [v1.x, v1.y], [v2.x, v2.y], [tipX, tipY]]);
       const newSpike = new HomingTriangle({
         game: this.game,
@@ -75,6 +76,7 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
 
       spikeVector.rotate(rotateAngle);
 
+      // note: maybe move these out of class?
       // triggered on a collision that should cause the splitter to separate
       const separateCallback = () => {
         if(!this.separated) {
@@ -92,7 +94,11 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
       }
 
       const enemyCollideCallback = (_a, b) => { // other active homing triangles can set separators off
-        if(b?.enemyInstance.enemyType === "HomingTriangle" && b.enemyInstance.activeHoming) separateCallback();
+        if(
+          b?.enemyInstance.enemyType === "HomingTriangle"
+          && b.enemyInstance.activeHoming
+          && b.enemyInstance.canSplit
+        ) separateCallback();
       }
 
       // separate when a player bullet hits

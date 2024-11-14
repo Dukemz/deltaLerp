@@ -59,7 +59,8 @@ class Player extends Sprite {
     this.maxSpeed ||= 6;
     this.framesAlive = 0;
     this.lastWeaponCycle = 0;
-    this._health = 100;
+    this.maxHealth = 50;
+    this._health = this.maxHealth;
 
     // indicators like health and such - rings around the player
     this.arcindics = [];
@@ -73,7 +74,7 @@ class Player extends Sprite {
     // group of all projectiles
     // allow for use with enemies as well?
     // if this.weapons is not already an array, create it
-    this.weapons ||= [new MachineGun()];
+    this.weapons ||= [new MachineGun(), new Shotgun()];
     // this.activeWeapon will be the currently active weapon
     // at the end of update, call the fire function
     // the weapon class should handle everything from there
@@ -96,9 +97,9 @@ class Player extends Sprite {
 
   set health(value) {
     this._health = value;
-    if(value <= 0) return this.remove();
-    // health is 0-100, map endarc from 180 to 0
-    this.healthIndicator.endArc.targetValue = map(value, 0, 100, 180, 0, true);
+    if(value <= 0) return this.delete();
+    // health is 0-100, map startArc from 180 to 0
+    this.healthIndicator.startArc.targetValue = map(value, 0, this.maxHealth, 180, 0, true);
   }
 
   directionalVelocity(angle) { // calculate velocity respective of an angle
@@ -146,7 +147,7 @@ class Player extends Sprite {
     }
 
     // kill player if they go too far lmao
-    if(this.x < camera.x - (this.game.visibleWidth/2) - 200 || this.x > camera.x + (this.game.visibleWidth/2) + 10) this.remove();
+    if(this.x < camera.x - (this.game.visibleWidth/2) - 200 || this.x > camera.x + (this.game.visibleWidth/2) + 10) this.delete();
 
     // cycle weapon
     if(world.physicsTime - this.lastWeaponCycle > 0.7 && this.input.cycleWeapon()) {
@@ -156,6 +157,11 @@ class Player extends Sprite {
 
     // shoot controls
     if(this.input.firing()) this.weapons[this.activeWeapon].fire();
+  }
+
+  delete() {
+    if(manager.assets.audio["dl.deathsfx"]) manager.assets.audio["dl.deathsfx"].audio.play();
+    this.remove();
   }
 
   tdebug() { // toggle debug

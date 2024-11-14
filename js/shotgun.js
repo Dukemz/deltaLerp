@@ -1,8 +1,10 @@
+"use strict";
+
 class Shotgun {
   constructor() {
-    this.fireRate = 600;
-    this.bulletSpread = 7; // number of bullets in each spread shot
-    this.spreadAngle = 45; // total spread angle range in degrees
+    this.fireRate = 800;
+    this.bulletSpread = 9; // number of bullets in each spread shot
+    this.spreadAngle = 55; // total spread angle range in degrees
     this.bulletSpeed = 14;
     this.killSpeed = 5; // speed at which the bullet is removed
     this.damage = 1.5;

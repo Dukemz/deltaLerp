@@ -16,8 +16,8 @@ class ArcIndicator { // arc indicator thing
     if(window.Q5) { this.understroke.a = this.understrokeAlpha } else { this.understroke.setAlpha(this.understrokeAlpha) }
 
     // leftmost point is 180, rightmost point is 0
-    this.startArc = new LerpController(0, 180, 0.9);
-    this.endArc = new LerpController(0, 0, 0.9);
+    this.startArc = new LerpController(0, 0, 0.99);
+    this.endArc = new LerpController(0, 180, 0.8);
   }
 
   draw() {
@@ -28,9 +28,9 @@ class ArcIndicator { // arc indicator thing
     noFill();
     stroke(this.understroke);
     strokeWeight(this.strokeWeight);
-    arc(this.parent.x, this.parent.y, this.diameter, this.diameter, 180, 0);
+    arc(this.parent.x, this.parent.y, this.diameter, this.diameter, 0, 180, OPEN);
     stroke(this.stroke);
-    arc(this.parent.x, this.parent.y, this.diameter, this.diameter, start, end);
+    arc(this.parent.x, this.parent.y, this.diameter, this.diameter, start, end, OPEN);
     pop();
   }
 }
