@@ -6,10 +6,11 @@ class Menu {
     this.mainMenuOpen = false;
 
     this.menuSprites = new Group();
-    // this.menuSprites.autoDraw = false;
+    this.menuSprites.autoDraw = false;
     this.menuSprites.strokeWeight = 5;
     this.menuSprites.drag = 5;
     this.menuSprites.rotationLock = true;
+    // this.menuSprites.textFill = color(255); // this doesn't work due to bug with q5
 
     // menu buttons, not including the start button
     // this.menuButtons = new this.menuSprites.Group();
@@ -44,6 +45,9 @@ class Menu {
         } else {
           this.rotation = 45;
         }
+
+        // button text
+        this.buttonText ??= "Placeholder";
 
         // set fill, stroke and rotation
         this.fill = data.fill ? data.fill : color("#193095");
@@ -132,6 +136,22 @@ class Menu {
           this.icondraw(this);
           pop();
         }
+
+      }
+
+      drawText() { // draw text underneath each button
+        if(this.buttonText && this.mouse.hovering()) {
+          push();
+          translate(this.x, this.y);
+          scale(this.scale.x, this.scale.y);
+          noStroke();
+          // fill(this.textFill); // disabled until q5 bug is fixed
+          fill(255);
+          textAlign(CENTER);
+          textSize(30);
+          text(this.buttonText, 0, this.height/this.scale);
+          pop();
+        }
       }
     } // end of menunode class
 
@@ -163,12 +183,14 @@ class Menu {
       hoverScale: 1.5,
       pressedScale: 1.3,
       strokeLerp: new ColLerpController(color("#242838"), color("#4265fc"), 0, 0, 0.999),
+      buttonText: ""
     });
     
     // MENU BUTTONS
     this.menuLogoCentre = new this.MenuNode([0, 0, 180, 180, 's'], {
       fill: color("#1b1c56"),
       stroke: color("#3f48cc"),
+      buttonText: "",
       pressedScale: 0.95,
       icondraw: (_spr) => {
         beginShape();
@@ -183,6 +205,7 @@ class Menu {
     // main buttons
     this.playButton = new this.MenuNode([0, 230, 100, 100], {
       parentNode: this.menuLogoCentre,
+      buttonText: "Play",
       icondraw: (spr) => {
         push();
         fill(spr.stroke);
@@ -326,6 +349,10 @@ class Menu {
         game = new Game();
       }
     }
+
+    // draw menu sprites
+    this.menuSprites.draw();
+    for(let s of this.menuSprites) s.drawText();
 
     if(this.mainMenuStartedOpening) { // main menu has STARTED opening but isn't open yet
 
