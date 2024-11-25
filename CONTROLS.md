@@ -30,6 +30,8 @@ Note: DualSense (PS5) controllers may behave strangely in Firefox for some reaso
 
 - **Q** - Crash game
 
+- **L** - Restart game
+
 - **J/Left Bumper** - Slow time
 
 - **M/Right Trigger** - Move camera forwards

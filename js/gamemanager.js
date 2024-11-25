@@ -4,7 +4,7 @@ class GameManager {
   // NOTE - eventually improve this
   // needs to be able to handle multiple crashes, in the event crash is called more than once
   constructor() {
-    console.log("[MANAGER] Initialising...")
+    console.log("[MANAGER] Initialising...");
     this.ingame = false;
     this.crashed = false;
     this.errdata = {};
@@ -111,7 +111,7 @@ class GameManager {
         msg += `Unable to provide more error information.`;
       }
     } else if(this.errdata.source) {
-      msg += `Source: ${this.errdata.source}`
+      msg += `Source: ${this.errdata.source}`;
     } else {
       msg += `No error data available.`;
     }
