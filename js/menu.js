@@ -218,22 +218,28 @@ class Menu {
       }
     });
     this.settingsButton = new this.MenuNode([0, 230, 100, 100], {
-      parentNode: this.menuLogoCentre,
-      icondraw: this.temporaryIconFunc
-    });
-    this.helpButton = new this.MenuNode([0, 230, 100, 100], {
-      parentNode: this.menuLogoCentre,
-      icondraw: this.temporaryIconFunc
-    });
-    this.creditsButton = new this.MenuNode([0, 230, 100, 100], {
+      buttonText: "Settings",
       parentNode: this.menuLogoCentre,
       icondraw: this.temporaryIconFunc
     });
     this.statisticsButton = new this.MenuNode([0, 230, 100, 100], {
+      buttonText: "Statistics",
+      parentNode: this.menuLogoCentre,
+      icondraw: this.temporaryIconFunc
+    });
+    this.helpButton = new this.MenuNode([0, 230, 100, 100], {
+      buttonText: "How to Play",
+      parentNode: this.menuLogoCentre,
+      icondraw: this.temporaryIconFunc,
+      onPressed: () => location.href = "https://github.com/Dukemz/deltaLerp/blob/main/CONTROLS.md"
+    });
+    this.creditsButton = new this.MenuNode([0, 230, 100, 100], {
+      buttonText: "Credits",
       parentNode: this.menuLogoCentre,
       icondraw: this.temporaryIconFunc
     });
     this.currentlyUselessButton = new this.MenuNode([0, 230, 100, 100], {
+      buttonText: "Whatever",
       parentNode: this.menuLogoCentre,
       icondraw: this.temporaryIconFunc
     });

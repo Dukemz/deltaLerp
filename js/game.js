@@ -136,9 +136,6 @@ class Game { // game class
   }
 
   draw() { // runs at the end of the main draw function
-    // set actual camera position to game's set position
-    camera.pos = game.camPos;
-
     // copy bg colour
     const backgroundCol = color(this.bgcol.levels);
     const bgopacity = this.bgOpacityLerp.currentValue;
@@ -171,6 +168,8 @@ class Game { // game class
       // calculation for camera movement
       // this is about as accurate as i can make it lol
       this.camPos.x += this.cameraSpeedLerp.currentValue * deltaTime * world.timeScale;
+      // set actual camera position to game's set position
+      camera.pos = game.camPos;
 
       this.cameraSpeedLerp.update();
       this.bgOpacityLerp.update();
