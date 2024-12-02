@@ -9,10 +9,13 @@ async function audioToBase64(audioFile) {
     reader.onload = (e) => {
       let base64 = e.target.result;
 
+      // remove the mime type string
+      base64 = base64.replace(/^data:.*;base64,/, '');
+
       // force MIME type to audio/ogg if the file is an .ogg
-      if (audioFile.type === 'video/ogg') {
-        base64 = base64.replace(/^data:video\/ogg/, 'data:audio/ogg');
-      }
+      // if(audioFile.type === 'video/ogg') {
+      //   base64 = base64.replace(/^data:video\/ogg/, 'data:audio/ogg');
+      // }
       resolve(base64);
     };
     reader.readAsDataURL(audioFile);
@@ -32,7 +35,7 @@ document.getElementById('convertButton').addEventListener('click', async () => {
     const base64str = await audioToBase64(audioFile);
     let fileData;
     let fileType = "application/octet-stream";
-    let fileExt = ".dzdlt";
+    let fileExt = ".txt";
     const encoding = document.getElementById('encodingSelect').value;
 
     // compress using lz-string/base64str
