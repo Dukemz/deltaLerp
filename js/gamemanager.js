@@ -34,7 +34,7 @@ class GameManager {
     this.fpsPush = setInterval(() => {
       if(!document.hidden) {
         this.fpsList.push(frameRate());
-        // remove first item in list if it goes above 30
+        // remove first item in list if it goes above 20
         if(this.fpsList.length > 20) this.fpsList.shift();
 
         if(window.Q5) {
@@ -61,6 +61,17 @@ class GameManager {
       this.crash({ type: "promiseReject", event });
     });
     console.log("[MANAGER] Loaded successfully!");
+  }
+
+  calculatePerformance() {
+    // average deltatime, fps calcs
+    this.avgFPS = this.fpsList.reduce((a, b) => a + b, 0) / this.fpsList.length || frameRate();
+    this.avgDeltaTime = 1 / this.avgFPS;
+    if(this.avgFPS < 2) console.warn(`Warning: Average FPS is ${this.avgFPS.toFixed(3)}!`);
+
+    if(window.Q5) {
+      this.q5avgFPS = this.q5fpsList.reduce((a, b) => a + b, 0) / this.q5fpsList.length || getFPS();
+    }
   }
 
   crash(data) { // data is an object, should contain error

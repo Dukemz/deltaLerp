@@ -20,7 +20,6 @@ let scriptList = [
   'js/homingtriangle.js'
 ];
 
-
 // menu/game instance
 let menu, game;
 
@@ -44,6 +43,7 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
       script.type = "text/javascript";
       script.src = scriptUrl;
       script.async = false; // ensure synchronous loading
+      // script.defer = true; // defer - https://developer.mozilla.org/en-US/docs/Web/API/HTMLScriptElement/defer
 
       // on error, reject the promise
       // script.onerror = reject;
@@ -59,7 +59,7 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
           reject(Error(`An error occurred loading [${scriptUrl}] - script loading halted.`));
         } else {
           resolve();
-          scriptContainer.removeChild(script); // remove the script tag
+          // scriptContainer.removeChild(script); // remove the script tag
         }
       };
 
@@ -150,6 +150,10 @@ async function setup() {
     document.getElementById("loadtext").innerHTML = "oops... something went wrong loading the game manager.<br>check the console for more info!";
     console.warn("[SETUP] Error creating game manager instance! Displayed below:");
     console.error(error);
+
+    for(let c of document.getElementsByTagName("canvas")) {
+      c.style.display = "none";
+    }
   }
 }
 
@@ -168,14 +172,7 @@ function draw() {
     if(document.hidden) {
       manager.lastHidden = performance.now();
     } else {
-      // average deltatime, fps calcs
-      manager.avgFPS = manager.fpsList.reduce((a, b) => a + b, 0) / manager.fpsList.length || frameRate();
-      manager.avgDeltaTime = 1 / manager.avgFPS;
-      if(manager.avgFPS < 2) console.warn(`Warning: Average FPS is ${manager.avgFPS.toFixed(3)}!`);
-
-      if(window.Q5) {
-        manager.q5avgFPS = manager.q5fpsList.reduce((a, b) => a + b, 0) / manager.q5fpsList.length || getFPS();
-      }
+      manager.calculatePerformance();
     }
 
     if(manager.ingame) {
@@ -184,7 +181,7 @@ function draw() {
       menu.draw();
     }
 
-    // step world
+    // world step, progress physics simulation
     world.calcTimeStep = (1 / (frameRate() || 60)) * world.timeScale;
     if(world.timeScale) world.step(
       world.calcTimeStep,
