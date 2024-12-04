@@ -3,6 +3,7 @@
 class kbInput {
   constructor(data) {
     Object.assign(this, data);
+    // new kbInput({ data }) can be run to preset keys
     // data = {
     //   up: "w",
     //   down: "s"
@@ -11,21 +12,21 @@ class kbInput {
     this.inputType = "kb";
     // note to self: potentially make both input classes extend a base input class?
 
-    // directional movement
-    this.c ||= {};
-    this.c.up ||= "up";
-    this.c.down ||= "down";
-    this.c.left ||= "left";
-    this.c.right ||= "right";
-    this.c.slow ||= "shift";
+    // directional movement preset
+    this.c ??= {};
+    this.c.up ??= "up";
+    this.c.down ??= "down";
+    this.c.left ??= "left";
+    this.c.right ??= "right";
+    this.c.slow ??= "shift";
 
     // fire controls
-    this.c.fire ||= "space";
-    this.c.autoFire ||= "e";
-    this.c.cycleWeapon ||= "c";
+    this.c.fire ??= "space";
+    this.c.autoFire ??= "e";
+    this.c.cycleWeapon ??= "c";
 
     // misc controls
-    this.c.pause ||= "p";
+    this.c.pause ??= "p";
 
     this.autoFireEnabled = false;
     this.preciseMode = true;
@@ -64,8 +65,6 @@ class kbInput {
   }
 
   // other methods //
-
-  // what if when you hold down right shift for 5 seconds it opens the sticky keys popup
   
   isMoving() {
     return (kb.pressing(this.c.up) || kb.pressing(this.c.down) || kb.pressing(this.c.left) || kb.pressing(this.c.right))

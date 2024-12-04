@@ -14,7 +14,7 @@ class GameHUD {
     
     // top left HUD
     textAlign(LEFT, TOP);
-    text(`frames: ${frameCount}, timedrift: ${(world.realTime-world.physicsTime).toFixed(3)}`, 10, 10);
+    text(`frames: ${frameCount}, timedrift: ${(world.realTime-world.physicsTime).toFixed(2)}`, 10, 10);
     text(`realtime: ${world.realTime.toFixed(3)}, physics: ${world.physicsTime.toFixed(3)}`, 10, 40);
 
     // top right HUD

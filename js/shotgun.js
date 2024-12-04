@@ -5,7 +5,7 @@ class Shotgun {
     this.fireRate = 800;
     this.bulletSpread = 9; // number of bullets in each spread shot
     this.spreadAngle = 55; // total spread angle range in degrees
-    this.bulletSpeed = 14;
+    this.bulletSpeed = 20;
     this.killSpeed = 5; // speed at which the bullet is removed
     this.damage = 1.5;
 
@@ -14,17 +14,18 @@ class Shotgun {
   }
 
   initialise(player) {
-    this.group = new player.projectiles.Group();
+    this.player = player;
+    this.group = new this.player.projectiles.Group();
 
     // projectile properties
     this.group.diameter = 10;
-    this.group.x = () => player.x + 5;
-    this.group.y = () => player.y;
+    this.group.x = () => this.player.x + 5;
+    this.group.y = () => this.player.y;
     this.group.mass = 5;
     this.group.bounciness = 1;
-    this.group.drag = 2;
+    this.group.drag = 4;
 
-    this.group.fill = player.fill;
+    this.group.fill = this.player.fill;
     this.group.stroke = 255;
     this.group.strokeWeight = 2;
     this.group.overlaps(this.group);
@@ -33,7 +34,7 @@ class Shotgun {
     // player.game.objects.collides(this.group, (_o, p) => p.remove());
 
     // damage enemies on collision
-    player.game.enemyObjects.collides(this.group, (e, p) => {
+    this.player.game.enemyObjects.collides(this.group, (e, p) => {
       e.enemyInstance.health -= this.damage;
       // p.remove();
     });
@@ -42,18 +43,21 @@ class Shotgun {
   fire() {
     const elapsed = world.physicsTime * 1000 - this.lastFired;
     if(elapsed > this.fireRate) {
-      // Calculate the angle increment between each bullet
+      // knockback - currently doesn't work very well if movement keys are being held down
+      this.player.vel.x -= 10;
+
+      // calculate the angle increment between each bullet
       const angleIncrement = this.spreadAngle / (this.bulletSpread - 1);
-      const startAngle = -this.spreadAngle / 2; // Center the spread
+      const startAngle = -this.spreadAngle / 2; // center the spread
 
       for(let i = 0; i < this.bulletSpread; i++) {
         const bullet = new this.group.Sprite();
 
-        // Calculate the specific angle for each bullet
+        // calculate the specific angle for each bullet
         const angle = startAngle + i * angleIncrement;
         const radians = (angle * Math.PI) / 180;
 
-        // Set bullet velocity based on calculated angle and consistent speed
+        // set bullet velocity based on calculated angle and consistent speed
         bullet.vel.x = Math.cos(radians) * this.bulletSpeed;
         bullet.vel.y = Math.sin(radians) * this.bulletSpeed;
 
@@ -66,7 +70,7 @@ class Shotgun {
       this.shotsFired += this.bulletSpread;
       this.lastFired = world.physicsTime * 1000;
 
-      // Limit the number of bullets on screen to prevent overflow
+      // limit the number of bullets for performance
       if(this.group.amount > 30) {
         this.group[0].remove();
       }
