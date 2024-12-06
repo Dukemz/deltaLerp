@@ -7,7 +7,7 @@ class Shotgun {
     this.spreadAngle = 55; // total spread angle range in degrees
     this.bulletSpeed = 20;
     this.killSpeed = 5; // speed at which the bullet is removed
-    this.damage = 1.5;
+    this.damage = 1;
 
     this.lastFired = 0;
     this.shotsFired = 0;
@@ -21,7 +21,7 @@ class Shotgun {
     this.group.diameter = 10;
     this.group.x = () => this.player.x + 5;
     this.group.y = () => this.player.y;
-    this.group.mass = 5;
+    this.group.mass = 1;
     this.group.bounciness = 1;
     this.group.drag = 4;
 
@@ -36,6 +36,8 @@ class Shotgun {
     // damage enemies on collision
     this.player.game.enemyObjects.collides(this.group, (e, p) => {
       e.enemyInstance.health -= this.damage;
+      // test - if enemy gets killed, bullet speed is readded
+      if(e.enemyInstance.health <= 0) p.speed += this.killSpeed;
       // p.remove();
     });
   }
@@ -44,7 +46,7 @@ class Shotgun {
     const elapsed = world.physicsTime * 1000 - this.lastFired;
     if(elapsed > this.fireRate) {
       // knockback - currently doesn't work very well if movement keys are being held down
-      this.player.vel.x -= 10;
+      // this.player.vel.x -= 10;
 
       // calculate the angle increment between each bullet
       const angleIncrement = this.spreadAngle / (this.bulletSpread - 1);
@@ -60,6 +62,9 @@ class Shotgun {
         // set bullet velocity based on calculated angle and consistent speed
         bullet.vel.x = Math.cos(radians) * this.bulletSpeed;
         bullet.vel.y = Math.sin(radians) * this.bulletSpeed;
+
+        bullet.vel.y += this.player.vel.y;
+        bullet.vel.x += this.player.vel.x;
 
         bullet.update = () => {
           if(bullet.speed < this.killSpeed) bullet.remove();
