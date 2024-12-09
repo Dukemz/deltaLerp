@@ -79,7 +79,7 @@ class Enemy {
       this.delete();
     }
 
-    this.baseSprite.text = this.health;
+    // this.baseSprite.text = this.health;
 
     // if individual sprite extension needs an update function this calls it
     // maybe have some kind of get/set thing that chains functionality on instead of replacing it..?

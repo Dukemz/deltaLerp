@@ -136,6 +136,7 @@ class GameManager {
   crashlog() { // log crash report to console
     let msg = `%coh no\n%c${this.errmsg}`;
     console.error(msg, "font-size: 27px", "");
+    // todo: check if this is actually an instance of Error, if not, just log it to the thing
     if(this.errdata.error) console.error(this.errdata.error.stack);
   }
 

@@ -108,8 +108,8 @@ class Game { // game class
     }
 
     // create boundaries
-    this.lowerboundary = new this.boundaries.Sprite(0, 305, this.visibleWidth*2, 2000);
-    this.upperboundary = new this.boundaries.Sprite(0, -305, this.visibleWidth*2, 2000);
+    this.lowerboundary = new this.boundaries.Sprite(0, 305, this.visibleWidth*4, 2000);
+    this.upperboundary = new this.boundaries.Sprite(0, -305, this.visibleWidth*4, 2000);
 
     // draw opaque bg
     background(this.bgcol);
@@ -288,5 +288,6 @@ class Game { // game class
     // this.draw = () => {};
     this.active = false;
     manager.ingame = false;
+    console.log("[GAME] Game closed!");
   }
 }

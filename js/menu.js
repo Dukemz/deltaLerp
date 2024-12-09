@@ -523,8 +523,8 @@ class ParticleBG {
     }
 
     update() {
-      this.x = constrain(this.x + this.vx, 0, width);
-      this.y = constrain(this.y + this.vy, 0, height);
+      this.x = constrain(this.x + this.vx * deltaTime/20, 0, width);
+      this.y = constrain(this.y + this.vy * deltaTime/20, 0, height);
       if(this.x === 0 || this.x === width) this.vx *= -1;
       if(this.y === 0 || this.y === height) this.vy *= -1;
     }
