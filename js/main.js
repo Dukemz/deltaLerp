@@ -106,6 +106,8 @@ async function setup() {
 
       // disable world auto step
       world.autoStep = false;
+      // make group.remove() actually remove groups
+      p5play.storeRemovedGroupRefs = false
       // set font (note: this gets messed up if p5play.renderStats is set to true)
       textFont("Trebuchet MS");
 
@@ -225,7 +227,17 @@ function windowResized() {
   }
 }
 
-function deltaLerp(a, b, f, ignoreTimeScale) { // hey look, it's the game's namesake!
+// hey look, it's the game's namesake!
+/**
+ * Lerp with deltaTime.
+ *
+ * @param {number} a - First number.
+ * @param {number} b - Second number.
+ * @param {number} f - Factor to interpolate by. Must be between 0 and 1.
+ * @param {boolean} ignoreTimeScale - Whether to ignore world.timeScale
+ * @returns {number}
+ */
+function deltaLerp(a, b, f, ignoreTimeScale) {
   let tsc = world.timeScale;
   if(ignoreTimeScale) tsc = 1;
   // f is the factor between 0 and 1 deciding how quickly it catches up
@@ -237,7 +249,7 @@ function deltaLerp(a, b, f, ignoreTimeScale) { // hey look, it's the game's name
 /**
  * Simple async sleep function.
  * @param {Number} ms - Milliseconds to wait for
- * @returns {*}
+ * @returns {Promise}
  */
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));

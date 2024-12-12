@@ -18,7 +18,7 @@ class LerpController {
   }
   
   /**
-   * Update the current lerp controller value and return it.
+   * Updates the current lerp controller value and returns it.
    * @returns {number} Updated LerpController value
    */
   update() {
@@ -29,7 +29,7 @@ class LerpController {
   }
   
   /**
-   * Set both the target and current value.
+   * Sets both the target and current value.
    * @param {number} value
    */
   instantSet(value) {

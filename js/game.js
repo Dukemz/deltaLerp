@@ -131,8 +131,8 @@ class Game { // game class
     // save timestamp on when the thing starts
     // main.js setup will open the menu rather than jumping straight into the game
     // new Game() will be called when entering a level
-    this.startTimestamp = Date.now();
-    console.log("[GAME] Game creation complete!");
+    this.startTimestamp = performance.now();
+    console.log(`[GAME] Game creation complete! (instance ${manager.gameInstances++})`);
   }
 
   draw() { // runs at the end of the main draw function
@@ -280,7 +280,7 @@ class Game { // game class
   exit() { // close game, remove all sprites.
     // game cannot be reused after this
 
-    // todo: make sure ALL groups are removed. write func in player/enemy classes to remove all their groups?
+    // todo: (MAYBE) make sure ALL groups are removed. write func in player/enemy classes to remove all their groups?
     this.players.remove();
     this.objects.remove();
     this.projectiles.remove();
