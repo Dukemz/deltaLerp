@@ -247,6 +247,24 @@ function deltaLerp(a, b, f, ignoreTimeScale) {
 
 
 /**
+ * Generate the points of an equilateral triangle given a side length.
+ *
+ * @param {number} sideLength
+ * @returns {number[]}
+ */
+function generateTrianglePoints(sideLength) {
+  // calculate the height of an equilateral triangle using the formula: height = (sqrt(3) / 2) * sideLength
+  const tHeight = (Math.sqrt(3) / 2) * sideLength;
+
+  // define the three points of the triangle
+  const pointA = { x: 0, y: -2*tHeight/3 };
+  const pointB = { x: -sideLength / 2, y: tHeight / 3 };
+  const pointC = { x: sideLength / 2, y: tHeight / 3 };
+
+  return [pointA, pointB, pointC];
+}
+
+/**
  * Simple async sleep function.
  * @param {Number} ms - Milliseconds to wait for
  * @returns {Promise}

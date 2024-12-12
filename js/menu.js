@@ -207,20 +207,37 @@ class Menu {
       parentNode: this.menuLogoCentre,
       buttonText: "Play",
       icondraw: (spr) => {
-        push();
         fill(spr.stroke);
         triangle(-15, -20, /*  */ -15, 20, /* */ 25, 0);
-        pop();
       },
       onPressed: () => { // close menu and start game
         this.exit();
         game = new Game();
       }
     });
+    // generate triangle points ahead of time
+    const settingsTrianglePoints = generateTrianglePoints(70);
     this.settingsButton = new this.MenuNode([0, 230, 100, 100], {
       buttonText: "Settings",
       parentNode: this.menuLogoCentre,
-      icondraw: this.temporaryIconFunc
+      icondraw: (spr) => {
+        fill(spr.stroke);
+        noStroke();
+        triangle(
+          settingsTrianglePoints[0].x, settingsTrianglePoints[0].y,
+          settingsTrianglePoints[1].x, settingsTrianglePoints[1].y,
+          settingsTrianglePoints[2].x, settingsTrianglePoints[2].y
+        );
+        triangle(
+          settingsTrianglePoints[0].x, -settingsTrianglePoints[0].y,
+          settingsTrianglePoints[1].x, -settingsTrianglePoints[1].y,
+          settingsTrianglePoints[2].x, -settingsTrianglePoints[2].y
+        );
+        fill(spr.fill);
+        circle(0, 0, 35);
+        fill(spr.stroke);
+        circle(0, 0, 25);
+      }
     });
     this.statisticsButton = new this.MenuNode([0, 230, 100, 100], {
       buttonText: "Statistics",
@@ -230,7 +247,12 @@ class Menu {
     this.helpButton = new this.MenuNode([0, 230, 100, 100], {
       buttonText: "How to Play",
       parentNode: this.menuLogoCentre,
-      icondraw: this.temporaryIconFunc,
+      icondraw: (spr) => {
+        circle(0, -28, 10);
+        fill(spr.stroke);
+        rectMode(CENTER);
+        rect(0, 10, 10, 40);
+      },
       onPressed: () => location.href = "https://github.com/Dukemz/deltaLerp/blob/main/CONTROLS.md"
     });
     this.creditsButton = new this.MenuNode([0, 230, 100, 100], {
@@ -288,6 +310,7 @@ class Menu {
 
   draw() {
     if(!this.active) return; // menu not initialised yet
+    if(document.hidden) this.background.adjust(width, height);
 
     if(camera.x !== 0 || camera.y !== 0) camera.pos = {x:0, y:0};
     camera.on();
@@ -350,10 +373,10 @@ class Menu {
       }
 
       // DEBUG: quickstart
-      if(kb.pressing("s")) {
-        this.exit();
-        game = new Game();
-      }
+      // if(kb.pressing("s")) {
+      //   this.exit();
+      //   game = new Game();
+      // }
     }
 
     // draw menu sprites
@@ -448,7 +471,10 @@ class ParticleBG {
     this.opacityLerp = new LerpController(0, 128, 0.7);
 
     this.lineColour = lineCol ? color(lineCol) : color(255);
+    this.clonedColour = color(this.lineColour.levels);
     // this.maxOpacity = 128;
+
+    this.queueReset = false;
 
     this.particleList = [];
     this.particlesPerUnitArea = 0.0001; // density: particles per square pixel
@@ -481,9 +507,17 @@ class ParticleBG {
   }
 
   draw() {
-    const clonedColour = color(this.lineColour.levels);
-    const isQ5 = !!window.Q5;
+    if(this.queueReset && !document.hidden) {
+      console.log("[MENU] Resetting menu background after document inactivity.");
+      this.queueReset = false;
+      this.particleList = [];
+      this.adjust(width, height);
 
+    } else if(deltaTime > 5000 && document.hidden) {
+      return this.queueReset = true;
+    }
+    
+    const isQ5 = !!window.Q5;
     const maxOpacity = this.opacityLerp.update();
 
     for(let i = 0; i < this.particleList.length; i++) {
@@ -501,12 +535,12 @@ class ParticleBG {
         if(d < this.maxDistance) {
           const opac = map(d, 0, this.maxDistance, maxOpacity, 0);
           if(isQ5) {
-            clonedColour.a = opac;
+            this.clonedColour.a = opac;
           } else {
-            clonedColour.setAlpha(opac);
+            this.clonedColour.setAlpha(opac);
           }
 
-          stroke(clonedColour);
+          stroke(this.clonedColour);
           line(p1.x, p1.y, p2.x, p2.y);
         }
       }
