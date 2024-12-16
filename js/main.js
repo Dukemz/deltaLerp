@@ -3,6 +3,7 @@
 console.log("[HELLO WORLD]");
 const version = "pre-alpha";
 
+// list of all game scripts to load
 let scriptList = [
   'js/lerpcontroller.js',
   'js/gamehud.js',
@@ -20,7 +21,7 @@ let scriptList = [
   'js/homingtriangle.js'
 ];
 
-// menu/game instance
+// menu/game instances
 let menu, game;
 
 async function loadScripts(scriptUrls) { // load scripts and add them to the page
@@ -59,7 +60,7 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
           reject(Error(`An error occurred loading [${scriptUrl}] - script loading halted.`));
         } else {
           resolve();
-          // scriptContainer.removeChild(script); // remove the script tag
+          scriptContainer.removeChild(script); // remove the script tag
         }
       };
 
@@ -75,12 +76,9 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
 
 function preload() {
   // this function doesn't do much, but it's called before setup
-  // console log helps with debugging 
+  // the console.log at the end helps with debugging 
+
   noLoop();
-
-  const testimg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAdCAIAAABE/PnQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAG1SURBVEhLzZY/UoNAFMZZx8bO1rEylXcQKi8BHkHkBHEmOGNS2UU8gnAJKziApZUewxK/t99mk3GAhQQcf0M2uw/yvvdnl4kKw9CbjKIoRCCOY2MYlSzLtgL3yxNjHo+z0ycIHJvVvjzOvzEGQVCW5a8Ji3+Ez6QcKoBIQeOETN5k0wMsOBmLbdDIAG3BWI8KfcL/P2tytMGsezBAAH5zDeqrlDJWF+6Dpm4eMIb1B8aqqux2gF6hLmGHJC2NODKA9/p1sV4urlbixfd9uz3gHbdg787GVaI8hcbdhYeL2Azg/fnLS+aSXwetAvArxYlSLm1jbQa0lLfXGDuS6MoAMXJEpBabAUqEtN7Pfez69WfdptHeZBRHf7MN3ipPZgpHX9sExC4lmqlkk2UjPbZpLr9HsIwUFyeI3dkAoe1VwYMO6FRmiDRK5XXPkKMUj/HtD/gri/tVgd2N5+gLdTBO9U5FTpRE9YKXN0zkyRZ6lMiiayVbi5J66cQhgE6KLz2RMBH7Um8tjWjkUij9bDMOARSEvqQyGuoR3jKLFoaUaKeTZt2DYQJ78Cd/vIxhAnZP/jR43g8mcFyLHdrIDAAAAABJRU5ErkJggg==";
-  window.oogle = loadImage(testimg);
-
   console.log("[SETUP] Preload complete.");
 }
 
@@ -88,7 +86,7 @@ async function setup() {
   console.log("[SETUP] Initialising...");
   document.getElementById("loadtext").innerHTML = "loading scripts...";
 
-  // there's gonna be a lot of nested try/catches here unfortunately
+  // there's gonna be a lot of nested try/catches here, unfortunately this is necessary
   try { // load manager first
     await loadScripts(['js/gamemanager.js', 'js/audiomgr.js']);
     window.manager = new GameManager();
@@ -96,10 +94,12 @@ async function setup() {
     try { // setup canvas
       console.log(`[SETUP] Creating canvas - w: ${windowWidth - 50}px, h: ${windowHeight - 50}px`);
       new Canvas(windowWidth - 50, windowHeight - 50);
+      // add canvas to the page and hide the load text
       document.getElementById("canvasContainer").appendChild(canvas);
       document.getElementById("loadtext").innerHTML = "";
 
-      // window resize listener for q5 workaround
+      // if using q5.js instead of p5.js, windowResized() doesn't trigger if game has crashed
+      // so this creates a listener to trigger it manually
       if(window.Q5) addEventListener("resize", () => {
         if(window.manager.crashed) windowResized();
       });
@@ -108,22 +108,20 @@ async function setup() {
       world.autoStep = false;
       // make group.remove() actually remove groups
       p5play.storeRemovedGroupRefs = false
-      // set font (note: this gets messed up if p5play.renderStats is set to true)
+      // set font for entire sketch (note: this breaks if p5play.renderStats is set to true)
       textFont("Trebuchet MS");
 
       try { // load game scripts
         await loadScripts(scriptList);
         console.log("[SETUP] All game scripts loaded!");
 
-        // annoying thing to make all sprites in a group run my update func
+        // make all sprites in a group run my custom update function
         Group.prototype.runUpdate = function () {
           for(let s of this) {
             if(s.runUpdate) s.runUpdate();
           }
         }
-        // load menu audio
         // note: to avoid lag, audio assets should be loaded outside of game or menu in an async func with await
-        // await loadScripts(["assets/stargazer.dzdla"]);
 
         // initial setup complete - create menu
         menu = new Menu();
@@ -131,9 +129,10 @@ async function setup() {
 
         console.log("[SETUP] Setup complete!");
         manager.setupDone = true;
-        loop();
+        loop(); // start the draw loop
         
-      } catch(error) {
+      } catch(error) { // if an error occurs outside of here the game manager is probably not available
+        // but here the game manager should be loaded so crash can be handled with it
         manager.crash({ type: "setupError", error });
       }
 
@@ -162,6 +161,7 @@ async function setup() {
 function draw() {
   if(!window.manager) {
     return console.log(`[DRAW] Skipping frame ${frameCount}, manager is not loaded yet.`);
+    // the following 2 conditions are for robustness and shouldn't occur normally
   } else if(!manager.setupDone) {
     noLoop();
     return console.warn(`[DRAW] Skipping frame ${frameCount} and stopping draw loop as setup is incomplete.`);
@@ -200,7 +200,7 @@ function draw() {
     manager.crash({ type: "drawError", error });
   }
 }
-// after this the draw functions of sprites are called
+// after this the draw functions of sprites with autoDraw enabled are called
 // by default sprites are drawn in the order they were created in
 
 function windowResized() {
@@ -210,6 +210,7 @@ function windowResized() {
 
   const newWidth = windowWidth - 50;
   const newHeight = windowHeight - 50;
+  // sometimes this function gets called even when the window isn't actually resized
   if(newWidth === oldWidth && newHeight === oldHeight) return;
 
   // resize canvas to fit the new window size
@@ -219,13 +220,15 @@ function windowResized() {
     console.log("[WINDOW] Resized - redrawing crash handler data.");
     manager.crashdraw();
   } else if(menu.active) {
-    // console.log(`[WINDOW/MENU] Resized: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]`);
+    console.log(`[WINDOW/MENU] Resized: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]`);
     menu.windowResized(oldWidth, oldHeight, oldZoom);
   } else if(game.active) { // run game window resize func
     console.log(`[WINDOW/GAME] Resized: [${oldWidth}, ${oldHeight}] => [${canvas.w}, ${canvas.h}]`);
     game.windowResized(oldWidth, oldHeight, oldZoom);
   }
 }
+
+// HERE BE FUNCTIONS //
 
 // hey look, it's the game's namesake!
 /**
@@ -273,5 +276,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// despite this code being at the end of the file it gets run first
+// it's just here to check the rest of the code in the file got parsed properly
 const titlestyle = "font-size: 27px; color: lightblue; text-shadow: 2px 2px dodgerblue";
 console.log(`%cdeltaLerp\n%cby dukemz - ${version}`, titlestyle, "color: cornflowerblue");
