@@ -28,7 +28,7 @@ class HomingTriangle extends Enemy {
   }
 
   postUpdate() { // called after update() in Enemy class
-    if(this.activeHoming) { // note to self: this is all very temporary
+    if(this.activeHoming) { // note to self: this is all kinda temporary
       // need to figure out how to make this all customisable in constructors and such
       // also maybe rather than activehoming being a variable it could be a function to enable/disable
       // allowing changing of behaviour and stuff when homing triangles start and stop homing
@@ -44,10 +44,6 @@ class HomingTriangle extends Enemy {
       for(let e of this.game.enemies) {
         const distanceToEnemy = this.baseSprite.distanceTo(e.baseSprite);
         if(e.enemyType === "HomingTriangle" && e.activeHoming && distanceToEnemy < 150) {
-          // let repelForce = 1/(this.baseSprite.distanceTo(e.baseSprite))**2;
-          // if(!isFinite(repelForce)) repelForce = 10;
-          // this.baseSprite.text = repelForce.toFixed(3);
-          // this.baseSprite.textFill = "white"
           this.baseSprite.repelFrom(e.baseSprite, 1);
           if(distanceToEnemy < 50) this.baseSprite.repelFrom(e.baseSprite, 2);
         }

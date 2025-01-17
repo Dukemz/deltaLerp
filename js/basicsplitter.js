@@ -10,12 +10,12 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
     this.splitterSpikeSize ||= 60;
     this.enemyType = "BasicSplitter";
 
-    this.spikeJoints = [] // change this when sprite.joints.removeAll() gets fixed
+    this.spikeJoints = []
     this.separated = false;
     this.baseConstructor = [this.x, this.y, this.sideLength, this.splitterShape];
     this.create();
 
-    // fill and such
+    // visual properties
     this.sprites.fill = this.splitterColour;
     this.baseSprite.fill = color(0,0,0,0);
     this.sprites.stroke ??= this.splitterColour; // change this in the future if armoured enemies are introduced!
@@ -29,8 +29,7 @@ class BasicSplitter extends Enemy { // splits into homing triangle things
   }
 
   generate() { // generate spikes
-    // currently can only be used once on creation, until i figure out a way to get the EXACT vertices location
-    // or maybe, set the rotation of the sprite to 0, then create all spikes, then set rotation back to what it was
+    // currently can only be used once on creation, since it assumes the base sprite has a rotation of 0
 
     // vector used to calculate outermost vertex of each triangle
     // offsetting the vector results in a weird sawblade shape

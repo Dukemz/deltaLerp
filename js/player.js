@@ -113,8 +113,7 @@ class Player extends Sprite {
 
   // ~~ UPDATE FUNCTION ~~ //
   runUpdate() {
-    // re-enable this if it's needed
-    // this.framesAlive++;
+    // this.framesAlive++; // debug variable, not needed currently
 
     // counteract gravity if there is any
     if(world.gravity.y) {
@@ -126,9 +125,7 @@ class Player extends Sprite {
       this.applyForceScaled(world.gravity.x);
     }
 
-    // cull projectiles - currently disabled due to p5play bug
-    // this.projectiles.cull(10,10,10,10);
-    // custom cull
+    // custom cull since p5play's built-in cull function doesn't work correctly
     for(let bullet of this.projectiles) {
       if(bullet.x > camera.x + this.game.cullZoneRight || bullet.x < camera.x - this.game.cullZoneLeft) bullet.remove();
     }
@@ -146,7 +143,7 @@ class Player extends Sprite {
       this.x -= this.maxSpeed * 2 - this.game.cameraSpeedLerp.currentValue * 2;
     }
 
-    // kill player if they go too far lmao
+    // kill player if they go too far
     if(this.x < camera.x - (this.game.visibleWidth/2) - 200 || this.x > camera.x + (this.game.visibleWidth/2) + 10) this.delete();
 
     // cycle weapon
@@ -160,7 +157,9 @@ class Player extends Sprite {
   }
 
   delete() {
+    // play death sound effect
     if(manager.assets.audio["dl.deathsfx"]) manager.assets.audio["dl.deathsfx"].audio.play();
+    // remove sprite
     this.remove();
   }
 
@@ -175,14 +174,14 @@ class Player extends Sprite {
     }
   }
 
-  setCol(colour) {
+  setCol(colour) { // sets both fill and stroke if debug not enabled
     if(!this.debug) {
       this.fill = colour;
       this.stroke = colour;
     }
   }
 
-  drawSubDetails() {
+  drawSubDetails() { // draw health indicators
     for(let a of this.arcindics) a.draw();
   }
 }

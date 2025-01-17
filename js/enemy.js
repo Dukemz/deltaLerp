@@ -33,25 +33,27 @@ class Enemy {
     this.sprites = new this.parentGroup.Group();
     this.subenemies = [];
     // copy sprites info passed from instance construction
+    // so you could do new SomethingEnemy({ sprites: { properties here } });
     if(data?.sprites) Object.assign(this.sprites, data.sprites);
-    
-    // this.sprites.stroke ??= "white";
-    // this.sprites.strokeWeight ??= 0;
   }
 
-  create() {
-    // this.projectiles = new this.game.enemyProjectiles.Group();
-
+  create() { // this function actually creates the sprite
     this.baseConstructor ||= [this.x, this.y];
-    // store baseSprite info passed from instance construction
+    // if this.baseSprite exists, it contains some properties to set
+    // so we store it, create the sprite, then copy the properties into the sprite
     let storedInfo = {};
     if(this.baseSprite) storedInfo = this.baseSprite;
+    // create base sprite
     this.baseSprite = new this.sprites.Sprite(...this.baseConstructor);
+    // copy stored info to set the sprite's properties
     Object.assign(this.baseSprite, storedInfo);
 
+    // sprite.enemyInstance will return this Enemy class instance
     this.baseSprite.enemyInstance = this;
+    // add to the enemy list
     this.game.enemies.push(this);
-    // this.baseSprite.pos = { x: this.x, y: this.y };
+
+    // run post create function from child class if there is one
     if(typeof this.postCreate === "function") this.postCreate();
   }
 
@@ -76,12 +78,13 @@ class Enemy {
 
   update() {
     if(this.sprites.length < 1) {
+      // delete this enemy instance if there are no sprites in it
       this.delete();
     }
 
     // this.baseSprite.text = this.health;
 
-    // if individual sprite extension needs an update function this calls it
+    // run post update function from child class if there is one
     // maybe have some kind of get/set thing that chains functionality on instead of replacing it..?
     if(typeof this.postUpdate === "function") this.postUpdate();
   }
@@ -95,8 +98,9 @@ class Enemy {
     this._health = value;
     if(this._health <= 0) this.delete();
   }
+}
 
-  // OLD DELETE FUNCTION(S). study this in detail to see why it didn't work later
+// OLD DELETE FUNCTION - doesn't work lmao
 
   // delete() {
   //   console.log(`[GAME] deleting enemy type ${this.enemyType} with ${this.subenemies.length} subenemies and ${this.sprites.length} subsprites`);
@@ -118,7 +122,7 @@ class Enemy {
   //   // this.sprites.remove();
 
   //   for(let subenemy of this.subenemies) {
-  //     // recurse. hoo boy this better not go badly
+  //     // recursive delete
   //     subenemy.delete();
   //   }
   //   this.sprites.remove();
@@ -127,4 +131,3 @@ class Enemy {
   //   this.game.enemies.splice(enemindex, 1);
   //   // this.game.enemies[enemindex].markedForDeletion = true;
   // }
-}

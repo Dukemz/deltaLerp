@@ -349,19 +349,11 @@ class Menu {
       // repel chained menu sprites from each other
       for(let nodeA of this.menuLogoCentre.childrenNodes) {
         for(let nodeB of this.menuLogoCentre.childrenNodes) {
+          // prevent node repelling itself
           if(nodeA === nodeB) continue;
-          
-          // gravitational force - disabled cause it's kinda useless
-          // const gravconst = 300;
-          // const distance = nodeA.distanceTo(nodeB);
-          // let force = ((gravconst * nodeA.mass * nodeB.mass) / distance);
-          // // increase repulsion force if nodes are too close
-          // // if(distance < 50) force *= 5;
-          // nodeA.repelFrom(nodeB, force);
-
           nodeA.repelFrom(nodeB, 100);
         }
-        // repel from node repel points to equalise nodes a bit
+        // repel from empty points in space to equalise nodes a bit
         nodeA.repelFrom(this.nodeRepelPointX, this.nodeRepelPointY, 100);
         nodeA.repelFrom(-this.nodeRepelPointX, -this.nodeRepelPointY, 100);
 
@@ -520,9 +512,10 @@ class ParticleBG {
     const isQ5 = !!window.Q5;
     const maxOpacity = this.opacityLerp.update();
 
+    // for each particle
     for(let i = 0; i < this.particleList.length; i++) {
       const p1 = this.particleList[i];
-      p1.update();
+      p1.update(); // update position
 
       push();
       strokeWeight(4);
@@ -530,9 +523,11 @@ class ParticleBG {
       // only check each pair once
       for(let j = i + 1; j < this.particleList.length; j++) {
         const p2 = this.particleList[j];
+        // distance between two particles
         const d = dist(p1.x, p1.y, p2.x, p2.y);
 
         if(d < this.maxDistance) {
+          // set opacity of line based on distance to other particle
           const opac = map(d, 0, this.maxDistance, maxOpacity, 0);
           if(isQ5) {
             this.clonedColour.a = opac;
@@ -557,6 +552,7 @@ class ParticleBG {
     }
 
     update() {
+      // update particle position and bounce
       this.x = constrain(this.x + this.vx * deltaTime/20, 0, width);
       this.y = constrain(this.y + this.vy * deltaTime/20, 0, height);
       if(this.x === 0 || this.x === width) this.vx *= -1;

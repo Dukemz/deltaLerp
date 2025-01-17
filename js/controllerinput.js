@@ -3,12 +3,6 @@
 class controllerInput {
   constructor(data) {
     Object.assign(this, data);
-    // data = {
-    //   up: "w",
-    //   down: "s"
-    //   // etc...
-    // }
-    this.inputType = "controller";
 
     // directional movement
     this.contro ||= window.contro;
@@ -68,13 +62,12 @@ class controllerInput {
   }
 
   analogMoveVel(targetSpeed) {
+    // create a vector from left stick position
     const stickVector = createVector(this.contro.leftStick.x, this.contro.leftStick.y);
     // void input if under deadzone
     if(stickVector.mag() > this.deadzone) {
-      // targetVector.setHeading(stickVector.heading());
 
-      // normalize
-      // this solution isn't the best but it's good enough
+      // normalize (set magnitude to 1)
       if(stickVector.mag() > 1) stickVector.normalize();
       // multiply by target speed
       stickVector.mult(targetSpeed);

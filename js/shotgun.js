@@ -45,9 +45,6 @@ class Shotgun {
   fire() {
     const elapsed = world.physicsTime * 1000 - this.lastFired;
     if(elapsed > this.fireRate) {
-      // knockback - currently doesn't work very well if movement keys are being held down
-      // this.player.vel.x -= 10;
-
       // calculate the angle increment between each bullet
       const angleIncrement = this.spreadAngle / (this.bulletSpread - 1);
       const startAngle = -this.spreadAngle / 2; // center the spread
@@ -63,17 +60,19 @@ class Shotgun {
         bullet.vel.x = Math.cos(radians) * this.bulletSpeed;
         bullet.vel.y = Math.sin(radians) * this.bulletSpeed;
 
+        // add player's current velocity
         bullet.vel.y += this.player.vel.y;
         bullet.vel.x += this.player.vel.x;
 
         bullet.update = () => {
           if(bullet.speed < this.killSpeed) bullet.remove();
-          // if(bullet.x > camera.x + 2000 || bullet.x < camera.x - 2000) bullet.remove();
         };
       }
 
       this.shotsFired += this.bulletSpread;
       this.lastFired = world.physicsTime * 1000;
+      // knockback - currently doesn't work very well if movement keys are being held down
+      this.player.vel.x -= 10;
 
       // limit the number of bullets for performance
       if(this.group.amount > 30) {

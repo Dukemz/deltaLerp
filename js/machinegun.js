@@ -1,13 +1,10 @@
 "use strict";
 
 class MachineGun {
-  // should probably make this extend weapon huh?
   // machine gun weapon - fires multiple small bullets in quick succession
-  // this group represents all the bullets
   constructor() {
     this.fireRate = 80; // time between firing in ms
 
-    // ~~ TRACKING ~~ //
     // stores timestamp of last time a bullet was fired
     this.lastFired = 0;
     // total bullets fired
@@ -15,10 +12,12 @@ class MachineGun {
   }
 
   initialise(player) {
+    // this group represents all the bullets
     this.group = new player.projectiles.Group();
 
     // ~~ PROPERTIES ~~ //
     // sprite soft & dynamic inheritance properties
+    // these set the properties of the bullet sprites to be created
     this.group.diameter = 10;
     this.group.x = () => player.x + 15;
     this.group.y = () => player.y;
@@ -27,10 +26,7 @@ class MachineGun {
     // bouncy for ricochets!
     this.group.bounciness = 0.8;
 
-    // visual properties
-    // this will set the fill every frame - disabled since that's pointless
-    // this.group.fill = () => player.fill;
-    this.group.fill = player.fill;
+    this.group.fill = player.fill; // this.group.fill = () => player.fill;
     this.group.stroke = 255;
     this.group.strokeWeight = 2;
     this.group.overlaps(this.group);
@@ -38,7 +34,7 @@ class MachineGun {
     // TODO: figure out how to make bullets always shoot from the tip of the player
     // and travel in the right direction accordingly
     
-    // remove bullet on collision with game objects
+    // remove bullet on collision with game objects, like walls
     player.game.objects.collides(this.group, (_o, p) => {
       p.remove();
     });
@@ -46,6 +42,7 @@ class MachineGun {
     // remove when touching enemies
     player.game.enemyObjects.collides(this.group, (e, p) => {
       p.remove();
+      // reduce the enemy's health
       e.enemyInstance.health -= 1;
     });
   } 
@@ -54,29 +51,25 @@ class MachineGun {
     // note that a bullet may not always be fired every time this function is called
     // this is just called at the end of player update if the player is currently requesting to fire
 
-    // elapsed time since last bullet fired
+    // calculate time since last bullet fired
     const elapseFired = world.physicsTime*1000 - this.lastFired;
     if(elapseFired > this.fireRate) {
+      // create a bullet
       const bullet = new this.group.Sprite();
-      // set bullet's update function since for some reason you can't define it before
+      // set bullet's update function
       bullet.update = () => {
+        // bullet also deletes itself if its speed drops below 10
         if(bullet.speed < 10) bullet.remove();
-        // custom cull in favour of new one in player
-        // if(bullet.x > camera.x + 2000 || bullet.x < camera.x - 2000) bullet.remove();
-        // this would constantly set the bullet's speed every frame
-        // disabled since it just makes the bullet richochet forever
-        // bullet.speed = 20;
       }
+      // increase amount of shots fired
       this.shotsFired++;
+      // set new last fired time
       this.lastFired = world.physicsTime*1000;
       if(this.group.amount > 25) {
+        // remove excess bullets if there's too many
         this.group[0].remove();
       }
     }
-    // culling - remove bullets if they go more than 10 units offscreen
-    // note - if screen size is changed then cull boundary changes too
-    // this is currently disabled due to bugs
-    // this.group.cull(50, 50, 50, 50);
   }
 }
 

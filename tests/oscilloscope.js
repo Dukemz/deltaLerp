@@ -50,15 +50,6 @@ function setup() {
 }
 
 function draw() {
-
-  // Get waveform data
-  analyserL.getFloatTimeDomainData(dataArrayL);
-  analyserR.getFloatTimeDomainData(dataArrayR);
-
-  stroke(oscColour);
-  strokeWeight(2);
-  noFill();
-
   // beginShape();
   // for (let i = 0; i < bufferLength; i++) {
   //   let x = map(dataArrayL[i], -1, 1, width / 2 - size / 2, width / 2 + size / 2);
@@ -66,10 +57,22 @@ function draw() {
   //   vertex(x, y);
   // }
   // endShape();
-  let prevX;
-  let prevY;
+
+  // circle(250,height/2, 50);
 
   if (!audio.paused) {
+
+    // Get waveform data
+    analyserL.getFloatTimeDomainData(dataArrayL);
+    analyserR.getFloatTimeDomainData(dataArrayR);
+
+    stroke(oscColour);
+    strokeWeight(2);
+    noFill();
+
+    let prevX;
+    let prevY;
+
     blendMode(BLEND);
     background(0, 0, 0, 100);
     blendMode(ADD);

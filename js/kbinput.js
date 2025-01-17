@@ -10,7 +10,7 @@ class kbInput {
     //   // etc...
     // }
     this.inputType = "kb";
-    // note to self: potentially make both input classes extend a base input class?
+    // MAYBE both input classes should extend a base class but for now it's not necessary
 
     // directional movement preset
     this.c ??= {};
@@ -18,6 +18,7 @@ class kbInput {
     this.c.down ??= "down";
     this.c.left ??= "left";
     this.c.right ??= "right";
+    // key to slow movement - this doesn't work atm due to its behaviour being all around weird, especially when a screenshot is taken
     this.c.slow ??= "shift";
 
     // fire controls
