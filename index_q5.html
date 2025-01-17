@@ -1,33 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <title>deltaLerp (PRE-ALPHA)</title>
-    <!-- q5.js (graphics engine) -->
-    <script type="text/javascript" src="https://q5js.org/q5.js"></script>
-    <!-- planck.js (physics engine) -->
-    <script type="text/javascript" src="lib/planck.min.js"></script>
-    <!-- p5play 3.24.7 (game framework) -->
-    <script type="text/javascript" src="lib/p5play.js"></script>
+    <title>well this is awkward</title>
 
-    <!-- main game script -->
-    <script type="text/javascript" src="js/main.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body>
-    <!-- deltaLerp, a game by Dukemz: https://dukemz.github.io -->
-    <!-- view the source code at https://github.com/Dukemz/deltaLerp -->
-    <!-- thanks for playing :) -->
-
-    <div id="canvasContainer">
-        <p id="loadtext">
-            loading...<br>(if you see this text for too long, check the console for issues)
-        </p>
-    </div>
-    <div id="loadedScripts" style="display: none;"></div>
+    <p>okay so basically the q5 client <a href="index.html">(here)</a> is the default one now cause p5.js kinda sucks</p>
+    <p>hopefully clipping masks and text wrapping get added to q5.js soon because that's basically the only reason I'd use p5.js over q5.js right now</p>
+    <p>the p5 client should still work though <a href="index_p5.html">(here)</a></p>
+    <br />
+    <p>list of reasons to NOT use the p5 client:</p>
+    <ul>
+        <li>unminified, q5.js is about 126kb, p5.js is like... 5mb</li>
+        <li>q5.js (q2d) has about 4x better performance than p5.js (p2d) and webgpu will be like 20x better</li>
+        <li>q5.js colour support is better</li>
+        <li><a href="https://substack.com/@quintonashley/p-152794191">the processing foundation just kinda sucks in general</a></li>
+        <li>and probably more that I forgot lmao</li>
+    </ul>
 </body>
-
 </html>
