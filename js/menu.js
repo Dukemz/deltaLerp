@@ -169,7 +169,7 @@ class Menu {
     await sleep(200);
 
     // menu background colour
-    this.bgcol = new ColLerpController(color("#000000"), color("#242838"), 0, 0, 0.99);
+    this.bgcol = new ColLerpController(color("#00000080"), color("#24283880"), 0, 0, 0.99);
     // menu zoom controller
     this.zoomController = new LerpController(1, 1, 0.9);
     
