@@ -1,12 +1,11 @@
-// version of oscilloscope.js without blur for better performance
-// but there's no reason to use this instead of oscilloscope_altfilter.js rn
+// oscilloscope.js but blur filter is applied and then removed using ctx.filter
+// increases performance a ton but doesn't look as cool
 
 let audio, audioContext, analyserL, analyserR, sourceNode, splitter;
 let dataArrayL, dataArrayR;
 let size;
 let followMouse = false;
 let oscColour;
-let oscColour2;
 
 const bufferLength = 512;
 let lastfps = 0;
@@ -23,8 +22,6 @@ function setup() {
   audio.loop = true;
 
   oscColour = color(0, 50, 255);
-  oscColour2 = color(oscColour.levels);
-  oscColour2.a = 45;
 
   audioContext = new (window.AudioContext || window.webkitAudioContext)();
   sourceNode = audioContext.createMediaElementSource(audio);
@@ -56,13 +53,6 @@ function setup() {
 }
 
 function draw() {
-
-  // Get waveform data
-  analyserL.getFloatTimeDomainData(dataArrayL);
-  analyserR.getFloatTimeDomainData(dataArrayR);
-
-  noFill();
-
   // beginShape();
   // for (let i = 0; i < bufferLength; i++) {
   //   let x = map(dataArrayL[i], -1, 1, width / 2 - size / 2, width / 2 + size / 2);
@@ -70,72 +60,63 @@ function draw() {
   //   vertex(x, y);
   // }
   // endShape();
-  let prevX;
-  let prevY;
+
+  // circle(250,height/2, 50);
 
   if(!audio.paused) {
+
+    // Get waveform data
+    analyserL.getFloatTimeDomainData(dataArrayL);
+    analyserR.getFloatTimeDomainData(dataArrayR);
+
+    stroke(oscColour);
+    strokeWeight(2);
+    noFill();
+
+    let prevX;
+    let prevY;
+
     blendMode(BLEND);
     background(0, 0, 0, 100);
-    // blendMode(ADD);
+    blendMode(ADD);
 
     // calculate mouse angle
     const mx = mouseX - width / 2;
     const my = mouseY - height / 2;
     const mouseAngle = atan2(my, mx);
 
-    push();
     // rotate by mouse angle
     if(followMouse) rotate(mouseAngle);
 
-    // draw initial shape to be blurred
-    stroke(oscColour2);
-    strokeWeight(10);
-    translate(width / 2, height / 2);
+    ctx.filter = 'blur(10px)'; // look into if pixeldensity is necessary
+    // strokeWeight(5);
+    // initial backdrop..? shape
+    beginShape();
     for(let i = 0; i < bufferLength; i++) {
-      // let x = map(dataArrayL[i], -1, 1, (width / 2) - (size / 2), (width / 2) + (size / 2));
-      // let y = map(dataArrayR[i], -1, 1, (height / 2) + (size / 2), (height / 2) - (size / 2));
-      let x = map(dataArrayL[i], -1, 1, -(size / 2), (size / 2));
-      let y = map(dataArrayR[i], -1, 1, (size / 2), -(size / 2));
+      let x = map(dataArrayL[i], -1, 1, (width / 2) - (size / 2), (width / 2) + (size / 2));
+      let y = map(dataArrayR[i], -1, 1, (height / 2) + (size / 2), (height / 2) - (size / 2));
+      // let x = map(dataArrayL[i], -1, 1, -(size / 2), (size / 2));
+      // let y = map(dataArrayR[i], -1, 1, (size / 2), -(size / 2));
+      // draw actual line
+      vertex(x, y);
+    }
+    endShape();
+    // filter(BLUR, 5); // for high quality ig?
+
+    ctx.filter = 'none';
+    // strokeWeight(2);
+
+    // main vectorscope shape
+    for(let i = 0; i < bufferLength; i++) {
+      let x = map(dataArrayL[i], -1, 1, (width / 2) - (size / 2), (width / 2) + (size / 2));
+      let y = map(dataArrayR[i], -1, 1, (height / 2) + (size / 2), (height / 2) - (size / 2));
+      // let x = map(dataArrayL[i], -1, 1, -(size / 2), (size / 2));
+      // let y = map(dataArrayR[i], -1, 1, (size / 2), -(size / 2));
       // draw actual line
       if(prevX) line(prevX, prevY, x, y);
       prevX = x;
       prevY = y;
     }
-    pop();
-    prevX = undefined;
-    prevY = undefined;
-    push();
-    // beginShape();
-    // for(let i = 0; i < bufferLength; i++) {
-    //   let x = map(dataArrayL[i], -1, 1, (width / 2) - (size / 2), (width / 2) + (size / 2));
-    //   let y = map(dataArrayR[i], -1, 1, (height / 2) + (size / 2), (height / 2) - (size / 2));
-    //   // let x = map(dataArrayL[i], -1, 1, -(size / 2), (size / 2));
-    //   // let y = map(dataArrayR[i], -1, 1, (size / 2), -(size / 2));
-    //   // draw actual line
-    //   vertex(x, y);
-    // }
-    // endShape();
-    // blur disabled for test
-    // filter(BLUR, 5);
-
-
-    // secondary shape
-    blendMode(ADD);
-    stroke(oscColour);
-    strokeWeight(2);
-    translate(width / 2, height / 2);
-    // second shape, will not be blurred
-    for(let i = 0; i < bufferLength; i++) {
-      // let x = map(dataArrayL[i], -1, 1, (width / 2) - (size / 2), (width / 2) + (size / 2));
-      // let y = map(dataArrayR[i], -1, 1, (height / 2) + (size / 2), (height / 2) - (size / 2));
-      let x = map(dataArrayL[i], -1, 1, -(size / 2), (size / 2));
-      let y = map(dataArrayR[i], -1, 1, (size / 2), -(size / 2));
-      // draw actual line
-      if(prevX) line(prevX, prevY, x, y);
-      prevX = x;
-      prevY = y;
-    }
-    pop();
 
     noStroke()
     fill(255, 255, 255);
