@@ -123,6 +123,15 @@ async function setup() {
         }
         // note: to avoid lag, audio assets should be loaded outside of game or menu in an async func with await
 
+        // add visibility change event
+        addEventListener('visibilitychange', () => {
+          if(manager.ingame) {
+            game.visibilitychange();
+          } else if(menu.active) {
+            menu.visibilitychange();
+          }
+        });
+
         // initial setup complete - create menu
         menu = new Menu();
         await menu.init();

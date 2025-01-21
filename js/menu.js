@@ -172,7 +172,6 @@ class Menu {
     this.bgcol = new ColLerpController(color("#00000080"), color("#24283880"), 0, 0, 0.99);
     // menu zoom controller
     this.zoomController = new LerpController(1, 1, 0.9);
-    
 
     // START BUTTON
     this.startButton = new this.MenuNode([0, 0, 100, 100, 'n'], {
@@ -220,6 +219,7 @@ class Menu {
     this.settingsButton = new this.MenuNode([0, 230, 100, 100], {
       buttonText: "Settings",
       parentNode: this.menuLogoCentre,
+      onPressed: () => alert('Settings menu coming "soon"!'),
       icondraw: (spr) => {
         fill(spr.stroke);
         noStroke();
@@ -253,12 +253,21 @@ class Menu {
         rectMode(CENTER);
         rect(0, 10, 10, 40);
       },
-      onPressed: () => location.href = "https://github.com/Dukemz/deltaLerp/blob/main/CONTROLS.md"
+      onPressed: () => {
+        if(confirm("You will be redirected to the controls page on GitHub. Is this okay?")) {
+          location.href = "https://github.com/Dukemz/deltaLerp/blob/main/CONTROLS.md";
+        }
+      }
     });
     this.creditsButton = new this.MenuNode([0, 230, 100, 100], {
       buttonText: "Credits",
       parentNode: this.menuLogoCentre,
-      icondraw: this.temporaryIconFunc
+      icondraw: this.temporaryIconFunc,
+      onPressed: () => {
+        if(confirm("You will be redirected to the repository on GitHub. Is this okay?")) {
+          location.href = "https://github.com/Dukemz/deltaLerp";
+        }
+      }
     });
     this.currentlyUselessButton = new this.MenuNode([0, 230, 100, 100], {
       buttonText: "Whatever",
@@ -456,6 +465,14 @@ class Menu {
   windowResized(oldWidth, oldHeight, oldZoom) {
     this.background.adjust(canvas.w, canvas.h);
   }
+
+  visibilitychange() {
+    if(!document.hidden) {
+      console.log("[MENU] Resetting particle background due to visibility change event.");
+      this.background.particleList = [];
+      this.background.adjust(width, height);
+    }
+  }
 }
 
 class ParticleBG {
@@ -465,8 +482,6 @@ class ParticleBG {
     this.lineColour = lineCol ? color(lineCol) : color(255);
     this.clonedColour = color(this.lineColour.levels);
     // this.maxOpacity = 128;
-
-    this.queueReset = false;
 
     this.particleList = [];
     this.particlesPerUnitArea = 0.0001; // density: particles per square pixel
@@ -499,16 +514,6 @@ class ParticleBG {
   }
 
   draw() {
-    if(this.queueReset && !document.hidden) {
-      console.log("[MENU] Resetting menu background after document inactivity.");
-      this.queueReset = false;
-      this.particleList = [];
-      this.adjust(width, height);
-
-    } else if(deltaTime > 5000 && document.hidden) {
-      return this.queueReset = true;
-    }
-    
     const isQ5 = !!window.Q5;
     const maxOpacity = this.opacityLerp.update();
 

@@ -251,6 +251,10 @@ class Game { // game class
     // set the bg colour again to avoid that weird messy effect
     background(this.bgcol);
   }
+  
+  visibilitychange() {
+    
+  }
 
   // function to calculate visible area
   // DEPRECATED: likely won't use

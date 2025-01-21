@@ -4,7 +4,9 @@ WORK IN PROGRESS!
 
 This is a prototype scroller/shooter game using only simple polygons and lines as sprites.
 
-I made this game for a school project, but also as a challenge to make a completely offline HTML/JS game that works without a live server.
+I initially made this game for a school project, but also as a challenge to make a completely offline HTML/JS game that works without a live server.
+
+All the code is by me, all the music is by my friend B0omBringer/nukegameplay.
 
 If you'd like to know more about this project or give any feedback or suggestions, please contact me on Discord.
 
@@ -26,7 +28,7 @@ Chromium-based browsers (this includes Edge and Opera) generally have the best c
 
 - [p5.js](https://p5js.org/)
 
-- [q5.js](https://q5js.org/) (beta alternative to p5)
+- [q5.js](https://q5js.org/) (higher performance replacement for p5)
 
 - [p5play](https://p5play.org/)
 
