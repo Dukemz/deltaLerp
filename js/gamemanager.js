@@ -14,7 +14,7 @@ class GameManager {
     this.avgFPS = 0;
     this.avgDeltaTime = 0;
 
-    this.gameInstances = 0;
+    this.gameInstances = 0; // what was i planning to do with this...?
 
     // ASSETS
     this.assets = {
@@ -78,6 +78,7 @@ class GameManager {
 
   crash(data) { // data is an object, should contain error
     this.ingame = false;
+    clearInterval(this.fpsPush);
     if(!this.crashed) {
       this.crashed = true;
     } else {
