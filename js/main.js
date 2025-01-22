@@ -237,6 +237,12 @@ function windowResized() {
   }
 }
 
+// library preload
+if(!window.p5) {
+  console.log("[MAIN] p5/q5 not in memory, opening libpreload.js.");
+  loadScripts(["js/libpreload.js"]);
+}
+
 // HERE BE FUNCTIONS //
 
 // hey look, it's the game's namesake!
@@ -246,7 +252,7 @@ function windowResized() {
  * @param {number} a - First number.
  * @param {number} b - Second number.
  * @param {number} f - Factor to interpolate by. Must be between 0 and 1.
- * @param {boolean} ignoreTimeScale - Whether to ignore world.timeScale
+ * @param {boolean} ignoreTimeScale - Whether to ignore world.timeScale.
  * @returns {number}
  */
 function deltaLerp(a, b, f, ignoreTimeScale) {
