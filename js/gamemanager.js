@@ -2,9 +2,14 @@
 
 class GameManager {
   // NOTE - eventually improve this
-  // needs to be able to handle multiple crashes, in the event crash is called more than once
-  constructor() {
+  // needs to be able to work without p5play
+  // also needs to be able to handle multiple crashes, in the event crash is called more than once
+  constructor(settings) {
     console.log("[MANAGER] Initialising...");
+
+    Object.assign(this, settings);
+    // if settings.libpreload = true don't start loading stuff initially
+
     this.ingame = false;
     this.crashed = false;
     this.errdata = {};
@@ -84,14 +89,27 @@ class GameManager {
     } else {
       console.error(`WARNING: Attempted to handle a crash on frame ${frameCount} while the game was already crashed (frame ${this.errdata.crashFrame}).`);
     }
-    this.errdata = data || {};
-    this.errdata.crashFrame = frameCount;
-    
-    this.setMessage();
-    this.crashlog();
-    this.crashdraw();
 
-    noLoop();
+    try {
+      this.errdata = data || {};
+      this.errdata.crashFrame = frameCount;
+
+      this.setMessage();
+      this.crashlog();
+      this.crashdraw();
+
+      noLoop();
+    } catch(err) {
+      console.warn("[MANAGER] Wouldn't you know it, crashed while trying to crash. Error displayed below:");
+      console.error(err);
+      console.warn("[MANAGER] Initial error that caused the crash displayed below:");
+      console.error(data);
+
+      document.getElementById("loadtext").innerHTML = "oops... something went catastrophically wrong.<br>check the console for more info!";
+      for(let c of document.getElementsByTagName("canvas")) {
+        c.style.display = "none"; // hide any canvases if they were created
+      }
+    }
   }
 
   setMessage() { // set this.errmsg based on data in this instance
