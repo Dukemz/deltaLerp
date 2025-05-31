@@ -336,9 +336,9 @@ class Menu {
       noStroke();
       fill(255);
       textSize(20);
-      const q5fps = window.Q5 ? `(q5: avg ${manager.q5avgFPS.toFixed(0)}, c ${getFPS()})` : "";
       textAlign(LEFT, BOTTOM);
-      text(`${frameRate().toFixed(0)}fps, avg ${manager.avgFPS.toFixed(0)} ${q5fps}`, 10, height - 40);
+      text(`${manager.avgFPS.toFixed(0)}hz, ${manager.q5avgFPS.toFixed(0)}fps`, 10, height - 70);
+      text(`actual: ${frameRate().toFixed(0)}hz, ${getFPS()}fps`, 10, height - 40);
       text(`deltaTime = ${deltaTime.toFixed(0)}, avg ${Math.round(manager.avgDeltaTime * 1000)}`, 10, height - 10);
       textAlign(RIGHT, BOTTOM);
       text(`particles: ${this.background.particleList.length}, density: ${this.background.particlesPerUnitArea}`, width-10, height-40);
@@ -531,7 +531,7 @@ class ParticleBG {
 
         if(d < this.maxDistance) {
           // set opacity of line based on distance to other particle
-          const opac = map(d, 0, this.maxDistance, 255, 0);
+          const opac = map(d, 0, this.maxDistance, 100, 0);
           if(isQ5) {
             this.clonedColour.a = opac;
           } else {

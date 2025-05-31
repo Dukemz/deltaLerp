@@ -26,10 +26,9 @@ class GameManager {
     // audio manager - replaceable module?
     this.audio = new AudioManager();
 
-    if(window.Q5) {
-      this.q5fpsList = [];
-      this.q5avgFPS = 0;
-    }
+    // not actually exclusive to q5 anymore, p5play subs it in
+    this.q5fpsList = [];
+    this.q5avgFPS = 0;
 
     // get the current fps 10 times a second
     // used to get average FPS over the last 2 seconds
@@ -39,10 +38,8 @@ class GameManager {
         // remove first item in list if it goes above 20
         if(this.fpsList.length > 20) this.fpsList.shift();
 
-        if(window.Q5) {
-          this.q5fpsList.push(getFPS());
-          if(this.q5fpsList.length > 20) this.q5fpsList.shift();
-        }
+        this.q5fpsList.push(getFPS());
+        if(this.q5fpsList.length > 20) this.q5fpsList.shift();
       }
     }, 100);
 
@@ -71,9 +68,7 @@ class GameManager {
     this.avgDeltaTime = 1 / this.avgFPS;
     if(this.avgFPS < 2) console.warn(`Warning: Average FPS is ${this.avgFPS.toFixed(3)}!`);
 
-    if(window.Q5) {
-      this.q5avgFPS = this.q5fpsList.reduce((a, b) => a + b, 0) / this.q5fpsList.length || getFPS();
-    }
+    this.q5avgFPS = this.q5fpsList.reduce((a, b) => a + b, 0) / this.q5fpsList.length || getFPS();
   }
 
   crash(data) { // data is an object, should contain error

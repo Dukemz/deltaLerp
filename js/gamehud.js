@@ -23,10 +23,14 @@ class GameHUD {
     text(`bullets fired: ${player.weapons[player.activeWeapon].shotsFired}, total active ${player.projectiles.amount}`, width-10, 40);
     
     // bottom left HUD
-    const q5fps = window.Q5 ? `(q5: avg ${manager.q5avgFPS.toFixed(0)}, c ${getFPS()})` : "";
     textAlign(LEFT, BOTTOM);
-    text(`${frameRate().toFixed(0)}fps, avg ${manager.avgFPS.toFixed(0)} ${q5fps}`, 10, height-40);
-    text(`deltaTime = ${deltaTime.toFixed(0)}, avg ${Math.round(manager.avgDeltaTime*1000)}`, 10, height-10);
+    // old:
+    // text(`${frameRate().toFixed(0)}hz, avg ${manager.avgFPS.toFixed(0)}hz // ${getFPS()}fps, avg ${manager.q5avgFPS.toFixed(0)}fps`, 10, height - 40);
+    // new:
+    text(`${manager.avgFPS.toFixed(0)}hz, ${manager.q5avgFPS.toFixed(0)}fps`, 10, height-70);
+    text(`actual: ${frameRate().toFixed(0)}hz, ${getFPS()}fps`, 10, height-40);
+    text(`deltaTime = ${deltaTime.toFixed(0)}, avg ${Math.round(manager.avgDeltaTime * 1000)}`, 10, height-10);
+
     
     // bottom right HUD
     textAlign(RIGHT, BOTTOM);
