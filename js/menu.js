@@ -342,7 +342,7 @@ class Menu {
       text(`deltaTime = ${deltaTime.toFixed(0)}, avg ${Math.round(manager.avgDeltaTime * 1000)}`, 10, height - 10);
       textAlign(RIGHT, BOTTOM);
       text(`particles: ${this.background.particleList.length}, density: ${this.background.particlesPerUnitArea}`, width-10, height-40);
-      text(`max dist factor: ${this.background.maxDistanceFactor}, opacity: ${this.background.opacityLerp.currentValue.toFixed(3)}`, width-10, height-10);
+      text(`max dist factor: ${this.background.maxDistanceFactor}`, width-10, height-10);
       pop();
       camera.on();
 
@@ -477,7 +477,6 @@ class Menu {
 
 class ParticleBG {
   constructor(lineCol) {
-    this.opacityLerp = new LerpController(0, 128, 0.7);
 
     this.lineColour = lineCol ? color(lineCol) : color(255);
     this.clonedColour = color(this.lineColour.levels);
@@ -515,7 +514,6 @@ class ParticleBG {
 
   draw() {
     const isQ5 = !!window.Q5;
-    const maxOpacity = this.opacityLerp.update();
 
     // for each particle
     for(let i = 0; i < this.particleList.length; i++) {
@@ -533,7 +531,7 @@ class ParticleBG {
 
         if(d < this.maxDistance) {
           // set opacity of line based on distance to other particle
-          const opac = map(d, 0, this.maxDistance, maxOpacity, 0);
+          const opac = map(d, 0, this.maxDistance, 255, 0);
           if(isQ5) {
             this.clonedColour.a = opac;
           } else {
