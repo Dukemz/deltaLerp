@@ -56,7 +56,7 @@ async function loadScripts(scriptUrls) { // load scripts and add them to the pag
       // this can be done since scripts stay in memory once loaded
       script.onload = () => {
         // crash detection
-        if(window.manager && window.manager.crashed) {
+        if(window.manager?.crashed) {
           reject(Error(`An error occurred loading [${scriptUrl}] - script loading halted.`));
         } else {
           resolve();

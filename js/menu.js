@@ -380,6 +380,12 @@ class Menu {
       // }
     }
 
+    // DEBUG: quickstart
+    if(kb.pressing("s")) {
+      this.exit();
+      game = new Game();
+    }
+
     // draw menu sprites
     this.menuSprites.draw();
     for(let s of this.menuSprites) s.drawText();

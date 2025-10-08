@@ -97,7 +97,7 @@ class Player extends Sprite {
 
   set health(value) {
     this._health = value;
-    if(value <= 0) return this.delete();
+    if(value <= 0) return this.deletePlayer();
     // health is 0-100, map startArc from 180 to 0
     this.healthIndicator.startArc.targetValue = map(value, 0, this.maxHealth, 180, 0, true);
   }
@@ -144,7 +144,7 @@ class Player extends Sprite {
     }
 
     // kill player if they go too far
-    if(this.x < camera.x - (this.game.visibleWidth/2) - 200 || this.x > camera.x + (this.game.visibleWidth/2) + 10) this.delete();
+    if(this.x < camera.x - (this.game.visibleWidth/2) - 200 || this.x > camera.x + (this.game.visibleWidth/2) + 10) this.deletePlayer();
 
     // cycle weapon
     if(world.physicsTime - this.lastWeaponCycle > 0.7 && this.input.cycleWeapon()) {
@@ -156,10 +156,10 @@ class Player extends Sprite {
     if(this.input.firing()) this.weapons[this.activeWeapon].fire();
   }
 
-  delete() {
+  deletePlayer() {
     // play death sound effect
     if(manager.assets.audio["dl.deathsfx"]) manager.assets.audio["dl.deathsfx"].audio.play();
-    // remove sprite
+    // remove sprite (apparently Sprite.remove() is an undocumented alias for Sprite.delete() now?)
     this.remove();
   }
 
