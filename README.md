@@ -38,6 +38,8 @@ Chromium-based browsers (this includes Edge and Opera) generally have the best c
 
 ## Offline Single File Demo (Outdated)
 
-I very much recommend against this, but to try the single-file proof of concept, download dlpoffline.min.html from the offlinemode folder and open it in your browser - no additional setup needed.
+I very much recommend against this because it's really outdated, but to try the single-file proof of concept, download offlinemode.zip and extract dlpoffline.min.html, then open it in your browser - no additional setup needed.
 
-You can also optionally download the quackmp3.mp3 file and place it into a folder named assets in the same directory as the HTML, to test if audio is working.
+You can also place the quackmp3.mp3 file into a folder named "assets" in the same directory as the HTML, to test if audio is working.
+
+(Also I think this test used to use [howler.js](https://howlerjs.com/) but I'm not using it anymore.)
