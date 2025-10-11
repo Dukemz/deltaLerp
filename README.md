@@ -4,7 +4,7 @@ WORK IN PROGRESS!
 
 This is a prototype scroller/shooter game using only simple polygons and lines as sprites.
 
-I initially made this game for a school project, but also as a challenge to make a completely offline HTML/JS game that works without a live server.
+I initially made this game for a school project, but also as a challenge both to make a game without any image/sprite assets, and to make a completely offline HTML/JS game that works without a live server.
 
 All the code is by me, all the music is by my friend B0omBringer/nukegameplay.
 
