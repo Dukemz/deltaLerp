@@ -11,11 +11,23 @@ class Shotgun {
 
     this.lastFired = 0;
     this.shotsFired = 0;
+    this.active = false; // note: maybe either make this a getter/setter, or a function, to detect when deactivated, so that the indicator can be disabled instantly
   }
 
   initialise(player) {
     this.player = player;
     this.group = new this.player.projectiles.Group();
+
+    // ammo indicator
+    this.indicator = new ArcIndicator(this.player, {
+      diameter: 210,
+      stroke: this.player.stroke,
+      startArc: new LerpController(0, 0, 0.9999),
+      endArc: new LerpController(180, 180, 1),
+      disabled: true
+    });
+    this.player.arcindics.push(this.indicator);
+    
 
     // projectile properties
     this.group.diameter = 10;

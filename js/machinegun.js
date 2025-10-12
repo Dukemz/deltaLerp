@@ -9,6 +9,7 @@ class MachineGun {
     this.lastFired = 0;
     // total bullets fired
     this.shotsFired = 0;
+    this.active = false;
   }
 
   initialise(player) {

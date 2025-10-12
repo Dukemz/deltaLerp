@@ -20,7 +20,7 @@ class GameManager {
     this.assets = {
       levels: {},
       audio: {},
-      mods: {} // mods/packs are the same thing
+      mods: {} // mods/packs will be the same thing
     }
 
     // audio manager - replaceable module?
@@ -66,7 +66,7 @@ class GameManager {
     // average deltatime, fps calcs
     this.avgFPS = this.fpsList.reduce((a, b) => a + b, 0) / this.fpsList.length || frameRate();
     this.avgDeltaTime = 1 / this.avgFPS;
-    if(this.avgFPS < 2) console.warn(`Warning: Average FPS is ${this.avgFPS.toFixed(3)}!`);
+    if(this.avgFPS < 2) console.warn(`Warning: Average FPS is ${this.avgFPS.toFixed(3)}!\nFPS list length: ${this.fpsList.length}`);
 
     this.q5avgFPS = this.q5fpsList.reduce((a, b) => a + b, 0) / this.q5fpsList.length || getFPS();
   }

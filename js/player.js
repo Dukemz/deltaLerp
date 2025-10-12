@@ -58,6 +58,7 @@ class Player extends Sprite {
     // custom attribs
     this.maxSpeed ||= 6;
     this.framesAlive = 0;
+    this.weaponCycleCooldown = 0.7
     this.lastWeaponCycle = 0;
     this.maxHealth = 50;
     this._health = this.maxHealth;
@@ -71,19 +72,20 @@ class Player extends Sprite {
     // in future figure out how to make this into classes
     // for easier addition of new weapons, use of extends, etc
     // array of available weapon classes
-    // group of all projectiles
-    // allow for use with enemies as well?
     // if this.weapons is not already an array, create it
     this.weapons ||= [new MachineGun(), new Shotgun()];
     // this.activeWeapon will be the currently active weapon
     // at the end of update, call the fire function
     // the weapon class should handle everything from there
+
+    // group of all projectiles - allow for use with enemies as well?
     this.projectiles ||= new this.game.playerProjectiles.Group();
 
     this.activeWeapon = 0;
     this.weapons.forEach(weapon => { // initialise all weapons
       weapon.initialise(this);
     });
+    this.weapons[this.activeWeapon].active = true;
 
     // for some reason these overlaps keep breaking everything
     this.overlaps(this.game.playerProjectiles);
@@ -98,7 +100,7 @@ class Player extends Sprite {
   set health(value) {
     this._health = value;
     if(value <= 0) return this.deletePlayer();
-    // health is 0-100, map startArc from 180 to 0
+    // health is 0-50, map startArc from 180 to 0
     this.healthIndicator.startArc.targetValue = map(value, 0, this.maxHealth, 180, 0, true);
   }
 
@@ -147,9 +149,11 @@ class Player extends Sprite {
     if(this.x < camera.x - (this.game.visibleWidth/2) - 200 || this.x > camera.x + (this.game.visibleWidth/2) + 10) this.deletePlayer();
 
     // cycle weapon
-    if(world.physicsTime - this.lastWeaponCycle > 0.7 && this.input.cycleWeapon()) {
+    if(world.physicsTime - this.lastWeaponCycle > this.weaponCycleCooldown && this.input.cycleWeapon()) {
       this.lastWeaponCycle = world.physicsTime;
+      this.weapons[this.activeWeapon].active = false;
       this.activeWeapon = (this.activeWeapon + 1) % this.weapons.length;
+      this.weapons[this.activeWeapon].active = true;
     }
 
     // shoot controls
