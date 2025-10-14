@@ -11,7 +11,7 @@ class Shotgun {
 
     this.lastFired = 0;
     this.shotsFired = 0;
-    this.active = false; // note: maybe either make this a getter/setter, or a function, to detect when deactivated, so that the indicator can be disabled instantly
+    this._active = false;
   }
 
   initialise(player) {
@@ -91,5 +91,16 @@ class Shotgun {
         this.group[0].remove();
       }
     }
+  }
+
+  get active() {
+    return this._active;
+  }
+  set active(value) {
+    if(typeof value !== "boolean") throw TypeError("Property active of weapon must be either true or false");
+    this._active = value;
+
+    // toggle ammo indicator visibility
+    this.indicator.disabled = !value;
   }
 }

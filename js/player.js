@@ -58,7 +58,7 @@ class Player extends Sprite {
     // custom attribs
     this.maxSpeed ||= 6;
     this.framesAlive = 0;
-    this.weaponCycleCooldown = 0.7
+    this.weaponCycleCooldown = 0.2;
     this.lastWeaponCycle = 0;
     this.maxHealth = 50;
     this._health = this.maxHealth;

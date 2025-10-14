@@ -9,7 +9,7 @@ class MachineGun {
     this.lastFired = 0;
     // total bullets fired
     this.shotsFired = 0;
-    this.active = false;
+    this._active = false;
   }
 
   initialise(player) {
@@ -71,6 +71,15 @@ class MachineGun {
         this.group[0].remove();
       }
     }
+  }
+
+  // this._active is true when this weapon is the current activeWeapon
+  get active() {
+    return this._active;
+  }
+  set active(value) {
+    if(typeof value !== "boolean") throw TypeError("Property active of weapon must be either true or false");
+    this._active = value;
   }
 }
 
