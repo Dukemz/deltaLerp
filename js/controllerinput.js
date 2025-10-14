@@ -101,10 +101,10 @@ class controllerInput {
 
     // there's probably a much more efficient way to do this but whatever
     if(!this.contro.pressing(this.c.left) && !this.contro.pressing(this.c.right)) {
-      vector.x = deltaLerp(currentVel.x, 0, 0.99999);
+      vector.x = deltaLerp(currentVel.x, 0, 0.999999);
     }
     if(!this.contro.pressing(this.c.up) && !this.contro.pressing(this.c.down)) {
-      vector.y = deltaLerp(currentVel.y, 0, 0.99999);
+      vector.y = deltaLerp(currentVel.y, 0, 0.999999);
     }
     return vector;
   }

@@ -20,7 +20,7 @@ class Shotgun {
 
     // ammo indicator
     this.indicator = new ArcIndicator(this.player, {
-      diameter: 210,
+      defaultdiameter: 210,
       stroke: this.player.stroke,
       startArc: new LerpController(0, 0, 0.9999),
       endArc: new LerpController(180, 180, 1),

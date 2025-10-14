@@ -113,6 +113,13 @@ class Player extends Sprite {
     return relativeVel;
   }
 
+  resize(sizefactor) { // note: player size doesn't affect projectile size, might change this later
+    this.scale = { x: sizefactor, y: sizefactor };
+    for(let a of this.arcindics) {
+      a.diameter = a.defaultdiameter * sizefactor;
+    }
+  }
+
   // ~~ UPDATE FUNCTION ~~ //
   runUpdate() {
     // this.framesAlive++; // debug variable, not needed currently

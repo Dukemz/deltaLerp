@@ -10,7 +10,8 @@ class ArcIndicator { // arc indicator thing
     this.stroke = data?.stroke || color(255);
     this.understrokeAlpha = data?.understrokeAlpha || 50;
     this.strokeWeight = 2;
-    this.diameter = (data?.diameter || 170) * parent.scale.x;
+    this.defaultdiameter = data?.defaultdiameter || 170;
+    this.diameter = this.defaultdiameter * parent.scale.x;
 
     // whether to actually show the indicator
     this.disabled = data?.disabled ?? false;
