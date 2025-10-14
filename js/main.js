@@ -285,6 +285,12 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// webgpu test
+if(document.title === "deltaLerp (q5-webgpu pre-alpha)") {
+  console.warn("[MAIN] Running in experimental WebGPU mode!");
+  Q5.WebGPU();
+}
+
 // despite this code being at the end of the file it gets run first
 // it's just here to check the rest of the code in the file got parsed properly
 const titlestyle = "font-size: 27px; color: lightblue; text-shadow: 2px 2px dodgerblue";
