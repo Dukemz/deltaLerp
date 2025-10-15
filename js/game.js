@@ -136,6 +136,49 @@ class Game { // game class
   }
 
   draw() { // runs at the end of the main draw function
+    // update stuff //
+
+    if(!this.paused) {
+      // update sprites
+      // this.enemies.forEach(en => en.update());
+      for(let en of this.enemies) en.update();
+      this.players.runUpdate();
+    }
+
+    // TEMPORARY DEBUG THINGS //
+
+    // game speed test
+    if(kb.presses("j") || contro.presses("l")) {
+      if(game.timeScale === 1) {
+        game.timeScale = 0.3;
+        this.bgOpacityLerp.targetValue = 30;
+      } else {
+        game.timeScale = 1;
+        this.bgOpacityLerp.targetValue = 128;
+      }
+    }
+
+    // cam scroll test
+    if(kb.presses("m") || contro.presses("rt")) {
+      if(this.cameraSpeedLerp.targetValue === 0) {
+        this.cameraSpeedLerp.targetValue = 0.1
+      } else {
+        this.cameraSpeedLerp.targetValue = 0;
+      }
+    }
+    if(kb.presses("b") || contro.presses("lt")) {
+      if(this.cameraSpeedLerp.targetValue === 0) {
+        this.cameraSpeedLerp.targetValue = -0.1
+      } else {
+        this.cameraSpeedLerp.targetValue = 0;
+      }
+    }
+    // crash lol
+    if(kb.presses("q")) throw Error("Congrats, you found the crash button!");
+
+
+    // draw stuff //
+
     // copy bg colour
     const backgroundCol = color(this.bgcol.levels);
     const bgopacity = this.bgOpacityLerp.currentValue;
@@ -193,46 +236,6 @@ class Game { // game class
     camera.on();
     // cull seems to be broken at the moment whenever the zoom is not 1?
     // this.projectiles.cull(10);
-
-    // update stuff //
-
-    if(!this.paused) {
-      // update sprites
-      // this.enemies.forEach(en => en.update());
-      for(let en of this.enemies) en.update();
-      this.players.runUpdate();
-    }
-
-    // TEMPORARY DEBUG THINGS //
-
-    // game speed test
-    if(kb.presses("j") || contro.presses("l")) {
-      if(game.timeScale === 1) {
-        game.timeScale = 0.3;
-        this.bgOpacityLerp.targetValue = 30;
-      } else {
-        game.timeScale = 1;
-        this.bgOpacityLerp.targetValue = 128;
-      }
-    }
-
-    // cam scroll test
-    if(kb.presses("m") || contro.presses("rt")) {
-      if(this.cameraSpeedLerp.targetValue === 0) {
-        this.cameraSpeedLerp.targetValue = 0.1
-      } else {
-        this.cameraSpeedLerp.targetValue = 0;
-      }
-    }
-    if(kb.presses("b") || contro.presses("lt")) {
-      if(this.cameraSpeedLerp.targetValue === 0) {
-        this.cameraSpeedLerp.targetValue = -0.1
-      } else {
-        this.cameraSpeedLerp.targetValue = 0;
-      }
-    }
-    // crash lol
-    if(kb.presses("q")) throw Error("Congrats, you found the crash button!");
   }
 
   kb2P() { // temporary function to add 2nd player with keyboard preset
